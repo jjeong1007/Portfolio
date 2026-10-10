@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Jason Jeong — design tokens
+   Source of truth: Figma "JJJ Final Undergrad Portfolio" › Design system (94:3927)
+   Spec: /design-system.md — keep both in sync.
+   ========================================================================== */
+
+@theme {
+  /* ---- Neutrals ------------------------------------------------------- */
+  --color-ink: #000000;          /* Primary Black — headings, primary text, dark fills */
+  --color-ink-body: #525252;     /* Text — long-form body copy */
+  --color-ink-subtle: #808080;   /* Subtle Text — labels, meta, captions */
+  --color-ink-faint: #bcbcbc;    /* asides inside body copy, e.g. "(haha get it)" */
+  --color-divider: #d9d9d9;      /* full-bleed hairline under the tab bar */
+  --color-line: #e5e5e5;         /* Borders — outlines, table rules */
+  --color-surface: #f2f2f2;      /* Secondary BG — cards, active tab */
+  --color-paper: #ffffff;        /* White — page background */
+
+  /* ---- Project accents (one per project, use sparingly) --------------- */
+  --color-desy: #df5732;         /* Desy Burnt Sienna */
+  --color-nyck: #0e6df9;         /* Nyck Blue */
+  --color-root: #fd5726;         /* Root Carrot */
+  --color-plaza: #a34414;        /* Plaza Earth */
+  --color-shopify: #95bf47;      /* Shopify Forest */
+  --color-amazon: #26cad3;       /* Amazon Rain */
+
+  /* ---- Type scale (responsive overrides at the bottom) ---------------- */
+  --text-title: 72px;
+  --text-subtitle: 44px;
+  --text-heading: 32px;
+  --text-body-lg: 20px;
+  --text-body-md: 16px;
+  --text-body-sm: 14px;
+  --text-micro: 12px;
+
+  --tracking-tight: -0.04em;     /* every style except Micro */
+  --tracking-wide: 0.04em;       /* Micro / Caption */
+  --leading-display: 1.2;        /* Figma "auto" for Bricolage Grotesque */
+  --leading-body: 1.35;          /* Figma "auto" for Satoshi */
+
+  /* ---- Radius --------------------------------------------------------- */
+  --radius-tab: 4px;
+  --radius-control: 8px;         /* buttons, chips, floating panels */
+  --radius-card: 12px;
+
+  /* ---- Elevation (floating UI only; cards stay flat) ------------------ */
+  --shadow-float: 0 0 46px rgba(0, 0, 0, 0.12);   /* floating panels */
+  --shadow-halo: 0 0 92px rgba(0, 0, 0, 0.12);    /* avatar */
+
+  /* ---- Layout --------------------------------------------------------- */
+  --container-page: 1440px;
+  --container-content: 1192px;
+  --container-copy: 560px;
+
+  /* ---- Motion --------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-rise: rise 700ms var(--ease-out-soft) both;
+  --animate-wave: wave 900ms var(--ease-out-soft);
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(-8deg); }
+    40% { transform: rotate(7deg); }
+    60% { transform: rotate(-4deg); }
+    80% { transform: rotate(3deg); }
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-body: var(--font-satoshi), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-body);
+}
+
+/* ---- Semantic spacing (not part of Tailwind's scale) ------------------- */
+:root {
+  --gutter: 124px;               /* page side margin at 1440 */
+  --space-paragraph: 22px;       /* one empty body line between paragraphs */
+  --space-intro: 42px;           /* section intro copy → its content block */
+  --space-section: 136px;        /* between sub-sections */
+}
+
+/* ---- Type styles: use these, not raw text-* + font-* combos ------------ */
+@utility type-title {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14;
+  font-size: var(--text-title);
+  font-weight: 700;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+@utility type-subtitle {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14;
+  font-size: var(--text-subtitle);
+  font-weight: 700;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+@utility type-heading {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14;
+  font-size: var(--text-heading);
+  font-weight: 700;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+@utility type-body-lg {
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg);
+  font-weight: 500;
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-tight);
+}
+@utility type-body-md {
+  font-family: var(--font-body);
+  font-size: var(--text-body-md);
+  font-weight: 500;
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-tight);
+}
+@utility type-body-sm {
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-tight);
+}
+@utility type-micro {
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  line-height: 14px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+/* Swatch labels: Bricolage Medium 20 */
+@utility type-label {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14;
+  font-size: var(--text-body-lg);
+  font-weight: 500;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* Buttons / chips: Bricolage Medium 16 */
+@utility type-control {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14;
+  font-size: var(--text-body-md);
+  font-weight: 500;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* ---- Base -------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-body-md);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-tight);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-nyck);
+    outline-offset: 2px;
+  }
+}
+
+/* ---- Responsive scale -------------------------------------------------- */
+@media (max-width: 1279.98px) {
+  :root { --gutter: 64px; }
+}
+@media (max-width: 1023.98px) {
+  :root {
+    --gutter: 40px;
+    --text-title: 56px;
+    --text-subtitle: 36px;
+    --text-heading: 28px;
+    --space-section: 96px;
+  }
+}
+@media (max-width: 767.98px) {
+  :root {
+    --gutter: 16px;
+    --text-title: 44px;
+    --text-subtitle: 32px;
+    --text-heading: 26px;
+    --space-section: 72px;
+  }
+}
+
+/* ---- View transitions (route changes) ----------------------------------
+   Types come from <Link transitionTypes> (src/lib/site-nav.ts) and are
+   mapped to classes by <PageTransition>. Old page leaves fast, new page
+   arrives gently after it. The companion stays anchored throughout. */
+:root {
+  --vt-exit: 220ms;
+  --vt-enter: 520ms;
+  --vt-offset: 24px;
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.nav-forward) {
+  animation: var(--vt-exit) ease-in both vt-leave;
+  --vt-dir: -1;
+}
+::view-transition-new(.nav-forward) {
+  animation: var(--vt-enter) var(--ease-out-soft) 120ms both vt-arrive;
+  --vt-dir: 1;
+}
+::view-transition-old(.nav-back) {
+  animation: var(--vt-exit) ease-in both vt-leave;
+  --vt-dir: 1;
+}
+::view-transition-new(.nav-back) {
+  animation: var(--vt-enter) var(--ease-out-soft) 120ms both vt-arrive;
+  --vt-dir: -1;
+}
+
+@keyframes vt-leave {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(calc(var(--vt-dir) * var(--vt-offset) / 2)) scale(0.985);
+  }
+}
+@keyframes vt-arrive {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(calc(var(--vt-dir) * var(--vt-offset)));
+  }
+}
+
+/* Companion (layout-level) never moves or fades during route changes */
+::view-transition-group(companion) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(companion) {
+  display: none;
+}
+::view-transition-new(companion) {
+  animation: none;
+}
+/* Arriving from / leaving to a page without it (the landing page) */
+::view-transition-new(companion):only-child {
+  animation: var(--vt-enter) var(--ease-out-soft) 120ms both vt-arrive;
+  --vt-dir: 1;
+}
+::view-transition-old(companion):only-child {
+  display: block;
+  animation: var(--vt-exit) ease-in both vt-leave;
+  --vt-dir: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
