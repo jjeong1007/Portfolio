@@ -6,8 +6,8 @@ This is the source of truth for the look and feel of Jason Jeong's portfolio. It
 
 - **Figma source:** [JJJ Final Undergrad Portfolio › Design system](https://www.figma.com/design/wTRwgEKJ5RXgMkFktaTcTO/JJJ-Final-Undergrad-Portfolio?node-id=94-3927) (node `94:3927`)
 - **Tokens in code:** [`src/app/globals.css`](src/app/globals.css) (Tailwind v4 `@theme`) and [`src/lib/design-tokens.ts`](src/lib/design-tokens.ts) (typed data)
-- **Live showcase:** `/design-system` ([`src/app/design-system/page.tsx`](src/app/design-system/page.tsx)), linked from the landing page's "How’d you make this website??" chip
-- **Landing page:** `/` ([`src/app/page.tsx`](src/app/page.tsx)), from Figma node `94:3455`
+- **Live showcase:** `/design-system` ([`src/app/design-system/page.tsx`](src/app/design-system/page.tsx)), linked from the nav bar and the companion menu
+- **Landing page:** `/` ([`src/app/page.tsx`](src/app/page.tsx)), from Figma node `94:3455`: nav bar, hero, and the projects grid (`#projects`, placeholder tiles for now)
 - **Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4. Deployed on Vercel.
 
 ---
@@ -26,7 +26,7 @@ The system pairs **minimal structure** with **small moments of play**.
 
 1. When unsure, use black, white or gray. Add accent color on purpose, never as decoration.
 2. A project page uses **only its own** project color. Don't mix accents on one page.
-3. Surfaces are flat: `bg-surface` with `rounded-card`. No gradients. The only shadows are the soft, centered `shadow-float` / `shadow-halo` on UI that floats over the page (the prompt card, the avatar).
+3. Surfaces are flat: `bg-surface` with `rounded-card`. No gradients. The only shadows are the soft, centered `shadow-float` / `shadow-halo` on UI that floats over the page (menus, the speech bubble, the avatar).
 4. Headlines use the display face (Bricolage). Everything else uses the body face (Satoshi).
 
 ---
@@ -152,13 +152,13 @@ Tailwind's 4px scale is the base. These are the values the design actually uses:
 
 | Token | Value | Use |
 |---|---|---|
-| `rounded-control` | 8px | Chips, buttons, the floating prompt card |
+| `rounded-control` | 8px | Chips, buttons, floating menus and the speech bubble |
 | `rounded-card` | 12px | Cards, swatches, toast, character strip |
 | `rounded-full` | — | Avatar |
 | `rounded-t-tab` | 4px top corners | Tabs |
 | `border-line` | 1px `#E5E5E5` | Outlines, list rules |
 | `border-divider` | 1px `#D9D9D9` | Full-bleed hairline under the tab bar |
-| `shadow-float` | `0 0 46px rgb(0 0 0 / 12%)` | Panels floating over the page (prompt card) |
+| `shadow-float` | `0 0 46px rgb(0 0 0 / 12%)` | Panels floating over the page (companion menu, speech bubble) |
 | `shadow-halo` | `0 0 92px rgb(0 0 0 / 12%)` | Avatar |
 | Elevation rule | — | Content cards stay flat (`bg-surface`). Shadows are only for floating UI, and always centered and soft, with no offset. |
 
@@ -184,7 +184,7 @@ Heading plus `ink-body` paragraphs.
 `<dl>` rows: `type-micro text-ink-subtle` label (147px column) + 16px `ink` answer with `leading-5`. Rows stack 24px apart and become a single column on mobile.
 
 ### Tabs — `ui/tabs.tsx` (client)
-- A sticky, full-bleed bar on a 1px `divider` bottom border.
+- A sticky, full-bleed bar on a 1px `divider` bottom border, pinned just below the Navbar (`top-(--nav-height)`).
 - Tab: 20px Lucide icon + 8px + `type-body-md` label, `px-3 py-2`, 4px top radius, 5px between tabs.
 - Active and hover: `bg-surface`. Inactive: transparent.
 - State lives in the URL hash (`#foundations`, `#assets`), so tabs can be linked. Left/right arrow keys move between tabs, with full ARIA `tablist`/`tab`/`tabpanel` roles.
@@ -201,11 +201,27 @@ A bordered quick-action pill: `rounded-control border-line bg-paper px-3 py-2`, 
 - `variant="quiet"`: 12px, `ink-subtle`. Use it for the joke or least important option.
 - Hover: lifts 2px with `ease-spring`, `bg-surface`, border darkens to `ink-faint`. Press: `scale(0.97)`.
 
-### Prompt card — `home/prompt-card.tsx` (client)
-A floating panel: `rounded-control border-line bg-paper px-4 py-3 shadow-float`. A `type-control` question sits above a wrapping row of chips with 10px gaps. Chips either link to a page or show a toast while that page doesn't exist yet. Edit the `prompts` array to change them.
+### Navbar — `ui/navbar.tsx` (client)
+The sticky top bar on every page, rendered once in the root layout (Figma `94:8094`). It is `--nav-height` (81px) tall, stays anchored during page transitions, and anything else sticky (e.g. the design system tab bar) sits at `top-(--nav-height)`. It has the 32px logo mark + 24px + links in `type-body-md`, all centered, `py-6`, with a `border-line` bottom edge over a slightly translucent `bg-paper`. Links come from `navLinks` in `lib/site-nav.ts`. "Projects" scrolls smoothly to `#projects`, "About me" shows a toast until that page exists. Hover: text goes to `ink-subtle`; the logo tilts.
+
+### Project grid — `home/project-grid.tsx`
+`#projects` on the landing page: a 3-column grid (2 on tablet, 1 on mobile) of square `rounded-card bg-surface` tiles with a 12px gap. Data comes from `lib/projects.ts` (name, discipline, project color). The tiles are still **placeholders**: no images, and plain gray at rest.
+- **Hover (Figma `94:4008`):** the project color fades up from the bottom (`linear-gradient(0deg, color @ 20% → transparent)`, 500ms). Two pills rise 12px and fade in, the name bottom-left and the discipline bottom-right, 60ms apart, with `ease-spring`. Pills: `type-control` Bold in the project color, `bg-paper/72` + `border-paper` + `backdrop-blur-sm`, `rounded-control px-4 py-2`, 12px from the tile edges.
+
+### Companion — `ui/companion.tsx` (client)
+A fixed character in the bottom-right corner (32px inset; 16px on mobile), rendered once in the root layout. It is hidden on the landing page (`HIDDEN_ON`), where the hero avatar already plays that role.
+- **Speech bubble:** 284px, `type-control`, right-aligned, `rounded-control border-line shadow-float`, 8px to the left of the avatar. Copy comes from `companionMessages` in `lib/site-nav.ts` and can be set per route. Hidden on mobile.
+- **Menu:** opens **only** when hovering the character (or clicking or focusing it), and stays open while the pointer moves into it. It appears above the character with "What do you wanna learn about me?" and the `navPrompts` chips stacked right-aligned. It closes on leave (180ms grace), Escape or an outside click. The bubble fades out while the menu is open.
+- **Page changes:** it keeps its own view-transition snapshot, so it stays put during route changes and fades in or out when coming from or going to the landing page.
+
+### Site navigation data — `lib/site-nav.ts`
+`navPrompts` (the companion chips), `navLinks` (the nav bar) and `companionMessages` are the single source for where things link. An entry with `href` navigates; one with `message` shows a toast. `transitionFor(href)` picks `nav-back` for links into `/` and `nav-forward` otherwise.
+
+### Page transitions — `ui/page-transition.tsx`
+Wrap each page's content in `<PageTransition>` inside `page.tsx`. Links pass `transitionTypes` (`nav-forward` / `nav-back`). The old page leaves in 220ms (fade, 12px drift, blur); the new one arrives over 520ms, 120ms later (fade, 24px rise, un-blur). Back reverses the direction. Untyped navigations, like the browser back button, swap instantly.
 
 ### Avatar — `home/avatar.tsx`
-A 128px circle (`rounded-full border-2 border-line shadow-halo`) that crops `avatar-character.svg` to the head, using Figma offsets stored as percentages. On hover the character waves (`animate-wave`).
+A 128px circle (`rounded-full border-2 border-line shadow-halo`) that crops the character to the head, using Figma offsets stored as percentages. The character is an inline SVG rig: the head bobs, the eyes blink at random and follow the cursor, and on hover it waves (`animate-wave`). See §7.4.
 
 ### BackLink — `ui/back-link.tsx`
 "‹ Back to main page" at the top left of secondary pages (Figma `94:8004`). It is a Lucide `chevron-left` (20×24, `#525252`) + 8px + `type-body-md` in `ink-body`, `px-3 py-2`, sitting at the left edge of the content column. Hover: `bg-surface`, text goes to `ink`, chevron nudges 2px left. It links to `/` by default; pass `href`/`label` to reuse it on other pages.
@@ -242,15 +258,61 @@ All brand assets are vectors exported from Figma, stored in [`public/brand/`](pu
 
 ---
 
-## 7. Motion and interaction
+## 7. Motion
 
-- Keep motion quiet: 150–200ms, `ease-out-soft` (`cubic-bezier(0.22, 1, 0.36, 1)`).
-- Playful moments use `ease-spring` (`cubic-bezier(0.34, 1.56, 0.64, 1)`, a small overshoot): chip lift, logo-mark tilt on hover.
-- **Entrance:** `animate-rise` (fade in + 16px rise, 700ms). Stagger siblings by 80ms with `animation-delay`.
-- **Wave:** `animate-wave` (a 900ms head wiggle) for the character on hover.
+All motion tokens live in the `@theme` block of `globals.css` (`--ease-*`, `--animate-*` and their `@keyframes`). Use those utilities rather than writing one-off timings. Use this section as the reference for any new animation.
+
+### 7.1 Easing
+
+| Token | Curve | Use it for |
+|---|---|---|
+| `ease-out-soft` | `cubic-bezier(0.22, 1, 0.36, 1)` | Default for UI: hovers, entrances, fades |
+| `ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Playful moments with a small overshoot: chip lift, logo-mark tilt |
+| `ease-sway` | `cubic-bezier(0.37, 0, 0.63, 1)` | Looping back-and-forth motion (symmetric ease-in-out): head bob |
+| `ease-lid` | `cubic-bezier(0.45, 0, 0.9, 0.55)` | Something closing fast and snapping shut: eyelids |
+| `ease-rebound` | `cubic-bezier(0, 0.55, 0.45, 1)` | The release after a squash: eyes springing open |
+
+### 7.2 Durations
+
+- **UI feedback:** 150–200ms (hover, press, color changes). Keep it quiet.
+- **Overlays and menus:** 250ms with `ease-spring`.
+- **Entrances:** 700ms (`animate-rise`).
+- **Character idle loops:** slow, seconds long (bob is 3.2s), so they read as breathing rather than as busy movement.
+- **Character accents:** fast, under 500ms (a blink is 180ms).
+
+### 7.3 Animations
+
+| Utility | What it does |
+|---|---|
+| `animate-rise` | Fade in + 16px rise, 700ms. Stagger siblings by 80ms with `animation-delay`. |
+| `animate-wave` | 900ms head wiggle on the whole character, played on hover. |
+| `animate-bob` | Idle loop: the head tips back 2.2° and returns, 3.2s, `ease-sway`, infinite. |
+| `animate-blink` | One blink, 180ms: the eye squashes to a lid line (`scale(2.2, 0.2)`) instead of vanishing, holds briefly, springs open. |
+| `animate-blink-twice` | A double blink, 450ms. |
+
+### 7.4 Character rig — `home/avatar.tsx`
+
+The character is inline SVG (art in `home/character-art.tsx`, drawn in a 418 × 235 frame, from `assets/wave-animation.html`) so its parts can move on their own. Parts pivot in **art units** with `transform-view` (`transform-box: view-box`) + `origin-[Xpx_Ypx]`:
+
+| Part | Pivot | Motion |
+|---|---|---|
+| Head | `240px 106px` (neck) | `animate-bob`, always on |
+| Left eye | `210.31px 61.98px` | Blinks; follows the cursor |
+| Right eye | `235.19px 58px` | Same, but 15ms late so a blink doesn't look mechanical |
+
+- **Blinking is random:** JS waits 2.2–6.5s between blinks, and a quarter of them are double blinks. It sets `data-blink="once" | "twice"` on the avatar root, and the eyes pick that up with `group-data-[blink=…]:animate-blink(-twice)`.
+- **Eye tracking:** the eyes move together toward the cursor, up to 3 × 2 art units (about 2px at 128px), reaching full travel 240px away from the face. They ease with a 200ms `ease-out-soft` transition and look back to center when the cursor leaves the window.
+- **Layering:** looping idle motion goes on an inner part (head), one-off motion on the outer one (hover `animate-wave` on the whole SVG), so they combine without overriding each other.
+- **Not used:** the waving arm and the lip-sync mouth shapes from the source file. If you add them later, follow the same pivots and timings as `assets/wave-animation.html`.
+
+### 7.5 Interaction states
+
 - Hover on interactive surfaces → `bg-surface`. Press on swatches → `scale(0.99)`.
 - Focus → 2px Nyck Blue outline, 2px offset (global `:focus-visible`).
-- All transitions turn off under `prefers-reduced-motion`.
+
+### 7.6 Reduced motion
+
+All transitions turn off under `prefers-reduced-motion`. Looping animations must also stop: add `motion-reduce:animate-none`, and skip JS-driven motion (blinking, eye tracking) when `matchMedia("(prefers-reduced-motion: reduce)")` matches.
 
 ---
 

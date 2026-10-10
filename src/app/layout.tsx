@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
 import localFont from "next/font/local";
 import { Companion } from "@/components/ui/companion";
+import { Navbar } from "@/components/ui/navbar";
 import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
@@ -29,9 +30,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${satoshi.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${bricolage.variable} ${satoshi.variable}`}>
       <body>
         <ToastProvider>
+          <Navbar />
           {children}
           <Companion />
         </ToastProvider>

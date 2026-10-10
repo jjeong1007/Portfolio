@@ -56,9 +56,15 @@
   /* ---- Motion --------------------------------------------------------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-sway: cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-lid: cubic-bezier(0.45, 0, 0.9, 0.55);
+  --ease-rebound: cubic-bezier(0, 0.55, 0.45, 1);
 
   --animate-rise: rise 700ms var(--ease-out-soft) both;
   --animate-wave: wave 900ms var(--ease-out-soft);
+  --animate-bob: bob 3200ms var(--ease-sway) infinite;
+  --animate-blink: blink 180ms both;
+  --animate-blink-twice: blink-twice 450ms both;
 
   @keyframes rise {
     from { opacity: 0; transform: translateY(16px); }
@@ -71,6 +77,24 @@
     60% { transform: rotate(-4deg); }
     80% { transform: rotate(3deg); }
   }
+  /* Character idle: the head tips back and forth around the neck */
+  @keyframes bob {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-2.2deg); }
+  }
+  /* Eyes squash to a lid line instead of vanishing: close fast, hold, spring open */
+  @keyframes blink {
+    0% { transform: scale(1, 1); animation-timing-function: var(--ease-lid); }
+    34%, 58% { transform: scale(2.2, 0.2); animation-timing-function: var(--ease-rebound); }
+    100% { transform: scale(1, 1); }
+  }
+  @keyframes blink-twice {
+    0% { transform: scale(1, 1); animation-timing-function: var(--ease-lid); }
+    14%, 23% { transform: scale(2.2, 0.2); animation-timing-function: var(--ease-rebound); }
+    40%, 60% { transform: scale(1, 1); animation-timing-function: var(--ease-lid); }
+    74%, 83% { transform: scale(2.2, 0.2); animation-timing-function: var(--ease-rebound); }
+    100% { transform: scale(1, 1); }
+  }
 }
 
 @theme inline {
@@ -82,6 +106,7 @@
 /* ---- Semantic spacing (not part of Tailwind's scale) ------------------- */
 :root {
   --gutter: 124px;               /* page side margin at 1440 */
+  --nav-height: 81px;            /* sticky Navbar: 24 + 32 logo + 24 + 1px border */
   --space-paragraph: 22px;       /* one empty body line between paragraphs */
   --space-intro: 42px;           /* section intro copy → its content block */
   --space-section: 136px;        /* between sub-sections */
@@ -164,6 +189,9 @@
 /* ---- Base -------------------------------------------------------------- */
 @layer base {
   html {
+    /* In-page anchors (#projects) glide; Next disables it for route changes
+       because of data-scroll-behavior="smooth" on <html>. */
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -251,14 +279,18 @@
   }
 }
 
-/* Companion (layout-level) never moves or fades during route changes */
+/* Layout-level chrome (nav bar, companion) never moves or fades during
+   route changes */
+::view-transition-group(site-nav),
 ::view-transition-group(companion) {
   animation: none;
   z-index: 100;
 }
+::view-transition-old(site-nav),
 ::view-transition-old(companion) {
   display: none;
 }
+::view-transition-new(site-nav),
 ::view-transition-new(companion) {
   animation: none;
 }
@@ -283,6 +315,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;

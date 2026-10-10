@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Chip } from "@/components/ui/chip";
 import { useToast } from "@/components/ui/toast";
-import { NAV_FORWARD, navPrompts } from "@/lib/site-nav";
+import { navPrompts, transitionFor } from "@/lib/site-nav";
 
 type PromptChipsProps = {
   /** "row" wraps horizontally (landing), "column" stacks right-aligned (companion menu) */
@@ -31,7 +31,7 @@ export function PromptChips({ layout = "row", onSelect }: PromptChipsProps) {
             {"href" in prompt ? (
               <Chip
                 href={prompt.href}
-                transitionTypes={NAV_FORWARD}
+                transitionTypes={transitionFor(prompt.href)}
                 aria-current={pathname === prompt.href ? "page" : undefined}
                 variant={variant}
                 onClick={onSelect}

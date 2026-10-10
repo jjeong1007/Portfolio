@@ -10,11 +10,23 @@ export type NavPrompt = {
 } & ({ href: string } | { message: string });
 
 export const navPrompts: NavPrompt[] = [
-  { label: "My projects!!", href: "/projects" },
+  { label: "My projects!!", href: "/#projects" },
   { label: "Who are you?!", message: "The about page is coming soon." },
   { label: "How’d you make this website??", href: "/design-system" },
   { label: "What are your deep darkest fears in life?", message: "Nice try. That’s classified.", quiet: true },
 ];
+
+/** Top nav bar links (landing page). Same shape as NavPrompt. */
+export const navLinks: NavPrompt[] = [
+  { label: "Projects", href: "/#projects" },
+  { label: "About me", message: "The about page is coming soon." },
+  { label: "Design system", href: "/design-system" },
+];
+
+/** Links into the landing page go "back"; everything else goes "forward". */
+export function transitionFor(href: string) {
+  return href.split("#")[0] === "/" ? NAV_BACK : NAV_FORWARD;
+}
 
 /** Companion speech-bubble commentary, per route. Falls back to `default`. */
 export const companionMessages: Record<string, string> & { default: string } = {

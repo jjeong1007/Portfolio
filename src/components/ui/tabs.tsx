@@ -50,7 +50,7 @@ export function Tabs({ items, label }: TabsProps) {
 
   return (
     <>
-      <nav className="sticky top-0 z-10 border-b border-divider bg-paper">
+      <nav className="sticky top-(--nav-height) z-10 border-b border-divider bg-paper">
         <Container>
           <div role="tablist" aria-label={label} className="flex gap-1.25">
             {items.map((item, i) => {
