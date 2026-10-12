@@ -21,7 +21,7 @@ export function BackLink({ href = "/", label = "Back to main page", className = 
         alt=""
         width={20}
         height={24}
-        className="transition-transform duration-200 ease-spring group-hover:-translate-x-0.5"
+        className="transition-transform duration-200 ease-spring group-hover:-translate-x-1"
       />
       {label}
     </Link>

@@ -61,21 +61,18 @@
   --ease-rebound: cubic-bezier(0, 0.55, 0.45, 1);
 
   --animate-rise: rise 700ms var(--ease-out-soft) both;
-  --animate-wave: wave 900ms var(--ease-out-soft);
   --animate-bob: bob 3200ms var(--ease-sway) infinite;
   --animate-blink: blink 180ms both;
   --animate-blink-twice: blink-twice 450ms both;
+  /* Jamming (Amazon Music cover): a slow bob, one beat per second (60 BPM) */
+  --animate-jam-nod: jam-nod 1000ms var(--ease-sway) infinite;
+  --animate-jam-sway: jam-sway 2000ms var(--ease-sway) infinite;
+  --animate-jam-wave: jam-wave 1000ms var(--ease-sway) infinite;
+  --animate-note: note 2400ms var(--ease-out-soft) infinite;
 
   @keyframes rise {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: none; }
-  }
-  @keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    20% { transform: rotate(-8deg); }
-    40% { transform: rotate(7deg); }
-    60% { transform: rotate(-4deg); }
-    80% { transform: rotate(3deg); }
   }
   /* Character idle: the head tips back and forth around the neck */
   @keyframes bob {
@@ -107,8 +104,9 @@
 :root {
   --gutter: 124px;               /* page side margin at 1440 */
   --nav-height: 81px;            /* sticky Navbar: 24 + 32 logo + 24 + 1px border */
-  --space-paragraph: 22px;       /* one empty body line between paragraphs */
-  --space-intro: 42px;           /* section intro copy → its content block */
+  --tabs-height: 37px;           /* sticky Tabs bar: 8 + 20 icon + 8 + 1px border */
+  --space-paragraph: 24px;       /* one empty body line between paragraphs */
+  --space-intro: 40px;           /* section intro copy → its content block */
   --space-section: 136px;        /* between sub-sections */
 }
 
@@ -165,6 +163,15 @@
   line-height: 14px;
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
+}
+/* Small headings inside a section or card: Bricolage Bold 20 */
+@utility type-subheading {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14;
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
 }
 /* Swatch labels: Bricolage Medium 20 */
 @utility type-label {
@@ -262,6 +269,32 @@
 ::view-transition-new(.nav-back) {
   animation: var(--vt-enter) var(--ease-out-soft) 120ms both vt-arrive;
   --vt-dir: -1;
+}
+
+/* Jamming keyframes (Amazon Music cover, --animate-jam-* / --animate-note above).
+   Top level rather than inside @theme so they're always emitted. */
+/* Head bobs down and back up on the beat */
+@keyframes jam-nod {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(4px); }
+}
+/* Body rocks side to side over two beats */
+@keyframes jam-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+/* A raised hand waves up and down from the elbow */
+@keyframes jam-wave {
+  0%, 100% { transform: rotate(-16deg); }
+  50% { transform: rotate(16deg); }
+}
+/* A note pops in, drifts up in a gentle S and fades. Set --dx, --rise and --tilt */
+@keyframes note {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.4) rotate(0deg); }
+  15% { opacity: 1; transform: translate(calc(var(--dx) * 0.1), calc(var(--rise) * 0.15)) scale(1) rotate(calc(var(--tilt) * -0.5)); }
+  45% { transform: translate(calc(var(--dx) * -0.3), calc(var(--rise) * 0.5)) scale(1) rotate(calc(var(--tilt) * 0.3)); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--rise)) scale(0.85) rotate(var(--tilt)); }
 }
 
 @keyframes vt-leave {

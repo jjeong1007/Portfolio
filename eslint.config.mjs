@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Raw exports from other tools (Framer, HTML prototypes), kept for reference only
+    "assets/**",
   ]),
 ]);
 

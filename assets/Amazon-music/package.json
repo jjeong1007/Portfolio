@@ -1,0 +1,30 @@
+{
+  "name": "Amazon-music",
+  "version": "1.0.0",
+  "description": "Exported Framer components: AmazonMusic",
+  "type": "module",
+  "main": "AmazonMusic.js",
+  "types": "AmazonMusic.d.ts",
+  "exports": {
+    ".": {
+      "import": "./AmazonMusic.js",
+      "types": "./AmazonMusic.d.ts"
+    },
+    "./AmazonMusic": {
+      "import": "./AmazonMusic.js",
+      "types": "./AmazonMusic.d.ts"
+    }
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "framer-motion": ">=10.0.0"
+  },
+  "keywords": [
+    "framer",
+    "react",
+    "components",
+    "exported"
+  ],
+  "license": "MIT"
+}

@@ -29,7 +29,7 @@ export function Swatch({ color, variant = "bar" }: SwatchProps) {
       onClick={copy}
       aria-label={`${color.name}, ${color.hex}. Copy hex`}
       style={{ backgroundColor: color.hex }}
-      className={`group relative flex h-[67px] w-full items-center overflow-hidden rounded-card px-3 transition-transform duration-150 ease-out-soft active:scale-[0.99] ${
+      className={`group relative flex h-17 w-full items-center overflow-hidden rounded-card px-3 transition-transform duration-150 ease-out-soft active:scale-[0.99] ${
         isChip ? "justify-center" : "justify-end"
       } ${color.on === "light" ? "text-paper" : "text-ink"} ${
         color.token === "paper" ? "border border-line" : ""

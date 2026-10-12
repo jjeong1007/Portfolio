@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import { CharacterBody, CharacterHead, EYE_LEFT_D, EYE_RIGHT_D } from "@/components/home/character-art";
+import {
+  CharacterBody,
+  CharacterHead,
+  EYE_LEFT_D,
+  EYE_RIGHT_D,
+  MOUTHS,
+  type MouthShape,
+} from "@/components/home/character-art";
 
 /** Eye centers in the 418 x 235 art frame (also their blink pivots). */
 const EYE_LEFT = { x: 210.31, y: 61.98 };
@@ -18,11 +25,19 @@ const BLINK_TWICE_CHANCE = 0.25;
 /**
  * Circular avatar cropping the rigged character to the head. The art is
  * inline SVG so the head and eyes can move: the head bobs (`animate-bob`),
- * the eyes blink at random intervals and follow the cursor. Hover still
- * plays the head wiggle (`animate-wave`). Crop offsets come from Figma
+ * the eyes blink at random intervals and follow the cursor, and `mouth`
+ * picks the lip-sync shape (see TalkingAvatar). Crop offsets come from Figma
  * (128px frame) as percentages so it scales. See "Motion" in design-system.md.
  */
-export function Avatar({ className = "", style }: { className?: string; style?: CSSProperties }) {
+export function Avatar({
+  className = "",
+  style,
+  mouth = "rest",
+}: {
+  className?: string;
+  style?: CSSProperties;
+  mouth?: MouthShape;
+}) {
   const root = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
   const eyes = useRef<SVGGElement>(null);
@@ -95,7 +110,7 @@ export function Avatar({ className = "", style }: { className?: string; style?: 
   return (
     <div
       ref={root}
-      className={`group relative size-32 shrink-0 overflow-hidden rounded-full border-2 border-line bg-paper shadow-halo ${className}`}
+      className={`group/avatar relative size-32 shrink-0 overflow-hidden rounded-full border-2 border-line bg-paper shadow-halo ${className}`}
       style={style}
     >
       <svg
@@ -104,24 +119,29 @@ export function Avatar({ className = "", style }: { className?: string; style?: 
         fill="none"
         role="img"
         aria-label="Illustration of Jason"
-        className="absolute aspect-418/235 max-w-none origin-[56%_28%] overflow-visible group-hover:animate-wave"
+        className="absolute aspect-418/235 max-w-none overflow-visible"
         style={{ left: "-93.07%", top: "23.62%", width: "250.85%" }}
       >
         <CharacterBody />
         {/* Pivots at the neck, in art units */}
         <g className="origin-[240px_106px] animate-bob transform-view motion-reduce:animate-none">
           <CharacterHead />
+          {mouth === "rest" ? (
+            <path d={MOUTHS.rest} stroke="#010101" strokeWidth="2.39796" strokeMiterlimit="10" />
+          ) : (
+            <path d={MOUTHS[mouth]} fill="#14141a" stroke="#14141a" strokeWidth="2.39796" strokeLinejoin="round" />
+          )}
           <g ref={eyes} className="transition-transform duration-200 ease-out-soft">
             <path
               d={EYE_LEFT_D}
               fill="#010101"
-              className="origin-[210.31px_61.98px] transform-view group-data-[blink=once]:animate-blink group-data-[blink=twice]:animate-blink-twice"
+              className="origin-[210.31px_61.98px] transform-view group-data-[blink=once]/avatar:animate-blink group-data-[blink=twice]/avatar:animate-blink-twice"
             />
             {/* Trails the left eye by 15ms so the blink doesn't feel mechanical */}
             <path
               d={EYE_RIGHT_D}
               fill="#010101"
-              className="origin-[235.19px_58px] transform-view [animation-delay:15ms] group-data-[blink=once]:animate-blink group-data-[blink=twice]:animate-blink-twice"
+              className="origin-[235.19px_58px] transform-view [animation-delay:15ms] group-data-[blink=once]/avatar:animate-blink group-data-[blink=twice]/avatar:animate-blink-twice"
             />
           </g>
         </g>

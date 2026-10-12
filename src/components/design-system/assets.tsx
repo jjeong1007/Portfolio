@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Container } from "@/components/ui/container";
 import { SectionIntro } from "@/components/ui/section-intro";
 
 type Asset = { src: string; name: string; meta?: string; w: number; h: number; alt: string };
@@ -39,8 +38,8 @@ function AssetCard({ asset, size = "lg" }: { asset: Asset; size?: "lg" | "sm" })
 
 export function Assets() {
   return (
-    <Container className="pt-[37px] pb-30">
-      <SectionIntro title="Assets" level="section">
+    <div className="pt-9 pb-30">
+      <SectionIntro title="Assets" level="section" id="assets-title">
         <p>
           The marks, characters and icons that carry the brand. Every asset is a vector exported
           straight from Figma and lives in <code>/public/brand</code>.
@@ -63,7 +62,7 @@ export function Assets() {
 
       <section aria-labelledby="icon-title" className="mt-(--space-section)">
         <h3 id="icon-title" className="type-heading">Icons</h3>
-        <p className="mt-1.25 text-ink-body">
+        <p className="mt-1 text-ink-body">
           UI icons come from{" "}
           <a href="https://lucide.dev" target="_blank" rel="noopener noreferrer" className="underline">
             Lucide
@@ -74,6 +73,6 @@ export function Assets() {
           {icons.map((a) => <AssetCard key={a.name} asset={a} size="sm" />)}
         </div>
       </section>
-    </Container>
+    </div>
   );
 }

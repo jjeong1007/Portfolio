@@ -28,11 +28,6 @@ export function transitionFor(href: string) {
   return href.split("#")[0] === "/" ? NAV_BACK : NAV_FORWARD;
 }
 
-/** Companion speech-bubble commentary, per route. Falls back to `default`. */
-export const companionMessages: Record<string, string> & { default: string } = {
-  default: "Let me know what else you wanna learn about me just by clicking me!",
-};
-
 /** Transition types passed to <Link transitionTypes>. See page-transition.tsx. */
 export const NAV_FORWARD = ["nav-forward"];
 export const NAV_BACK = ["nav-back"];

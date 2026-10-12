@@ -14,6 +14,8 @@ export type TabItem = {
 type TabsProps = {
   items: TabItem[];
   label: string;
+  /** Sticky rail beside the panels on desktop (e.g. a table of contents); panels move right to make room. */
+  aside?: ReactNode;
 };
 
 function subscribe(onChange: () => void) {
@@ -25,7 +27,7 @@ function subscribe(onChange: () => void) {
  * Accessible tabs whose active state lives in the URL hash (#foundations,
  * #assets), so tabs are linkable. The bar is sticky on a full-bleed divider.
  */
-export function Tabs({ items, label }: TabsProps) {
+export function Tabs({ items, label, aside }: TabsProps) {
   const fallback = items[0].id;
   const hash = useSyncExternalStore(
     subscribe,
@@ -52,7 +54,7 @@ export function Tabs({ items, label }: TabsProps) {
     <>
       <nav className="sticky top-(--nav-height) z-10 border-b border-divider bg-paper">
         <Container>
-          <div role="tablist" aria-label={label} className="flex gap-1.25">
+          <div role="tablist" aria-label={label} className="flex gap-1">
             {items.map((item, i) => {
               const selected = item.id === active;
               return (
@@ -81,17 +83,26 @@ export function Tabs({ items, label }: TabsProps) {
           </div>
         </Container>
       </nav>
-      {items.map((item) => (
-        <div
-          key={item.id}
-          role="tabpanel"
-          id={`panel-${item.id}`}
-          aria-labelledby={`tab-${item.id}`}
-          hidden={item.id !== active}
-        >
-          {item.panel}
+      <Container className={aside ? "lg:grid lg:grid-cols-[192px_minmax(0,1fr)] lg:gap-12" : ""}>
+        {aside && (
+          <div className="sticky top-[calc(var(--nav-height)+var(--tabs-height))] hidden self-start pt-9 lg:block">
+            {aside}
+          </div>
+        )}
+        <div className="min-w-0">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              role="tabpanel"
+              id={`panel-${item.id}`}
+              aria-labelledby={`tab-${item.id}`}
+              hidden={item.id !== active}
+            >
+              {item.panel}
+            </div>
+          ))}
         </div>
-      ))}
+      </Container>
     </>
   );
 }

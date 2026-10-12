@@ -3,29 +3,32 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { Avatar } from "@/components/home/avatar";
+import { useTalk } from "@/components/home/use-talk";
 import { PromptChips } from "@/components/ui/prompt-chips";
-import { companionMessages } from "@/lib/site-nav";
+import { companionLines } from "@/lib/dialogue";
 
 const CLOSE_DELAY = 180;
 const HIDDEN_ON = ["/"];
 
 /**
- * Fixed bottom-right character with a speech bubble, rendered once in the
- * root layout so it persists on every page except the landing page
- * (`HIDDEN_ON`). Hovering (or clicking /
- * focusing) the character opens the site navigation menu above it.
- * Bubble copy comes from `companionMessages` in site-nav.ts.
+ * Fixed bottom-right character, rendered once in the root layout so it
+ * persists on every page except the landing page (`HIDDEN_ON`). There's no
+ * bubble at rest: hovering the character makes it say a random line from
+ * `companionLines` in a bubble that grows as it types (see use-talk.ts);
+ * clicking or focusing it opens the site navigation menu above it.
  */
 export function Companion() {
   const pathname = usePathname();
-  const message = companionMessages[pathname] ?? companionMessages.default;
   const [open, setOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const root = useRef<HTMLDivElement>(null);
   const menuId = useId();
+  const voice = useTalk(companionLines);
+  const { silence } = voice;
 
   const show = () => {
     clearTimeout(closeTimer.current);
+    silence();
     setOpen(true);
   };
   const hide = () => {
@@ -58,7 +61,8 @@ export function Companion() {
       className="fixed right-4 bottom-4 z-20 flex flex-col items-end gap-3 md:right-8 md:bottom-8"
       // Own snapshot so page transitions leave it anchored (see globals.css)
       style={{ viewTransitionName: "companion" }}
-      onFocus={show}
+      // Keyboard focus opens the menu; a mouse click does it in onClick instead
+      onFocus={(e) => e.target.matches(":focus-visible") && show()}
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) hide();
       }}
@@ -68,10 +72,7 @@ export function Companion() {
         id={menuId}
         aria-label="What do you wanna learn about me?"
         inert={!open}
-        // Only keeps an already-open menu open (it ignores the pointer while closed)
-        onPointerEnter={(e) => e.pointerType === "mouse" && clearTimeout(closeTimer.current)}
-        onPointerLeave={(e) => e.pointerType === "mouse" && hide()}
-        className={`flex origin-bottom-right flex-col items-end gap-2.5 rounded-control border border-line bg-paper px-4 py-3 shadow-float transition-[opacity,transform,translate] duration-250 ease-spring ${
+        className={`flex origin-bottom-right flex-col items-end gap-3 rounded-control border border-line bg-paper px-4 py-3 shadow-float transition-[opacity,transform,translate] duration-250 ease-spring ${
           open ? "translate-y-0 scale-100 opacity-100" : "pointer-events-none translate-y-2 scale-95 opacity-0"
         }`}
       >
@@ -82,12 +83,17 @@ export function Companion() {
       {/* Bubble + character */}
       <div className="flex items-center gap-2">
         <p
-          aria-hidden={open}
-          className={`type-control hidden w-[284px] rounded-control border border-line bg-paper px-4 py-3 text-right shadow-float transition-[opacity,translate] duration-200 ease-out-soft md:block ${
-            open ? "translate-x-2 opacity-0" : "opacity-100"
+          aria-hidden
+          className={`type-control pointer-events-none hidden w-max max-w-[284px] origin-right rounded-control border border-line bg-paper px-4 py-3 text-right shadow-float transition-[opacity,scale,translate] duration-250 ease-spring md:block ${
+            voice.open && !open ? "translate-x-0 scale-100 opacity-100" : "translate-x-2 scale-95 opacity-0"
           }`}
         >
-          {message}
+          {/* Only the typed part is laid out, so the bubble grows with the line */}
+          {voice.line.slice(0, voice.typed)}
+        </p>
+        {/* Screen readers get the whole line at once instead of letter by letter */}
+        <p className="sr-only" aria-live="polite">
+          {voice.open ? voice.line : ""}
         </p>
         <button
           type="button"
@@ -95,12 +101,12 @@ export function Companion() {
           aria-controls={menuId}
           aria-label="Open navigation menu"
           onClick={() => (open ? setOpen(false) : show())}
-          // Hovering the character itself is the only hover trigger
-          onPointerEnter={(e) => e.pointerType === "mouse" && show()}
-          onPointerLeave={(e) => e.pointerType === "mouse" && hide()}
+          // Hover talks; only a click (or focus) opens the menu
+          onPointerEnter={(e) => e.pointerType === "mouse" && !open && voice.talk()}
+          onPointerLeave={(e) => e.pointerType === "mouse" && voice.stop()}
           className="rounded-full transition-transform duration-300 ease-spring hover:scale-105 active:scale-95"
         >
-          <Avatar className="max-md:size-20" />
+          <Avatar className="max-md:size-20" mouth={voice.mouth} />
         </button>
       </div>
     </div>

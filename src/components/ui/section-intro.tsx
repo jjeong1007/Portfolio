@@ -22,7 +22,7 @@ export function SectionIntro({ title, level = "subsection", id, children }: Sect
       {children && (
         <div
           className={`space-y-(--space-paragraph) text-ink-body ${
-            level === "section" ? "mt-2" : "mt-1.25"
+            level === "section" ? "mt-2" : "mt-1"
           }`}
         >
           {children}

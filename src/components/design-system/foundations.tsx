@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { Container } from "@/components/ui/container";
 import { SectionIntro } from "@/components/ui/section-intro";
 import { Swatch } from "@/components/ui/swatch";
 import { CharacterStrip } from "@/components/design-system/character-strip";
+import { MotionShowcase } from "@/components/design-system/motion-showcase";
+import { SpacingScale } from "@/components/design-system/spacing-scale";
 import { neutrals, projectColors, typeScale } from "@/lib/design-tokens";
 
 const brandColors = [neutrals.black, neutrals.white, ...Object.values(projectColors)];
@@ -11,8 +12,8 @@ const darkNeutrals = [neutrals.subtle, neutrals.text, neutrals.black];
 
 export function Foundations() {
   return (
-    <Container className="pt-[37px] pb-30">
-      <SectionIntro title="Foundations" level="section">
+    <div className="pt-9 pb-30">
+      <SectionIntro title="Foundations" level="section" id="foundations-title">
         <p>
           Foundations don’t just establish the details of your brand. It also establishes the tone
           and feel of what you’re building.
@@ -21,7 +22,7 @@ export function Foundations() {
 
       {/* Brand board */}
       <div className="mt-(--space-intro) grid gap-3 lg:grid-cols-[660fr_520fr]">
-        <div className="flex min-h-[420px] flex-col items-center justify-center gap-[7px] rounded-card bg-surface lg:min-h-[620px]">
+        <div className="flex min-h-[420px] flex-col items-center justify-center gap-2 rounded-card bg-surface lg:min-h-[620px]">
           <Image src="/brand/logo-mark-small.svg" alt="" width={94} height={94} />
           <p className="type-subtitle">Jason Jeong</p>
         </div>
@@ -74,7 +75,7 @@ export function Foundations() {
           </p>
         </SectionIntro>
 
-        <div className="mt-(--space-intro) grid gap-5 md:grid-cols-[576fr_567fr] md:gap-12.5">
+        <div className="mt-(--space-intro) grid gap-5 md:grid-cols-[576fr_568fr] md:gap-12">
           {[lightNeutrals, darkNeutrals].map((column, i) => (
             <ul key={i} className="flex flex-col gap-5" aria-label={i ? "Dark neutrals" : "Light neutrals"}>
               {column.map((color) => (
@@ -86,7 +87,7 @@ export function Foundations() {
           ))}
         </div>
 
-        <ul className="mt-[35px] grid grid-cols-3 gap-3 lg:grid-cols-6" aria-label="Project colors">
+        <ul className="mt-9 grid grid-cols-3 gap-3 lg:grid-cols-6" aria-label="Project colors">
           {Object.values(projectColors).map((color) => (
             <li key={color.name}>
               <Swatch color={color} variant="chip" />
@@ -111,7 +112,7 @@ export function Foundations() {
           </p>
         </SectionIntro>
 
-        <div className="mt-[54px] flex min-h-[190px] flex-col items-center justify-center gap-5 rounded-card bg-surface px-6 py-10 text-center md:flex-row md:gap-30 md:py-6 md:text-left">
+        <div className="mt-14 flex min-h-48 flex-col items-center justify-center gap-5 rounded-card bg-surface px-6 py-10 text-center md:flex-row md:gap-30 md:py-6 md:text-left">
           <div className="font-display font-bold [font-variation-settings:'opsz'_14]">
             <p className="text-body-lg leading-display tracking-tight">Bricolage Grotesque</p>
             <p className="text-subtitle leading-display tracking-tight">Playfulness</p>
@@ -123,7 +124,7 @@ export function Foundations() {
           </div>
         </div>
 
-        <div className="mt-7 flex flex-col gap-[7px]" aria-label="Type scale">
+        <div className="mt-7 flex flex-col gap-2" aria-label="Type scale">
           {typeScale.map((style) => (
             <div
               key={style.label}
@@ -135,6 +136,37 @@ export function Foundations() {
           ))}
         </div>
       </section>
-    </Container>
+
+      {/* Spacing */}
+      <section aria-labelledby="spacing-title" className="mt-(--space-section)">
+        <SectionIntro title="Spacing" id="spacing-title">
+          <p>
+            Everything sits on a 4-point grid. Every margin, padding and gap is a multiple of 4, so
+            layouts line up on their own and spacing decisions stay quick.
+          </p>
+          <p>
+            These are the steps the system actually uses. The only things off the grid are 1px
+            hairlines and the line heights that come with each type style.
+          </p>
+        </SectionIntro>
+        <div className="mt-(--space-intro)">
+          <SpacingScale />
+        </div>
+      </section>
+
+      {/* Motion */}
+      <section aria-labelledby="motion-title" className="mt-(--space-section)">
+        <SectionIntro title="Motion" id="motion-title">
+          <p>
+            Motion is where the playfulness comes through, so it stays quick and quiet in the UI and
+            slow, like breathing, in the character. Distances follow the same 4-point grid.
+          </p>
+          <p>Hover a card to play its curve.</p>
+        </SectionIntro>
+        <div className="mt-(--space-intro)">
+          <MotionShowcase />
+        </div>
+      </section>
+    </div>
   );
 }

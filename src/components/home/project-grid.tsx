@@ -1,5 +1,9 @@
+import Link from "next/link";
+import { JamTile } from "@/components/case-study/jam-cover";
 import { Container } from "@/components/ui/container";
+import { caseStudies } from "@/content/case-studies";
 import { projectHex, projects, type Project } from "@/lib/projects";
+import { NAV_FORWARD } from "@/lib/site-nav";
 
 function Pill({ children, color, delay }: { children: string; color: string; delay: number }) {
   return (
@@ -15,12 +19,28 @@ function Pill({ children, color, delay }: { children: string; color: string; del
 /**
  * Placeholder tile. At rest it's a plain surface; on hover the project's
  * color gradient fades up from the bottom and its name + discipline pills
- * rise in (Figma 94:4008).
+ * rise in (Figma 94:4008). Projects with a case study link to it. Amazon
+ * Music shows its animated cover (case-study/jam-cover.tsx).
  */
 function ProjectTile({ project }: { project: Project }) {
   const hex = projectHex(project);
+  const study = caseStudies[project.slug];
+  const hasCaseStudy = Boolean(study);
   return (
-    <li className="group relative aspect-square overflow-hidden rounded-card bg-surface">
+    <li className="group relative aspect-square overflow-hidden rounded-card bg-surface has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-nyck">
+      {hasCaseStudy && (
+        <Link
+          href={`/projects/${project.slug}`}
+          transitionTypes={NAV_FORWARD}
+          // Resolves the case study (URL data) ahead of the click so navigation is instant
+          prefetch
+          aria-label={`${project.name} case study`}
+          className="absolute inset-0 z-10 outline-none"
+        />
+      )}
+      {/* Amazon Music's cover: its three screens, and on hover the personas peek in to jam */}
+      {project.slug === "amazon-music" && study && <JamTile screens={study.cover} />}
+      {/* After the cover so the gradient tints it, but before the pills so they stay on top */}
       <span
         aria-hidden
         className="absolute inset-0 opacity-0 transition-opacity duration-500 ease-out-soft group-hover:opacity-100"

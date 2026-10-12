@@ -44,7 +44,7 @@ export function Overview() {
       </h1>
 
       <div className="mt-10 flex flex-col-reverse items-start justify-between gap-6 md:mt-14 md:flex-row md:gap-18">
-        <div className="max-w-copy md:pt-2.5">
+        <div className="max-w-copy md:pt-2">
           <h2 className="type-subtitle">Overview</h2>
           <div className="space-y-(--space-paragraph) text-ink-body">
             <p>
@@ -65,20 +65,20 @@ export function Overview() {
           width={270}
           height={270}
           preload
-          className="size-30 shrink-0 md:size-50 xl:mr-22 xl:size-[270px]"
+          className="size-30 shrink-0 md:size-50 xl:mr-22 xl:size-68"
         />
       </div>
 
       <div className="mt-24 grid gap-14 lg:mt-41 lg:grid-cols-2 lg:gap-18">
         {blocks.map((block) => (
           <section key={block.eyebrow} className="flex flex-col gap-6">
-            <div className="flex max-w-[356px] flex-col gap-1.25">
+            <div className="flex max-w-[356px] flex-col gap-1">
               <p className="type-micro">{block.eyebrow}</p>
               <h3 className="type-heading leading-none!">{block.title}</h3>
             </div>
             <dl className="flex flex-col gap-6">
               {block.rows.map((row) => (
-                <div key={row.q} className="grid gap-2 md:grid-cols-[147px_1fr] md:gap-18">
+                <div key={row.q} className="grid gap-2 md:grid-cols-[148px_1fr] md:gap-18">
                   <dt className="type-micro text-ink-subtle md:whitespace-nowrap">{row.q}</dt>
                   <dd className="leading-5">{row.a}</dd>
                 </div>

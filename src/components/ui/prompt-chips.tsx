@@ -20,7 +20,7 @@ export function PromptChips({ layout = "row", onSelect }: PromptChipsProps) {
     <ul
       className={
         layout === "row"
-          ? "flex flex-wrap items-end justify-center gap-2.5"
+          ? "flex flex-wrap items-end justify-center gap-2"
           : "flex flex-col items-end gap-2"
       }
     >

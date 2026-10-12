@@ -4,7 +4,7 @@ import type { ComponentPropsWithoutRef } from "react";
 type ChipVariant = "default" | "quiet";
 
 const base =
-  "inline-flex items-center justify-center rounded-control border border-line bg-paper px-3 py-2 text-center whitespace-nowrap transition-[transform,background-color,border-color] duration-200 ease-spring hover:-translate-y-0.5 hover:border-ink-faint hover:bg-surface active:translate-y-0 active:scale-[0.97]";
+  "inline-flex items-center justify-center rounded-control border border-line bg-paper px-3 py-2 text-center whitespace-nowrap transition-[transform,background-color,border-color] duration-200 ease-spring hover:-translate-y-1 hover:border-ink-faint hover:bg-surface active:translate-y-0 active:scale-[0.97]";
 
 const variants: Record<ChipVariant, string> = {
   default: "type-control text-ink",

@@ -6,7 +6,7 @@ import { useToast } from "@/components/ui/toast";
 import { navLinks, transitionFor } from "@/lib/site-nav";
 
 const linkClass =
-  "type-body-md rounded-tab px-1 py-0.5 text-ink transition-colors duration-150 hover:text-ink-subtle";
+  "type-body-md rounded-tab px-1 py-1 text-ink transition-colors duration-150 hover:text-ink-subtle";
 
 /**
  * Sticky top bar on every page (rendered in the root layout): logo mark +
