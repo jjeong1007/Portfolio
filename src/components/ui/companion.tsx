@@ -1,25 +1,28 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { Avatar } from "@/components/home/avatar";
+import { useHeroInView } from "@/components/home/hero-presence";
 import { useTalk } from "@/components/home/use-talk";
 import { PromptChips } from "@/components/ui/prompt-chips";
 import { companionLines } from "@/lib/dialogue";
 
 const CLOSE_DELAY = 180;
-const HIDDEN_ON = ["/"];
 
 /**
  * Fixed bottom-right character, rendered once in the root layout so it
- * persists on every page except the landing page (`HIDDEN_ON`). There's no
+ * persists across pages. While a page-header character (TalkingAvatar on the
+ * landing and About pages) is on screen it tucks away, and it pops back in
+ * once that one has scrolled out of view (hero-presence.ts). There's no
  * bubble at rest: hovering the character makes it say a random line from
  * `companionLines` in a bubble that grows as it types (see use-talk.ts);
  * clicking or focusing it opens the site navigation menu above it.
  */
 export function Companion() {
-  const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const heroInView = useHeroInView();
+  const [menuOpen, setOpen] = useState(false);
+  // Tucking away also closes the menu
+  const open = menuOpen && !heroInView;
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const root = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -52,13 +55,17 @@ export function Companion() {
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
-  // The landing hero already features the character front and center
-  if (HIDDEN_ON.includes(pathname)) return null;
-
   return (
     <div
       ref={root}
-      className="fixed right-4 bottom-4 z-20 flex flex-col items-end gap-3 md:right-8 md:bottom-8"
+      // Hidden while the header character is on screen; fades in and out of the corner
+      inert={heroInView}
+      aria-hidden={heroInView}
+      // Click-through: its box spans the closed menu too, which would block whatever is
+      // underneath (e.g. the project tiles). Only the visible parts take the pointer.
+      className={`pointer-events-none fixed right-4 bottom-4 z-20 flex flex-col items-end gap-3 transition-opacity duration-250 ease-out-soft md:right-8 md:bottom-8 ${
+        heroInView ? "opacity-0" : "opacity-100"
+      }`}
       // Own snapshot so page transitions leave it anchored (see globals.css)
       style={{ viewTransitionName: "companion" }}
       // Keyboard focus opens the menu; a mouse click does it in onClick instead
@@ -73,7 +80,7 @@ export function Companion() {
         aria-label="What do you wanna learn about me?"
         inert={!open}
         className={`flex origin-bottom-right flex-col items-end gap-3 rounded-control border border-line bg-paper px-4 py-3 shadow-float transition-[opacity,transform,translate] duration-250 ease-spring ${
-          open ? "translate-y-0 scale-100 opacity-100" : "pointer-events-none translate-y-2 scale-95 opacity-0"
+          open ? "pointer-events-auto translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
         }`}
       >
         <p className="type-control">What do you wanna learn about me?</p>
@@ -104,7 +111,7 @@ export function Companion() {
           // Hover talks; only a click (or focus) opens the menu
           onPointerEnter={(e) => e.pointerType === "mouse" && !open && voice.talk()}
           onPointerLeave={(e) => e.pointerType === "mouse" && voice.stop()}
-          className="rounded-full transition-transform duration-300 ease-spring hover:scale-105 active:scale-95"
+          className="pointer-events-auto rounded-full transition-transform duration-300 ease-spring hover:scale-105 active:scale-95"
         >
           <Avatar className="max-md:size-20" mouth={voice.mouth} />
         </button>

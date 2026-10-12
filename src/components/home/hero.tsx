@@ -7,7 +7,7 @@ const rise = (step: number): CSSProperties => ({ animationDelay: `${step * 80}ms
 
 export function Hero() {
   return (
-    <section className="flex justify-center px-(--gutter) pt-16 md:pt-23">
+    <section className="flex justify-center px-(--gutter) pt-20 md:pt-23">
       <div className="flex w-full max-w-197 flex-col items-center text-center">
         <TalkingAvatar className="animate-rise" style={rise(0)} />
 

@@ -14,6 +14,6 @@ Read **[design-system.md](design-system.md)** before building any UI. It is the 
 
 - Tokens: `src/app/globals.css` (`@theme`) and `src/lib/design-tokens.ts`
 - Primitives: `src/components/ui/` (Container, Navbar, Companion, PageTransition, SectionIntro, BackLink, Chip, Tabs, Swatch, Toast)
-- Pages: `/` (landing: nav, hero, projects), `/design-system` (showcase)
-- Page sections: `src/components/home/`, `src/components/design-system/`
+- Pages: `/` (landing: nav, hero, projects), `/about` (about me + photo gallery), `/design-system` (showcase), `/projects/[slug]` (case studies)
+- Page sections: `src/components/home/`, `src/components/about/`, `src/components/design-system/`
 - Brand assets: `public/brand/`

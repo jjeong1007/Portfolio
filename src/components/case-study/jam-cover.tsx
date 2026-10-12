@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import type { Figure } from "@/lib/case-study";
 import {
   PERSONA_NECK,
@@ -15,6 +15,7 @@ import {
   PersonaMouth,
   type PersonaKey,
 } from "./persona-art";
+import { useTileActive } from "@/components/home/use-tile-active";
 import { PoseBody, PoseOverlay, RelaxedBody, type FigmaPoseKey } from "./pose-art";
 
 /**
@@ -359,36 +360,7 @@ function Leaner({ lean: { cast, face, delay }, jam }: { lean: Lean; jam: boolean
  * and the others slide out, and the characters lean in from the sides.
  */
 export function JamTile({ screens }: { screens: Figure[] }) {
-  const root = useRef<HTMLDivElement>(null);
-  const [jam, setJam] = useState(false);
-
-  useEffect(() => {
-    const host = root.current?.parentElement;
-    if (!host) return;
-    const enter = (e: PointerEvent) => e.pointerType === "mouse" && setJam(true);
-    const leave = (e: PointerEvent) => e.pointerType === "mouse" && setJam(false);
-    const focus = (e: FocusEvent) => (e.target as Element).matches(":focus-visible") && setJam(true);
-    const blur = () => setJam(false);
-    host.addEventListener("pointerenter", enter);
-    host.addEventListener("pointerleave", leave);
-    host.addEventListener("focusin", focus);
-    host.addEventListener("focusout", blur);
-
-    // Touch screens can't hover: jam while most of the tile is on screen instead
-    let observer: IntersectionObserver | undefined;
-    if (window.matchMedia("(hover: none)").matches) {
-      observer = new IntersectionObserver(([entry]) => setJam(entry.isIntersecting), { threshold: 0.6 });
-      observer.observe(host);
-    }
-
-    return () => {
-      host.removeEventListener("pointerenter", enter);
-      host.removeEventListener("pointerleave", leave);
-      host.removeEventListener("focusin", focus);
-      host.removeEventListener("focusout", blur);
-      observer?.disconnect();
-    };
-  }, []);
+  const [root, jam] = useTileActive<HTMLDivElement>();
 
   const [first, middle, last] = screens;
   const screen = (figure: Figure, className: string, style: CSSProperties) => (

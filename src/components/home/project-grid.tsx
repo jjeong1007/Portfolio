@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { JamTile } from "@/components/case-study/jam-cover";
+import { VaseTile } from "@/components/home/vase-tile";
 import { Container } from "@/components/ui/container";
 import { caseStudies } from "@/content/case-studies";
 import { projectHex, projects, type Project } from "@/lib/projects";
@@ -20,7 +21,8 @@ function Pill({ children, color, delay }: { children: string; color: string; del
  * Placeholder tile. At rest it's a plain surface; on hover the project's
  * color gradient fades up from the bottom and its name + discipline pills
  * rise in (Figma 94:4008). Projects with a case study link to it. Amazon
- * Music shows its animated cover (case-study/jam-cover.tsx).
+ * Music and Plaza show animated covers (case-study/jam-cover.tsx,
+ * home/vase-tile.tsx).
  */
 function ProjectTile({ project }: { project: Project }) {
   const hex = projectHex(project);
@@ -40,6 +42,13 @@ function ProjectTile({ project }: { project: Project }) {
       )}
       {/* Amazon Music's cover: its three screens, and on hover the personas peek in to jam */}
       {project.slug === "amazon-music" && study && <JamTile screens={study.cover} />}
+      {/* Plaza's cover: the vase, and on hover Jason pops out of it */}
+      {project.slug === "plaza" && <VaseTile />}
+      {project.comingSoon && (
+        <span className="type-micro absolute inset-0 flex items-center justify-center text-ink-subtle">
+          Coming soon
+        </span>
+      )}
       {/* After the cover so the gradient tints it, but before the pills so they stay on top */}
       <span
         aria-hidden

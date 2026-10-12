@@ -8,6 +8,7 @@ This is the source of truth for the look and feel of Jason Jeong's portfolio. It
 - **Tokens in code:** [`src/app/globals.css`](src/app/globals.css) (Tailwind v4 `@theme`) and [`src/lib/design-tokens.ts`](src/lib/design-tokens.ts) (typed data)
 - **Live showcase:** `/design-system` ([`src/app/design-system/page.tsx`](src/app/design-system/page.tsx)), linked from the nav bar and the companion menu. Overview, then two tabs: **Foundations** (brand board, Mood & Tone, Color palette, Typography, Spacing, Motion) and **Assets** (Logo mark, Characters, Icons), with a sticky table of contents beside them on desktop
 - **Landing page:** `/` ([`src/app/page.tsx`](src/app/page.tsx)), from Figma node `94:3455`: nav bar, hero, and the projects grid (`#projects`, placeholder tiles for now)
+- **About page:** `/about` ([`src/app/about/page.tsx`](src/app/about/page.tsx)), from Figma node `103:12209` ("Who are you"). Content in [`src/content/about/`](src/content/about/).
 - **Case studies:** `/projects/[slug]` ([`src/app/projects/[slug]/page.tsx`](src/app/projects/[slug]/page.tsx)), content in [`src/content/case-studies/`](src/content/case-studies/). Live so far: Amazon Music, Plaza.
 - **`assets/`:** raw exports from other tools (Framer, HTML prototypes), kept for reference only. TypeScript and ESLint ignore it.
 - **Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4. Deployed on Vercel.
@@ -137,6 +138,7 @@ Display sizes step down at Tailwind's breakpoints. The variables are redefined i
   - **576 / 568** with a **48px** gap: neutral swatch columns.
   - **Label / answer rows:** 148px label column, 72px gap, answer fills the rest.
 - **Prose width:** intro paragraphs in the hero are capped at **560px** (`max-w-copy`). Section intros run the full 1192px column.
+- **Narrow column:** **1000px** (`max-w-narrow`), centered inside the 1192px column. The About page story copy and photo gallery use it.
 
 ### 4.2 Spacing: the 4-point grid
 
@@ -170,12 +172,13 @@ These are the steps the design actually uses (shown live on `/design-system` ›
 |---|---|---|
 | `rounded-control` | 8px | Chips, buttons, floating menus and the speech bubble |
 | `rounded-card` | 12px | Cards, swatches, toast, character strip |
+| `rounded-photo` | 8px | Photos packed tightly together: the About page gallery and collage. Single photos in a case study stay `rounded-card`. |
 | `rounded-full` | — | Avatar |
 | `rounded-t-tab` | 4px top corners | Tabs |
 | `border-line` | 1px `#E5E5E5` | Outlines, list rules |
 | `border-divider` | 1px `#D9D9D9` | Full-bleed hairline under the tab bar |
 | `shadow-float` | `0 0 46px rgb(0 0 0 / 12%)` | Panels floating over the page (companion menu, speech bubble) |
-| `shadow-halo` | `0 0 92px rgb(0 0 0 / 12%)` | Avatar |
+| `shadow-halo` | `0 0 92px rgb(0 0 0 / 12%)` | Avatar, the About page collage photos (they float over the page) |
 | Elevation rule | — | Content cards stay flat (`bg-surface`). Shadows are only for floating UI, and always centered and soft, with no offset. |
 
 ---
@@ -227,14 +230,14 @@ A bordered quick-action pill: `rounded-control border-line bg-paper px-3 py-2`, 
 - Hover: lifts 4px with `ease-spring`, `bg-surface`, border darkens to `ink-faint`. Press: `scale(0.97)`.
 
 ### Navbar — `ui/navbar.tsx` (client)
-The sticky top bar on every page, rendered once in the root layout (Figma `94:8094`). It is `--nav-height` (81px) tall, stays anchored during page transitions, and anything else sticky (e.g. the design system tab bar) sits at `top-(--nav-height)`. It has the 32px logo mark + 24px + links in `type-body-md`, all centered, `py-6`, with a `border-line` bottom edge over a slightly translucent `bg-paper`. Links come from `navLinks` in `lib/site-nav.ts`. "Projects" scrolls smoothly to `#projects`, "About me" shows a toast until that page exists. Hover: text goes to `ink-subtle`; the logo tilts.
+The sticky top bar on every page, rendered once in the root layout (Figma `94:8094`). It is `--nav-height` (81px) tall, stays anchored during page transitions, and anything else sticky (e.g. the design system tab bar) sits at `top-(--nav-height)`. It has the 32px logo mark + 24px + links in `type-body-md`, all centered, `py-6`, with a `border-line` bottom edge over a slightly translucent `bg-paper`. Links come from `navLinks` in `lib/site-nav.ts`. "Projects" scrolls smoothly to `#projects`, "About me" goes to `/about`. Hover: text goes to `ink-subtle`; the logo tilts.
 
 ### Project grid — `home/project-grid.tsx`
-`#projects` on the landing page: a 3-column grid (2 on tablet, 1 on mobile) of square `rounded-card bg-surface` tiles with a 12px gap. Data comes from `lib/projects.ts` (name, discipline, project color). Most tiles are still **placeholders**: no images, and plain gray at rest. **Amazon Music** shows its three cover screens and, on hover, the characters lean in to jam (`JamTile`, §7.4a). Tiles for projects with a case study link to `/projects/<slug>` (the whole tile is the link, with the focus ring drawn on the tile).
+`#projects` on the landing page: a 3-column grid (2 on tablet, 1 on mobile) of square `rounded-card bg-surface` tiles with a 12px gap. Data comes from `lib/projects.ts` (name, discipline, project color). Most tiles are still **placeholders**: no images, and plain gray at rest. **Amazon Music** shows its three cover screens and, on hover, the characters lean in to jam (`JamTile`, §7.4a). **Plaza** shows its vase logo and, on hover, Jason pops out of it (`VaseTile`, §7.4b). Both use `home/use-tile-active.ts`, which listens on the tile: active on hover or keyboard focus, and on touch screens while 60% of the tile is in view. Tiles for projects with a case study link to `/projects/<slug>` (the whole tile is the link, with the focus ring drawn on the tile).
 - **Hover (Figma `94:4008`):** the project color fades up from the bottom (`linear-gradient(0deg, color @ 20% → transparent)`, 500ms). Two pills rise 12px and fade in, the name bottom-left and the discipline bottom-right, 60ms apart, with `ease-spring`. Pills: `type-control` Bold in the project color, `bg-paper/72` + `border-paper` + `backdrop-blur-sm`, `rounded-control px-4 py-2`, 12px from the tile edges.
 
 ### Companion — `ui/companion.tsx` (client)
-A fixed character in the bottom-right corner (32px inset; 16px on mobile), rendered once in the root layout. It is hidden on the landing page (`HIDDEN_ON`), where the hero avatar already plays that role.
+A fixed character in the bottom-right corner (32px inset; 16px on mobile), rendered once in the root layout. - **Out of the way of the header character:** on pages with a TalkingAvatar in the header (landing, `/about`), it stays hidden while that avatar is on screen, so there's only ever one Jason in view. Once the header avatar scrolls fully out of view (or under the sticky Navbar), the companion fades in (opacity, 250ms `ease-out-soft`). Scrolling back up fades it out the same way. While hidden it's `inert`, and an open menu closes. The avatar (`data-hero-avatar`) reports itself through `home/hero-presence.ts` (`useReportHero` / `useHeroInView`). The server HTML renders the companion hidden, and the first client read looks for `[data-hero-avatar]` in that HTML, so it never flashes in while the page content is still hydrating. Pages without a header avatar show it straight away.
 - **Speech bubble:** max 284px, `type-control`, right-aligned, `rounded-control border-line shadow-float`, 8px to the left of the avatar. There is no bubble at rest. Hidden on mobile.
 - **Hover = talk:** hovering the character (mouse only) pops the bubble in from the right (`ease-spring`, 250ms) and types a random line from `companionLines` (`lib/dialogue.ts`) while the mouth lip-syncs (`useTalk`). The bubble grows with the typed text. On leave, it fades out.
 - **Click = menu:** the menu opens **only** on click (or keyboard focus), never on hover. It appears above the character with "What do you wanna learn about me?" and the `navPrompts` chips stacked right-aligned. It closes on a second click, Escape, an outside click, or picking a chip. Opening it silences the character, and the bubble fades out while it's open.
@@ -250,7 +253,7 @@ Wrap each page's content in `<PageTransition>` inside `page.tsx`. Links pass `tr
 A 128px circle (`rounded-full border-2 border-line shadow-halo`) that crops the character to the head, using Figma offsets stored as percentages. The character is an inline SVG rig: the head bobs, the eyes blink at random and follow the cursor, and a `mouth` prop picks the lip-sync shape. See §7.4.
 
 ### TalkingAvatar — `home/talking-avatar.tsx` (client)
-The landing-page avatar. Hovering the character (or tapping it on touch) says a random line from `heroLines` in [`lib/dialogue.ts`](src/lib/dialogue.ts), never the same one twice in a row. The text types into a speech bubble while the mouth lip-syncs. Bubble: `type-control`, `rounded-control border-line bg-paper shadow-float`, `px-4 py-3`, centered text, **8px above** the avatar and centered on it, max 320px wide. It pops up from the bottom with `ease-spring` (250ms) and fades out 150ms after the pointer leaves (on touch, 2.5s after the line finishes). Only the typed part of the line is laid out, so the bubble starts small and grows as the text types. Screen readers get the whole line through a polite live region. The typing and lip-sync logic lives in `home/use-talk.ts` (`useTalk(lines)`), shared with the Companion. To add dialogue, add strings to `heroLines` / `companionLines`.
+The page-header avatar (landing page and `/about`). Pass `lines` to change what it says (default `heroLines`; `/about` uses `aboutLines`). It reports whether it's on screen so the Companion can stay hidden meanwhile (see Companion). **Top room:** the bubble opens upward, so a header avatar needs at least ~80px between the Navbar and the avatar for a two-line bubble to clear the nav: the landing hero uses `pt-20` (`md:pt-23`), `/about` uses `pt-24`. Hovering the character (or tapping it on touch) says a random line from `heroLines` in [`lib/dialogue.ts`](src/lib/dialogue.ts), never the same one twice in a row. The text types into a speech bubble while the mouth lip-syncs. Bubble: `type-control`, `rounded-control border-line bg-paper shadow-float`, `px-4 py-3`, centered text, **8px above** the avatar and centered on it, max 320px wide. It pops up from the bottom with `ease-spring` (250ms) and fades out 150ms after the pointer leaves (on touch, 2.5s after the line finishes). Only the typed part of the line is laid out, so the bubble starts small and grows as the text types. Screen readers get the whole line through a polite live region. The typing and lip-sync logic lives in `home/use-talk.ts` (`useTalk(lines)`), shared with the Companion. To add dialogue, add strings to `heroLines` / `companionLines`.
 
 ### Case study page — `case-study/case-study-page.tsx`
 Every project case study at `/projects/[slug]` uses this one template. Content is data, so a new case study needs no new components:
@@ -278,6 +281,15 @@ Layout, top to bottom:
 
 The slug is URL data, so the page reads it behind `<Suspense>`, and grid tiles `prefetch` so navigation stays instant (Next's instant-navigation check).
 
+### About page — `app/about/page.tsx`
+Figma `103:12209`. Copy and photos are data in [`src/content/about/index.ts`](src/content/about/index.ts) (`story`, `collage`, `galleries`).
+- **Header:** `pt-24` (room for the speech bubble under the Navbar), TalkingAvatar (`aboutLines`) → 12px → `type-title` "So, who is Jason Jeong?" over "I’m a creative builder." in Bricolage Medium, `leading-[1.07]` like the landing hero. Blocks `animate-rise`, 80ms apart.
+- **Collage — `about/photo-collage.tsx` (client):** a selfie (492 × 304) with four photos (296 × 216, ±15°) behind it, all `rounded-photo shadow-halo`, laid out in a 952 × 556 Figma frame. Positions are multiples of `--u` (`100cqw / 952`), so it scales as one piece. On small screens the frame is 96px wider than the column and the outer photos run off the edges (the page clips them). At rest the four photos peek out from behind the selfie. Hovering or keyboard-focusing the collage (tapping on touch) fans them out to their Figma spots: 700ms `ease-spring`, 60ms apart. The `type-subheading ink-body` "hover over me!" sits 8px above the selfie and fades away once they're out; touch screens read "tap me!".
+- **Story:** `type-body-lg ink-body` paragraphs in the 1000px `max-w-narrow` column, 64px below the collage.
+- **Outside of design:** `--space-section` down, a centered `type-subtitle` `<h2>`, 64px, then one gallery per hobby (`about/photo-gallery.tsx`), `--space-section` apart. Each gallery has a centered `type-subtitle` title in Bricolage Medium, 16px above its photos.
+- **Gallery rows:** each photo keeps its Figma frame (`size`) and grows by its aspect ratio, so every row is justified to one height at any width, with 12px gaps. Below 640px the rows become a 2-column masonry and panoramas (wider than 2:1) span both columns. Photos are `rounded-photo` on `bg-surface` with a blur placeholder. An optional `caption` sits 12px in from the bottom left, in `type-body-md paper`, and only shows on hover, like the project tiles: an `ink` gradient (60% at the bottom, clear by halfway up) fades in over 500ms `ease-out-soft`, then the caption rises 12px and fades in (300ms `ease-spring`, 60ms later). Photos without a caption get no hover. Touch screens can't hover, so they show both at rest.
+- To add a photo, drop it in `src/content/about/`, import it, and add it to a row with its frame size.
+
 ### BackLink — `ui/back-link.tsx`
 "‹ Back to main page" at the top left of secondary pages (Figma `94:8004`). It is a Lucide `chevron-left` (20×24, `#525252`) + 8px + `type-body-md` in `ink-body`, `px-3 py-2`, sitting at the left edge of the content column. Hover: `bg-surface`, text goes to `ink`, chevron nudges 4px left. It links to `/` by default; pass `href`/`label` to reuse it on other pages.
 
@@ -303,6 +315,7 @@ All brand assets are vectors exported from Figma, stored in [`public/brand/`](pu
 |---|---|
 | `logo-mark-large.svg` (270×270), `logo-mark-small.svg` (94×94) | The "JJ" monogram mark in black. The small one is also the favicon (`src/app/icon.svg`). |
 | `character-1.svg` … `character-5.svg` | Hand-drawn vector character poses of Jason |
+| Personas (code, not files) | The Amazon Music cast, drawn in `case-study/`. How they're built: [`personas.md`](personas.md) |
 | `icon-blocks.svg`, `icon-library-big.svg` | Lucide `blocks` and `library-big` at 20px |
 | `icon-chevron-left.svg` | Lucide `chevron-left` (20×24, `#525252` stroke) for BackLink |
 | `icon-times.svg` | Custom bold "×" used in the font pairing |
@@ -395,6 +408,14 @@ Every head bobs at the neck (`341px 250px`, `animate-jam-nod`) and every body sw
 - **Notes** use the Figma hair colors plus Amazon Rain; they're decorative art, so their hex values live in the component. Each host places them with `--note-x`, `--note-size`, `--note-bottom` and `--note-rise`.
 - **Reduced motion:** the characters still swap in, but loops stop and notes are hidden.
 
+### 7.4b Vase tile — `home/vase-tile.tsx` (client)
+
+The Plaza tile on the landing page. Art: the Plaza vase logo (`public/brand/plaza-vase.svg`, Figma `1080:1535`) and Jason in his bucket hat (`public/brand/plaza-character.svg`: design-system character 5, cropped to the head, hat recolored Plaza Earth).
+- **Rest:** the vase, 44cqw tall, centered.
+- **Active:** the camera zooms 2× into the vase's mouth and moves it to 56cqw down (450ms `ease-out-soft`), the vase rocks on its base left-right twice (±4°, `animate-vase-shake`, 600ms), then Jason springs up out of the mouth (600ms `ease-spring`). He's drawn behind the vase and clipped to the mouth below the rim, so the lip hides where he comes out.
+- **Leaving:** everything reverses in 350ms with no stagger.
+- **Reduced motion:** no shake; Jason still swaps in.
+
 ### 7.5 Interaction states
 
 - Hover on interactive surfaces → `bg-surface`. Press on swatches → `scale(0.99)`.
@@ -454,4 +475,6 @@ const accent = projectColors.nyck;
 - Project chips in the Figma palette row cut off their labels, so the label is hidden by default and shows on hover.
 - Landing page: the avatar border in Figma is `#EDEDED` at 1.78px. It's built with `border-2 border-line` (#E5E5E5), which looks the same, so the system doesn't gain a near-duplicate gray.
 - **4-point grid migration:** the Figma file had off-grid spacing (5, 7, 10, 22, 35, 37, 42, 50, 54, 93px, a 67px swatch, a 147px label column). Each was rounded to the nearest multiple of 4 (§4.2), so the build is a few pixels off Figma in those places on purpose.
+- About page (`103:12209`): the photo radius in Figma mixes 12, 8 and ~6px. It's built with one `rounded-photo` (8px). The gallery is 986px wide in Figma and the copy 1000px. Both use the 1000px `max-w-narrow`. The 200px gap above "Outside of design" is `--space-section` (136px). The title's second line uses the hero's tight `leading-[1.07]` rather than Figma's auto line height.
+- About page collage: Figma shows only the fanned-out layout, with a "hover over me!" label. The build reads that as the hover state and tucks the photos behind the selfie at rest.
 - The **Assets** tab has no Figma design yet. Its page reuses the Foundations patterns to show logo marks, characters and icons.

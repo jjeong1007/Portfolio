@@ -10,6 +10,12 @@ export const heroLines: string[] = [
   "Psst… the projects are just below. Go on, take a peek!",
 ];
 
+/** The avatar at the top of the About page. */
+export const aboutLines: string[] = [
+  "That’s me! Well, a drawing of me.",
+  "Scroll down, I took all of these photos myself!",
+];
+
 /** The little character in the bottom-right corner of every other page. */
 export const companionLines: string[] = [
   "Hiya! Still here if you need me.",

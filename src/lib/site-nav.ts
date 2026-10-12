@@ -11,7 +11,7 @@ export type NavPrompt = {
 
 export const navPrompts: NavPrompt[] = [
   { label: "My projects!!", href: "/#projects" },
-  { label: "Who are you?!", message: "The about page is coming soon." },
+  { label: "Who are you?!", href: "/about" },
   { label: "How’d you make this website??", href: "/design-system" },
   { label: "What are your deep darkest fears in life?", message: "Nice try. That’s classified.", quiet: true },
 ];
@@ -19,7 +19,7 @@ export const navPrompts: NavPrompt[] = [
 /** Top nav bar links (landing page). Same shape as NavPrompt. */
 export const navLinks: NavPrompt[] = [
   { label: "Projects", href: "/#projects" },
-  { label: "About me", message: "The about page is coming soon." },
+  { label: "About me", href: "/about" },
   { label: "Design system", href: "/design-system" },
 ];
 
