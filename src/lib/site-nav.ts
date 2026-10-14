@@ -23,9 +23,37 @@ export const navLinks: NavPrompt[] = [
   { label: "Design system", href: "/design-system" },
 ];
 
-/** Links into the landing page go "back"; everything else goes "forward". */
+/**
+ * The side-hustle landing page. Visitors who start there keep it as home: the
+ * logo and "projects" links point back to it instead of "/" (see use-home.ts).
+ */
+export const STUDIO_HOME = "/studio";
+
+/**
+ * The landing page a path belongs to: /studio is the studio's, "/" and the case
+ * studies are the main site's. Shared pages (/about, /design-system) belong to
+ * neither and return null, so they use whichever home the visitor came from.
+ */
+export function ownHome(pathname: string): string | null {
+  if (pathname === STUDIO_HOME || pathname.startsWith(`${STUDIO_HOME}/`)) return STUDIO_HOME;
+  if (pathname === "/" || pathname.startsWith("/projects/")) return "/";
+  return null;
+}
+
+/** Points links into the landing page ("/", "/#projects") at `home` instead. */
+export function withHome(prompts: NavPrompt[], home: string): NavPrompt[] {
+  if (home === "/") return prompts;
+  return prompts.map((prompt) =>
+    "href" in prompt && prompt.href.split("#")[0] === "/"
+      ? { ...prompt, href: home + prompt.href.slice(1) }
+      : prompt,
+  );
+}
+
+/** Links into a landing page go "back"; everything else goes "forward". */
 export function transitionFor(href: string) {
-  return href.split("#")[0] === "/" ? NAV_BACK : NAV_FORWARD;
+  const path = href.split("#")[0];
+  return path === "/" || path === STUDIO_HOME ? NAV_BACK : NAV_FORWARD;
 }
 
 /** Transition types passed to <Link transitionTypes>. See page-transition.tsx. */

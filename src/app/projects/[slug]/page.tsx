@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
+import { PasswordGate } from "@/components/case-study/password-gate";
 import { PageTransition } from "@/components/ui/page-transition";
 import { caseStudies, getCaseStudy } from "@/content/case-studies";
+import { hasAccess } from "@/lib/case-study-access";
 
 // Unknown slugs fall through to notFound() (`dynamicParams` isn't allowed with Cache Components)
 export function generateStaticParams() {
@@ -26,8 +28,13 @@ export default function ProjectPage({ params }: PageProps<"/projects/[slug]">) {
   );
 }
 
+/**
+ * Password-protected case studies render the gate until the access cookie is
+ * set, so their content is never sent to the browser without the password.
+ */
 async function CaseStudy({ params }: Pick<PageProps<"/projects/[slug]">, "params">) {
   const study = getCaseStudy((await params).slug);
   if (!study) notFound();
+  if (study.protected && !(await hasAccess())) return <PasswordGate />;
   return <CaseStudyPage study={study} />;
 }

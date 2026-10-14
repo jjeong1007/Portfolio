@@ -1,11 +1,26 @@
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { TalkingAvatar } from "@/components/home/talking-avatar";
 
 /** Staggered entrance: each block rises in 80ms after the previous one. */
 const rise = (step: number): CSSProperties => ({ animationDelay: `${step * 80}ms` });
 
-export function Hero() {
+const defaultBlurb = (
+  <>
+    Going deep into product strategy, making a butt-ton of design systems{" "}
+    <span className="text-ink-faint">(haha get it)</span>, and creating compelling experiences
+    for not just customers, but my team as well.
+  </>
+);
+
+/** The landing hero. `tagline` and `blurb` let other landing pages (e.g. /studio) reuse it. */
+export function Hero({
+  tagline = <>I do product &amp; strategy</>,
+  blurb = defaultBlurb,
+}: {
+  tagline?: ReactNode;
+  blurb?: ReactNode;
+}) {
   return (
     <section className="flex justify-center px-(--gutter) pt-20 md:pt-23">
       <div className="flex w-full max-w-197 flex-col items-center text-center">
@@ -23,14 +38,12 @@ export function Hero() {
             />
           </span>
           <span className="block animate-rise font-medium!" style={rise(2)}>
-            I do product &amp; strategy
+            {tagline}
           </span>
         </h1>
 
         <p className="type-body-lg mt-4 max-w-187 animate-rise text-ink-body" style={rise(3)}>
-          Going deep into product strategy, making a butt-ton of design systems{" "}
-          <span className="text-ink-faint">(haha get it)</span>, and creating compelling experiences
-          for not just customers, but my team as well.
+          {blurb}
         </p>
       </div>
     </section>

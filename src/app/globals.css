@@ -24,6 +24,10 @@
   --color-plaza: #a34414;        /* Plaza Earth */
   --color-shopify: #95bf47;      /* Shopify Forest */
   --color-amazon: #26cad3;       /* Amazon Rain */
+  --color-referrai: #ff5c0a;     /* Referrai Orange */
+  /* Darker shades for small text where the accent is too light (projectTextColors) */
+  --color-shopify-text: #5e8e3e;
+  --color-amazon-text: #188389;
 
   /* ---- Type scale (responsive overrides at the bottom) ---------------- */
   --text-title: 72px;

@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import { Chip } from "@/components/ui/chip";
 import { useToast } from "@/components/ui/toast";
-import { navPrompts, transitionFor } from "@/lib/site-nav";
+import { useHome } from "@/components/ui/use-home";
+import { navPrompts, transitionFor, withHome } from "@/lib/site-nav";
 
 type PromptChipsProps = {
   /** "row" wraps horizontally (landing), "column" stacks right-aligned (companion menu) */
@@ -11,10 +12,11 @@ type PromptChipsProps = {
   onSelect?: () => void;
 };
 
-/** The site's quick-navigation chips, driven by `navPrompts`. */
+/** The site's quick-navigation chips, driven by `navPrompts`. For studio visitors, "My projects" goes to the studio's. */
 export function PromptChips({ layout = "row", onSelect }: PromptChipsProps) {
   const toast = useToast();
   const pathname = usePathname();
+  const home = useHome();
 
   return (
     <ul
@@ -24,7 +26,7 @@ export function PromptChips({ layout = "row", onSelect }: PromptChipsProps) {
           : "flex flex-col items-end gap-2"
       }
     >
-      {navPrompts.map((prompt) => {
+      {withHome(navPrompts, home).map((prompt) => {
         const variant = prompt.quiet ? "quiet" : "default";
         return (
           <li key={prompt.label}>

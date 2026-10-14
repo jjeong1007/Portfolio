@@ -28,9 +28,25 @@ export const projectColors = {
   plaza: { name: "Plaza Earth", token: "plaza", hex: "#A34414", on: "light" },
   shopify: { name: "Shopify Forest", token: "shopify", hex: "#95BF47", on: "light" },
   amazon: { name: "Amazon Rain", token: "amazon", hex: "#26CAD3", on: "light" },
+  referrai: { name: "Referrai Orange", token: "referrai", hex: "#FF5C0A", on: "light" },
 } as const satisfies Record<string, ColorToken>;
 
 export type ProjectKey = keyof typeof projectColors;
+
+/**
+ * Accent shades for small text (eyebrows, captions). Shopify and Amazon are
+ * (and Referrai) are too light to read at 12px on white, so they get a darker shade (Shopify's
+ * is from the Figma); the rest are readable as-is.
+ */
+export const projectTextColors = {
+  desy: "#DF5732",
+  nyck: "#0E6DF9",
+  root: "#FD5726",
+  plaza: "#A34414",
+  shopify: "#5E8E3E",
+  amazon: "#188389",
+  referrai: "#C94A08",
+} as const satisfies Record<ProjectKey, string>;
 
 export type TypeStyle = {
   label: string;

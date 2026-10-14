@@ -98,6 +98,21 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
     </>
   ),
+  // graduation-cap
+  graduation: (
+    <>
+      <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+      <path d="M22 10v6M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+    </>
+  ),
+  // sparkles
+  sparkles: (
+    <>
+      <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+      <path d="M20 2v4M22 4h-4" />
+      <circle cx="4" cy="20" r="2" />
+    </>
+  ),
 };
 
 export function Icon({ name, className }: { name: IconName; className?: string }) {
@@ -110,7 +125,7 @@ export function Icon({ name, className }: { name: IconName; className?: string }
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`size-5 shrink-0 ${className ?? ""}`}
+      className={`shrink-0 ${className ?? "size-5"}`}
     >
       {PATHS[name]}
     </svg>

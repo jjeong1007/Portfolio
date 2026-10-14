@@ -20,6 +20,14 @@ const BOX_H = VASE_H + HEADROOM;
 const JASON = { x: 12.7, y: -51.2, width: 68, height: 65.28 };
 /* Far enough down that he's fully inside the vase */
 const HIDDEN_DROP = 61;
+/* His brim is wider than the mouth, so he squeezes through it narrowed to
+   fit (68 × 0.68 ≈ 46 < 47.7) and springs back to full width once the brim
+   has cleared the lip, about 150ms into the pop. */
+const SQUEEZE = 0.68;
+const UNSQUEEZE_DELAY_MS = 150;
+/* On the way back he narrows first, then drops */
+const SQUEEZE_OUT_MS = 120;
+const DROP_OUT_DELAY_MS = 90;
 
 const ZOOM_MS = 450;
 const SHAKE_MS = 600;
@@ -85,10 +93,26 @@ export function VaseTile() {
                         transitionTimingFunction: "var(--ease-spring)",
                         transitionDelay: `${ZOOM_MS + SHAKE_MS}ms`,
                       }
-                    : out),
+                    : { ...out, transitionDelay: `${DROP_OUT_DELAY_MS}ms` }),
                 }}
               >
-                <image href="/brand/plaza-character.svg" {...JASON} />
+                <g
+                  className="transition-[scale]"
+                  style={{
+                    transformBox: "fill-box",
+                    transformOrigin: "center",
+                    scale: active ? "1" : `${SQUEEZE} 1`,
+                    ...(active
+                      ? {
+                          transitionDuration: "450ms",
+                          transitionTimingFunction: "var(--ease-spring)",
+                          transitionDelay: `${ZOOM_MS + SHAKE_MS + UNSQUEEZE_DELAY_MS}ms`,
+                        }
+                      : { ...out, transitionDuration: `${SQUEEZE_OUT_MS}ms` }),
+                  }}
+                >
+                  <image href="/brand/plaza-character.svg" {...JASON} />
+                </g>
               </g>
             </g>
             {/* The vase is drawn over him, so its lip hides where he comes out */}

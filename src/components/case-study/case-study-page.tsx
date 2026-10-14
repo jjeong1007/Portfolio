@@ -2,18 +2,22 @@ import Image from "next/image";
 import { BackLink } from "@/components/ui/back-link";
 import { Container } from "@/components/ui/container";
 import type { Block, CaseStudy, Feature, Figure, Section } from "@/lib/case-study";
-import { projectHex, projects } from "@/lib/projects";
+import { projectHex, projects, projectTextHex } from "@/lib/projects";
+import { Breakdown } from "./breakdown";
+import { GoldenCircle } from "./golden-circle";
 import { Icon } from "./icons";
+import { JobMap } from "./job-map";
 import { JamCover } from "./jam-cover";
 import { PersonaCard } from "./persona-card";
 
 /** Body copy is Large Body (20px) and runs the full width of its container. */
 const TEXT = "type-body-lg text-ink-body";
 
-function Eyebrow({ children, accent }: { children: string; accent?: string }) {
+/** Micro label in the project's text accent; `dot` adds a swatch of the full accent before it. */
+function Eyebrow({ children, color, dot }: { children: string; color?: string; dot?: string }) {
   return (
-    <p className="type-micro flex items-center gap-2 text-ink-subtle">
-      {accent && <span aria-hidden className="size-2 rounded-full" style={{ backgroundColor: accent }} />}
+    <p className="type-micro flex items-center gap-2 text-ink-subtle" style={color ? { color } : undefined}>
+      {dot && <span aria-hidden className="size-2 rounded-full" style={{ backgroundColor: dot }} />}
       {children}
     </p>
   );
@@ -64,7 +68,13 @@ function Figures({ figures, columns = 1, fit = "framed" }: Extract<Block, { type
       <div className={`grid items-end justify-items-center gap-6 ${COLUMNS[columns]}`}>
         {figures.map((f: Figure) => (
           <div key={f.src.src} className="flex flex-col items-center gap-3">
-            <Image src={f.src} alt={f.alt} sizes={SIZES[columns]} className="h-auto max-w-full" />
+            <Image
+              src={f.src}
+              alt={f.alt}
+              sizes={f.maxWidth ? `${f.maxWidth}px` : SIZES[columns]}
+              className="h-auto max-w-full"
+              style={f.maxWidth ? { width: f.maxWidth } : undefined}
+            />
             {!single && f.caption && <p className="type-body-sm text-center text-ink-body">{f.caption}</p>}
           </div>
         ))}
@@ -73,6 +83,25 @@ function Figures({ figures, columns = 1, fit = "framed" }: Extract<Block, { type
         <figcaption className="type-body-sm mt-4 text-center text-ink-subtle">{figures[0].caption}</figcaption>
       )}
     </figure>
+  );
+}
+
+/** Dashed stand-ins for images that haven't been exported yet, each labeled with what goes there. */
+function Placeholders({ labels, columns = 1, tall }: Omit<Extract<Block, { type: "placeholder" }>, "type">) {
+  return (
+    <div className={`grid gap-3 pt-4 ${COLUMNS[columns]}`}>
+      {labels.map((label) => (
+        <div
+          key={label}
+          className={`flex flex-col items-center justify-center gap-1 rounded-card border border-dashed border-ink-faint bg-surface p-6 text-center ${
+            tall ? "min-h-90 md:min-h-120" : "min-h-60 md:min-h-80"
+          }`}
+        >
+          <p className="type-micro text-ink-subtle">Image placeholder</p>
+          <p className="type-body-sm text-ink-body">{label}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -199,7 +228,7 @@ function Spotlights({ items }: Extract<Block, { type: "spotlights" }>) {
   );
 }
 
-function BlockView({ block, accent }: { block: Block; accent: string }) {
+function BlockView({ block, accent, textAccent }: { block: Block; accent: string; textAccent?: string }) {
   switch (block.type) {
     case "text":
       return <Paragraphs paragraphs={block.paragraphs} />;
@@ -226,13 +255,31 @@ function BlockView({ block, accent }: { block: Block; accent: string }) {
       );
     case "figures":
       return <Figures {...block} />;
+    case "placeholder":
+      return <Placeholders {...block} />;
     case "cards":
       return (
         <ul className={`grid gap-3 ${block.items.length === 3 ? "lg:grid-cols-3" : "md:grid-cols-2"}`}>
           {block.items.map((card) => (
             <li key={card.title} className="rounded-card bg-surface p-6 md:p-8">
+              {card.icon && (
+                <span className="mb-4 block" style={{ color: accent }}>
+                  <Icon name={card.icon} className="size-13" />
+                </span>
+              )}
               <h3 className="type-subheading">{card.title}</h3>
               <p className="type-body-md mt-2 text-ink-body">{card.body}</p>
+            </li>
+          ))}
+        </ul>
+      );
+    case "logos":
+      return (
+        <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {block.items.map((logo) => (
+            <li key={logo.name} className="flex flex-col items-center gap-4 rounded-card bg-surface px-6 py-10">
+              <Image src={logo.src} alt="" className="size-12" />
+              <span className="type-label text-ink">{logo.name}</span>
             </li>
           ))}
         </ul>
@@ -249,15 +296,31 @@ function BlockView({ block, accent }: { block: Block; accent: string }) {
       return <Stats {...block} />;
     case "spotlights":
       return <Spotlights {...block} />;
+    case "golden-circle":
+      return <GoldenCircle {...block} accent={accent} />;
+    case "breakdown":
+      return <Breakdown {...block} accent={accent} />;
+    case "job-map":
+      return <JobMap {...block} accent={accent} textAccent={textAccent} />;
   }
 }
 
-function SectionView({ section, index, accent }: { section: Section; index: number; accent: string }) {
+function SectionView({
+  section,
+  index,
+  accent,
+  textAccent,
+}: {
+  section: Section;
+  index: number;
+  accent: string;
+  textAccent?: string;
+}) {
   const id = `section-${index}`;
   const statement = section.variant === "statement";
   return (
     <Container as="section" aria-labelledby={id} className="mt-(--space-section)">
-      <Eyebrow>{section.eyebrow}</Eyebrow>
+      <Eyebrow color={textAccent}>{section.eyebrow}</Eyebrow>
       <h2
         id={id}
         className={
@@ -272,7 +335,7 @@ function SectionView({ section, index, accent }: { section: Section; index: numb
       {section.blocks && (
         <div className="mt-6 space-y-6">
           {section.blocks.map((block, i) => (
-            <BlockView key={i} block={block} accent={accent} />
+            <BlockView key={i} block={block} accent={accent} textAccent={textAccent} />
           ))}
         </div>
       )}
@@ -302,28 +365,40 @@ function Cover({ screens }: { screens: Figure[] }) {
 /**
  * A project case study: back link, title + cover, context and project meta,
  * contributions, then the story as eyebrow + heading sections. Content comes
- * from `src/content/case-studies/`; the accent is the project's color.
+ * from `src/content/case-studies/`; the accent is the project's color, and
+ * eyebrows use its text shade (lib/design-tokens projectTextColors).
  */
 export function CaseStudyPage({ study }: { study: CaseStudy }) {
   const project = projects.find((p) => p.slug === study.slug);
   const accent = project ? projectHex(project) : "currentColor";
+  const textAccent = project ? projectTextHex(project) : undefined;
 
   return (
-    <main className="pb-30">
+    <main className="pb-30 xl:[--gutter:200px]">
       <Container className="pt-6">
         <BackLink href="/#projects" label="Back to projects" className="-ml-3" />
       </Container>
 
       <Container as="header" className="mt-10 md:mt-14">
-        {project && <Eyebrow accent={accent}>{project.category}</Eyebrow>}
+        {project && <Eyebrow color={textAccent} dot={accent}>
+            {project.category}
+          </Eyebrow>}
         <h1 className="type-title mt-1">{study.name}</h1>
         <p className="type-body-lg mt-2 text-ink-body">{study.tagline}</p>
-        {study.slug === "amazon-music" ? <JamCover screens={study.cover} /> : <Cover screens={study.cover} />}
+        {study.cover.length === 0 ? (
+          <div className="mt-10">
+            <Placeholders labels={["Cover: three final product screens"]} tall />
+          </div>
+        ) : study.slug === "amazon-music" ? (
+          <JamCover screens={study.cover} />
+        ) : (
+          <Cover screens={study.cover} />
+        )}
       </Container>
 
       <Container className="mt-18 grid gap-12 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-18">
         <div>
-          <Eyebrow>Context</Eyebrow>
+          <Eyebrow color={textAccent}>Context</Eyebrow>
           <p className={`mt-3 ${TEXT}`}>{study.context}</p>
         </div>
         <dl className="grid grid-cols-2 content-start gap-6">
@@ -357,7 +432,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
       </Container>
 
       {study.sections.map((section, i) => (
-        <SectionView key={section.eyebrow} section={section} index={i} accent={accent} />
+        <SectionView key={section.eyebrow} section={section} index={i} accent={accent} textAccent={textAccent} />
       ))}
 
       <Container className="mt-(--space-section)">

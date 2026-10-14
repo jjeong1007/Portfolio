@@ -53,7 +53,7 @@ Text hierarchy: `ink` for headings and paired answer copy → `ink-body` for par
 
 ### 2.2 Project accents
 
-There are six project colors, one per project. Use them for small accents on that project's page and its card.
+There are seven project colors, one per project. Use them for small accents on that project's page and its card.
 
 | Figma name | Token / class | Hex |
 |---|---|---|
@@ -63,13 +63,14 @@ There are six project colors, one per project. Use them for small accents on tha
 | Plaza Earth | `plaza` → `bg-plaza`, `text-plaza` | `#A34414` |
 | Shopify Forest | `shopify` → `bg-shopify`, `text-shopify` | `#95BF47` |
 | Amazon Rain | `amazon` → `bg-amazon`, `text-amazon` | `#26CAD3` |
+| Referrai Orange | `referrai` → `bg-referrai`, `text-referrai` | `#FF5C0A` (small text: `#C94A08`) |
 
 Nyck Blue (`#0E6DF9`) is also the **focus ring** color across the site.
 
 **Accessibility notes**
 
 - White text on **Shopify Forest** (≈2.2:1) and **Amazon Rain** (≈2.0:1) fails WCAG contrast. The Figma swatches use it, but in real UI put **black** text on these two, or use them only for non-text accents.
-- White on Desy Burnt Sienna (≈3.8:1) and Root Carrot (≈3.2:1) is fine for large text (19px+ bold / 24px+) but not small body text.
+- White on Desy Burnt Sienna (≈3.8:1), Root Carrot (≈3.2:1) and Referrai Orange (≈3.1:1) is fine for large text (19px+ bold / 24px+) but not small body text.
 - White on Nyck Blue (≈4.6:1) and Plaza Earth (≈6.2:1) passes AA for all sizes.
 - Don't use `ink-subtle` (#808080, ≈3.9:1 on white) for long passages. It is for short labels only.
 
@@ -273,6 +274,8 @@ Layout, top to bottom:
   - `quotes`: `bg-surface rounded-card` cards, 2 across: optional `type-micro ink-subtle` label, the quote in `type-body-lg ink` with curly quotes, attribution in `type-body-sm ink-subtle` pinned to the bottom. Use for interview quotes and testimonials instead of screenshots of speech bubbles.
   - `stats`: big numbers on `bg-surface rounded-card p-6` tiles, 4 across (2 on mobile): value in `type-subtitle`, label in `type-body-md ink-body`.
   - `spotlights`: feature rows, two columns with a 72px gap. Bare product screens sit side by side on a fixed-height `bg-surface` card and run off its bottom edge, like the cover, beside a `type-subheading` title and Large Body copy. Every other row puts the screens on the right.
+  - `golden-circle`: Simon Sinek's Why / How / What on a `bg-surface rounded-card` card. Three `bg-paper` point cards (titles in `type-subheading`, points in `type-body-md`) sit beside concentric rings that are flat fills of the project accent (20%, 30%, then a solid core; they compound toward the center), labeled in `type-subheading ink`. No dark backdrop or gradients.
+  - `job-map`: a Jobs To Be Done map on a `bg-surface rounded-card` card. "Main job" (`type-micro ink-subtle`) over the job statement in `type-subheading`, then the steps as `bg-paper rounded-card p-4` cards, 6 across on desktop (3 on tablet, stacked on mobile). Each step: a numbered stage name (`type-micro` in the project's text shade), the job in `type-body-md ink`, then an optional struggle under a `border-line` hairline (`type-body-sm ink-body`) with the assumption it backs beside a dot in the project accent. The cards use a subgrid, so struggles line up across columns.
   - `figures` are either `framed` (default: transparent graphics on a padded `bg-surface` card, never scaled past their pixel size; with several figures each gets its own `type-body-sm` caption) or `bleed` (photos that fill their own card, with a blur placeholder), in 1, 2, 3 or 4 columns.
   - **Rebuild, don't screenshot:** anything that is mostly text (feature lists, personas, diagrams of labels) is a block, not an image, so it uses the site's type and colors. Keep images for real screens, sketches, photos and illustrations, cropped free of baked-in captions.
 - **Icons:** Lucide geometry inlined in `case-study/icons.tsx` (they take `currentColor`). Add new ones there and to `IconName` in `lib/case-study.ts`.

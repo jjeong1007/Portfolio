@@ -11,9 +11,11 @@ export type Figure = {
   src: StaticImageData;
   alt: string;
   caption?: string;
+  /** Caps the displayed width in px (framed figures only), for art that reads too large at full width. */
+  maxWidth?: number;
 };
 
-/** Lucide icons available to `features` and `merge` blocks (drawn in `case-study/icons.tsx`). */
+/** Lucide icons available to `features`, `merge` and `cards` blocks (drawn in `case-study/icons.tsx`). */
 export type IconName =
   | "locate"
   | "gamepad"
@@ -26,7 +28,12 @@ export type IconName =
   | "map"
   | "video"
   | "bag"
-  | "users";
+  | "users"
+  | "graduation"
+  | "sparkles";
+
+/** A Golden Circle point, with an optional supporting line set smaller beneath it. */
+export type CirclePoint = { text: string; note?: string };
 
 /** A named feature: an icon pill plus, in a `features` block, a description. */
 export type Feature = { icon: IconName; title: string; body?: string };
@@ -56,8 +63,12 @@ export type Block =
    * for transparent graphics; `bleed` lets photos and full-bleed art fill the card.
    */
   | { type: "figures"; figures: Figure[]; columns?: 1 | 2 | 3 | 4; fit?: "framed" | "bleed" }
-  /** Titled cards in a grid, e.g. takeaways. */
-  | { type: "cards"; items: { title: string; body: string }[] }
+  /** Stand-ins for images not exported yet: dashed `bg-surface` cards, each labeled with what goes there. */
+  | { type: "placeholder"; labels: string[]; columns?: 1 | 2 | 3 | 4; tall?: boolean }
+  /** Titled cards in a grid, e.g. takeaways; `icon` sits above the title in the project color. */
+  | { type: "cards"; items: { icon?: IconName; title: string; body: string }[] }
+  /** Company logos on `bg-surface` tiles, each named beneath its mark, e.g. competitors. */
+  | { type: "logos"; items: { name: string; src: StaticImageData }[] }
   /** Feature pills, each beside its description (label / answer rows). */
   | { type: "features"; items: Feature[] }
   /** Features combined into one: `from` pills + … = `to`. */
@@ -68,6 +79,23 @@ export type Block =
   | { type: "quotes"; items: { label?: string; quote: string; attribution?: string }[] }
   /** Big numbers with a short label each, e.g. launch metrics. */
   | { type: "stats"; items: { value: string; label: string }[] }
+  /** Simon Sinek's Golden Circle: why / how / what cards beside concentric rings in the project accent. */
+  | { type: "golden-circle"; why: CirclePoint[]; how: CirclePoint[]; what: CirclePoint[] }
+  /**
+   * One bar split into shares that add up to 100, e.g. a customer mix. The first
+   * share is drawn in the project accent and later ones in lighter tints of it;
+   * `from` / `to` label the ends of the range.
+   */
+  | { type: "breakdown"; from: string; to: string; items: { label: string; value: number; note?: string }[] }
+  /**
+   * A Jobs To Be Done map: the main job, then its steps in order (Define, Locate…).
+   * A step can name the struggle it surfaced and, in `supports`, the assumption it backs.
+   */
+  | {
+      type: "job-map";
+      job: string;
+      steps: { stage: string; job: string; struggle?: string; supports?: string }[];
+    }
   /** Feature rows: screens on a `bg-surface` card beside a title and description, alternating sides. */
   | { type: "spotlights"; items: { title: string; body: string; figures: Figure[] }[] };
 
@@ -81,10 +109,15 @@ export type Section = {
 
 export type CaseStudy = {
   slug: string;
+  /**
+   * Confidential: the page shows a password gate until `CASE_STUDY_PASSWORD`
+   * is entered. Also add `import "server-only"` to the case study's file.
+   */
+  protected?: boolean;
   name: string;
   /** One line under the title. */
   tagline: string;
-  /** Product screens shown side by side on a `bg-surface` card (no baked-in titles or backdrops). */
+  /** Product screens shown side by side on a `bg-surface` card (no baked-in titles or backdrops). Empty shows a placeholder. */
   cover: Figure[];
   context: string;
   /** Label / answer rows: Role, Timeline, Team, Tools… */
