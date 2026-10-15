@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { CharacterGlasses, CharacterHair } from "@/components/home/character-art";
 
 /**
@@ -22,7 +23,7 @@ import { CharacterGlasses, CharacterHair } from "@/components/home/character-art
 /** Head pivot at the neck, in Frame 1 units. */
 export const PERSONA_NECK = { x: 341, y: 250 };
 
-export type PersonaKey = "sally" | "louise" | "quincy" | "jason";
+export type PersonaKey = "sally" | "louise" | "quincy" | "jason" | "dorianne";
 
 /** Hair colors from the persona portraits. */
 const HAIR: Record<PersonaKey, string> = {
@@ -30,6 +31,8 @@ const HAIR: Record<PersonaKey, string> = {
   louise: "#FFE81D",
   quincy: "#1D92FF",
   jason: "#000000",
+  // Shopify's hypothesis persona, from the jam cover's note palette
+  dorianne: "#FF1D86",
 };
 
 const STROKE = { stroke: "black", strokeWidth: 2, strokeMiterlimit: 10 } as const;
@@ -255,6 +258,7 @@ function PersonaFist() {
 
 /** What sets each persona's top apart, drawn over the sweater. */
 export function PersonaOutfit({ persona }: { persona: PersonaKey }) {
+  if (persona === "dorianne") return <Apron />;
   if (persona === "sally") {
     // Two bold stripes across the chest
     return (
@@ -281,6 +285,31 @@ export function PersonaOutfit({ persona }: { persona: PersonaKey }) {
       <path d="M306 262L304 268L333 293L333 287Z" fill="black" />
       <path d="M380 263L381 269L348 295L348 289Z" fill="black" />
     </>
+  );
+}
+
+/**
+ * Dorianne's baking apron over the sweater: a bib on straps that run up under
+ * the collar with a whisk on it, a waistband, and a skirt with a pocket.
+ * Clipped to the sweater, so the skirt ends at the hem.
+ */
+function Apron() {
+  const clip = useId();
+  const white = { stroke: "white", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" } as const;
+  return (
+    <g clipPath={`url(#${clip})`}>
+      <clipPath id={clip}>
+        <path d={TORSO_D} />
+      </clipPath>
+      <path d="M309 318L318 262M371 318L360 262" stroke="black" strokeWidth="6" />
+      <path d="M302 316C326 312 354 312 378 316L386 404L294 404Z" fill="black" />
+      <path d="M220 398C290 405 390 405 460 398L460 412C390 419 290 419 220 412Z" fill="black" />
+      <path d="M288 410L392 410C402 470 412 540 422 620L258 620C266 540 276 470 288 410Z" fill="black" />
+      {/* A whisk on the bib, and a pocket on the skirt */}
+      <path d="M340 386L340 366" {...white} strokeWidth="3" />
+      <path d="M340 366C329 358 328 336 340 328C352 336 351 358 340 366ZM340 366C335 354 335 340 340 328C345 340 345 354 340 366Z" {...white} />
+      <path d="M314 456L366 456L364 494C352 498 328 498 316 494Z" {...white} />
+    </g>
   );
 }
 
@@ -357,6 +386,22 @@ export function PersonaHairFront({ persona }: { persona: PersonaKey }) {
         stroke="black"
         strokeWidth="2"
       />
+    );
+  }
+  if (persona === "dorianne") {
+    // A top bun behind swept-over bangs
+    return (
+      <>
+        <circle cx="346" cy="122" r="18" fill={HAIR.dorianne} {...STROKE} />
+        <path d="M338 112C344 108 352 110 355 116" {...STROKE} strokeLinecap="round" />
+        <path
+          d="M321 186C313 164 320 144 340 137C364 129 389 140 396 166C397 173 394 177 389 175C377 160 362 155 349 158C344 167 335 172 327 172C325 177 324 182 324 188Z"
+          fill={HAIR.dorianne}
+          {...STROKE}
+          strokeLinejoin="round"
+        />
+        <path d="M349 158C359 150 374 150 384 158" {...STROKE} strokeLinecap="round" />
+      </>
     );
   }
   if (persona === "jason") {

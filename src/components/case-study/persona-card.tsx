@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTalk } from "@/components/home/use-talk";
 import type { Persona } from "@/lib/case-study";
+import { PersonaPortrait } from "./persona-portrait";
 
 /**
  * A persona card. Hovering the portrait (or tapping it on touch) has the
@@ -23,13 +24,17 @@ export function PersonaCard({ persona, index }: { persona: Persona; index: numbe
           onPointerDown={(e) => e.pointerType !== "mouse" && talk({ linger: true })}
         >
           <div className="size-24 overflow-hidden rounded-full border-2 border-line bg-paper">
-            <Image
-              src={persona.portrait}
-              alt=""
-              sizes="96px"
-              className="size-full origin-[50%_67%] animate-bob motion-reduce:animate-none"
-              style={{ animationDelay: `${index * -1100}ms` }}
-            />
+            {typeof persona.portrait === "string" ? (
+              <PersonaPortrait persona={persona.portrait} delay={index * -1100} />
+            ) : (
+              <Image
+                src={persona.portrait}
+                alt=""
+                sizes="96px"
+                className="size-full origin-[50%_67%] animate-bob motion-reduce:animate-none"
+                style={{ animationDelay: `${index * -1100}ms` }}
+              />
+            )}
           </div>
         </div>
         <p
@@ -48,7 +53,7 @@ export function PersonaCard({ persona, index }: { persona: Persona; index: numbe
       </div>
       <h3 className="type-subheading mt-4">{persona.name}</h3>
       <p className="type-body-sm mt-1 text-ink-subtle">
-        Age {persona.age} · Favorite artist: {persona.favoriteArtist}
+        Age {persona.age} · {persona.favoriteArtist ? `Favorite artist: ${persona.favoriteArtist}` : persona.role}
       </p>
       <p className="type-body-md mt-3 text-ink-body">{persona.body}</p>
     </li>

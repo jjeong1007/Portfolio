@@ -226,7 +226,7 @@ const RELAXED_THUMB = "M262 503C256 508 254 515 256 521";
  * both sleeves (stroked under the fills), and each sleeve has one unbroken line
  * where it crosses the body.
  */
-export function RelaxedBody() {
+export function RelaxedBody({ persona = "jason" }: { persona?: PersonaKey }) {
   const both = (child: ReactNode) => (
     <>
       {child}
@@ -240,7 +240,7 @@ export function RelaxedBody() {
         <path d={TORSO_D} />
         {both(<path d={RELAXED_ARM} />)}
       </g>
-      <PersonaTorso persona="jason" />
+      <PersonaTorso persona={persona} />
       {both(<path d={RELAXED_HAND} fill="white" {...line} />)}
       {both(<path d={RELAXED_ARM} fill="white" />)}
       {both(

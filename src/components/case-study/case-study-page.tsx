@@ -162,7 +162,8 @@ function Merge({ from, to, accent }: { from: Feature[]; to: Feature; accent: str
 
 function Personas({ items }: Extract<Block, { type: "personas" }>) {
   return (
-    <ul className="grid gap-3 pt-4 md:grid-cols-3">
+    // A lone persona gets the full row instead of a third of it
+    <ul className={`grid gap-3 pt-4 ${items.length > 1 ? "md:grid-cols-3" : ""}`}>
       {items.map((p, i) => (
         <PersonaCard key={p.name} persona={p} index={i} />
       ))}

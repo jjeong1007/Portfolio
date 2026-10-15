@@ -1,4 +1,5 @@
 import type { StaticImageData } from "next/image";
+import type { PersonaKey } from "@/components/case-study/persona-art";
 
 /**
  * Shape of a case study page (`/projects/[slug]`). Each case study lives in
@@ -41,12 +42,15 @@ export type Feature = { icon: IconName; title: string; body?: string };
 export type Persona = {
   name: string;
   age: number;
-  favoriteArtist: string;
+  /** Shown after the age, e.g. Amazon Music's personas' favorite artists. */
+  favoriteArtist?: string;
+  /** Shown after the age instead, for personas without a favorite artist. */
+  role?: string;
   body: string;
   /** First-person lines said in a speech bubble when the portrait is hovered; one is picked at random. */
   lines: string[];
-  /** Square, transparent-cornered portrait; shown in a circle. */
-  portrait: StaticImageData;
+  /** Square, transparent-cornered portrait, or a persona drawn live from the rig (persona-art.tsx); shown in a circle. */
+  portrait: StaticImageData | PersonaKey;
 };
 
 export type Block =
@@ -73,7 +77,7 @@ export type Block =
   | { type: "features"; items: Feature[] }
   /** Features combined into one: `from` pills + … = `to`. */
   | { type: "merge"; from: Feature[]; to: Feature }
-  /** Persona cards: portrait (talks on hover), name, age and favorite artist, a short bio. */
+  /** Persona cards: portrait (talks on hover), name, age and favorite artist or role, a short bio. */
   | { type: "personas"; items: Persona[] }
   /** Quote cards: what someone said, with an optional label above and attribution below. */
   | { type: "quotes"; items: { label?: string; quote: string; attribution?: string }[] }

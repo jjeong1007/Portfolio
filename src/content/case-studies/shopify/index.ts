@@ -47,7 +47,7 @@ export const shopify: CaseStudy = {
   contributions: [
     {
       title: "Discovery & Validation",
-      body: "Surveyed students (n=33 without a business), ran [#] interviews, and led current-state and prototype usability tests.",
+      body: "Surveyed 35 students (33 without a business), ran [#] interviews, and led current-state and prototype usability tests.",
     },
     {
       title: "Framing the Opportunity",
@@ -323,10 +323,21 @@ export const shopify: CaseStudy = {
           paragraphs: ["We distilled our assumptions into a hypothesis persona to test against in research."],
         },
         {
-          type: "subheading",
-          title: "Dorianne, 20",
-          paragraphs: [
-            "A Northwestern sophomore who wants to start a baking business. She has ideas and motivation but struggles to turn them into action due to time and resource constraints. She wants to turn her passion into passive income while having independence and creative control.",
+          type: "personas",
+          items: [
+            {
+              name: "Dorianne",
+              age: 20,
+              role: "Northwestern sophomore, aspiring baker",
+              body: "Dorianne wants to start a baking business. She has ideas and motivation but struggles to turn them into action due to time and resource constraints. She wants to turn her passion into passive income while having independence and creative control.",
+              lines: [
+                "I have a whole notebook of recipes. I just need a weekend to start.",
+                "Between midterms and my shifts, when would I even set up a store?",
+                "I’d love for my baking to pay for itself, and then some.",
+                "Website? Instagram? Farmers market? Where do I even begin?",
+              ],
+              portrait: "dorianne",
+            },
           ],
         },
         {
@@ -351,7 +362,7 @@ export const shopify: CaseStudy = {
         {
           type: "text",
           paragraphs: [
-            "We surveyed [#] students, including 33 who don't currently run a business, to understand what's holding them back. These were their top five hesitations:",
+            "We surveyed 35 students, including 33 who don't currently run a business, to understand what's holding them back. These were their top five hesitations:",
           ],
         },
         {

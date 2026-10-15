@@ -15,9 +15,9 @@ export type Project = {
 
 /** Grid order (left → right, top → bottom): published case studies first, then coming-soon tiles. */
 export const projects: Project[] = [
-  { slug: "shopify", name: "Shopify", category: "Product Strategy", color: "shopify" },
   { slug: "plaza", name: "Plaza", category: "Mobile App UI", color: "plaza" },
   { slug: "amazon-music", name: "Amazon Music", category: "Mobile App UI", color: "amazon" },
+  { slug: "shopify", name: "Shopify", category: "Product Strategy", color: "shopify" },
   { slug: "desy-ai", name: "Desy AI", category: "Product Management", color: "desy", comingSoon: true, siteCover: true },
   { slug: "nyck", name: "Nyck", category: "Design System", color: "nyck", comingSoon: true },
   { slug: "root-inc", name: "Root Inc", category: "Mobile App UI", color: "root", comingSoon: true },
