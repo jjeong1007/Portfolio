@@ -337,12 +337,20 @@ export function PersonaBrows() {
   );
 }
 
-/** Open eyes: two short dashes. */
+/**
+ * Open eyes: two short dashes. Each eye squashes around its own center (the
+ * Avatar's blink) while an ancestor with `group/persona` carries `data-blink`
+ * ("once" | "twice"); see `BlinkingPersona`. The second eye trails by 15ms.
+ */
 export function PersonaEyesOpen() {
   return (
     <>
-      <path d="M380.075 202.98C380.89 203.088 381.529 202.613 381.611 201.92L382.467 195.316C382.562 194.623 382.059 193.984 381.38 193.903C380.687 193.808 380.062 194.297 379.966 194.99L379.11 201.594C379.029 202.232 379.45 202.83 380.062 202.98H380.075Z" fill="#010101" />
-      <path d="M355.426 199.393C356.242 199.501 356.88 199.026 356.962 198.333L357.818 191.729C357.913 191.036 357.41 190.397 356.731 190.316C356.038 190.221 355.413 190.71 355.318 191.403L354.462 198.007C354.38 198.645 354.801 199.243 355.413 199.393H355.426Z" fill="#010101" />
+      <g className="origin-[380.8px_198.4px] transform-view [animation-delay:15ms] group-data-[blink=once]/persona:animate-blink group-data-[blink=twice]/persona:animate-blink-twice">
+        <path d="M380.075 202.98C380.89 203.088 381.529 202.613 381.611 201.92L382.467 195.316C382.562 194.623 382.059 193.984 381.38 193.903C380.687 193.808 380.062 194.297 379.966 194.99L379.11 201.594C379.029 202.232 379.45 202.83 380.062 202.98H380.075Z" fill="#010101" />
+      </g>
+      <g className="origin-[356.1px_194.8px] transform-view group-data-[blink=once]/persona:animate-blink group-data-[blink=twice]/persona:animate-blink-twice">
+        <path d="M355.426 199.393C356.242 199.501 356.88 199.026 356.962 198.333L357.818 191.729C357.913 191.036 357.41 190.397 356.731 190.316C356.038 190.221 355.413 190.71 355.318 191.403L354.462 198.007C354.38 198.645 354.801 199.243 355.413 199.393H355.426Z" fill="#010101" />
+      </g>
     </>
   );
 }

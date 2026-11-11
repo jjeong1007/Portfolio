@@ -43,9 +43,9 @@ export function PhotoCollage({ className = "", style }: { className?: string; st
       onPointerDown={(e) => e.pointerType !== "mouse" && setOpen((o) => !o)}
       onFocus={(e) => e.target.matches(":focus-visible") && setOpen(true)}
       onBlur={() => setOpen(false)}
-      className={`@container relative shrink-0 rounded-card ${className}`}
-      // Wider than the column on small screens: the outer photos run off the edges
-      style={{ width: "min(calc(100% + 96px), 952px)", aspectRatio: `${FRAME.w} / ${FRAME.h}`, ...style }}
+      // Wider than the column below lg, so the outer photos run off the edges; from lg it fills its 10 grid columns
+      className={`@container relative w-[calc(100%+96px)] shrink-0 rounded-card lg:w-full ${className}`}
+      style={{ aspectRatio: `${FRAME.w} / ${FRAME.h}`, ...style }}
     >
       <div className="absolute inset-0" style={{ "--u": `calc(100cqw / ${FRAME.w})` } as CSSProperties}>
         {collage.corners.map((photo, i) => {

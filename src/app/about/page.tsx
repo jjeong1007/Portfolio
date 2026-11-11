@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { PhotoCollage } from "@/components/about/photo-collage";
-import { PhotoGallery } from "@/components/about/photo-gallery";
+import { PhotoCarousel } from "@/components/about/photo-carousel";
 import { TalkingAvatar } from "@/components/home/talking-avatar";
 import { Container } from "@/components/ui/container";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -22,7 +22,7 @@ export default function AboutPage() {
     <PageTransition>
       {/* The collage runs past the gutter on small screens */}
       <main className="overflow-x-clip pb-(--space-section)">
-        <Container as="header" className="flex flex-col items-center pt-24 text-center">
+        <Container as="header" grid className="justify-items-center pt-24 text-center">
           <TalkingAvatar lines={aboutLines} className="animate-rise" style={rise(0)} />
 
           <h1 className="type-title mt-3 leading-[1.07]!">
@@ -34,13 +34,15 @@ export default function AboutPage() {
             </span>
           </h1>
 
-          <div className="mt-20 flex w-full animate-rise justify-center" style={rise(3)}>
+          {/* The middle 10 columns from lg; it runs past the gutter on phones */}
+          <div className="mt-20 flex w-full animate-rise justify-center lg:col-span-10 lg:col-start-2" style={rise(3)}>
             <PhotoCollage />
           </div>
         </Container>
 
-        <Container>
-          <div className="mx-auto mt-16 max-w-narrow space-y-(--space-paragraph) text-ink-body">
+        {/* Story and galleries: the middle 10 columns from lg */}
+        <Container grid>
+          <div className="mt-16 space-y-(--space-paragraph) text-ink-body lg:col-span-10 lg:col-start-2">
             {story.map((p) => (
               <p key={p.slice(0, 24)} className="type-body-lg">
                 {p}
@@ -48,13 +50,13 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <section aria-labelledby="outside-design" className="mx-auto max-w-narrow pt-(--space-section)">
+          <section aria-labelledby="outside-design" className="pt-(--space-section) lg:col-span-10 lg:col-start-2">
             <h2 id="outside-design" className="type-subtitle text-center">
               Outside of design, you can catch me doing…
             </h2>
             <div className="mt-16 space-y-(--space-section)">
               {galleries.map((g) => (
-                <PhotoGallery key={g.title} {...g} />
+                <PhotoCarousel key={g.title} {...g} />
               ))}
             </div>
           </section>

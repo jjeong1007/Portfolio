@@ -5,6 +5,7 @@ import { unlockCaseStudy } from "@/app/projects/[slug]/actions";
 import { BackLink } from "@/components/ui/back-link";
 import { Chip } from "@/components/ui/chip";
 import { Container } from "@/components/ui/container";
+import { PageGrid } from "@/components/ui/page-grid";
 
 /**
  * Shown in place of a `protected` case study until the password is in. The
@@ -16,12 +17,17 @@ export function PasswordGate() {
   const id = useId();
 
   return (
-    <main className="pb-30">
+    <main data-grid="case-study" className="pb-30">
+      <PageGrid grid="case-study" />
       <Container className="pt-6">
         <BackLink href="/#projects" label="Back to projects" className="-ml-3" />
       </Container>
-      <Container className="mt-18 flex justify-center">
-        <section aria-labelledby={`${id}-title`} className="w-full max-w-100 rounded-card bg-paper p-6 shadow-float">
+      {/* The middle 8 columns on tablet, 6 on desktop */}
+      <Container grid className="mt-18">
+        <section
+          aria-labelledby={`${id}-title`}
+          className="rounded-card bg-paper p-6 shadow-float md:col-span-8 md:col-start-3 lg:col-span-6 lg:col-start-4"
+        >
           <h1 id={`${id}-title`} className="type-subheading">
             Password protected
           </h1>

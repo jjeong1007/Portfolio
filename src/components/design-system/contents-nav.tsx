@@ -14,6 +14,7 @@ const groups: Group[] = [
       { id: "mood-title", label: "Mood & Tone" },
       { id: "color-title", label: "Color palette" },
       { id: "type-title", label: "Typography" },
+      { id: "grid-title", label: "Grid" },
       { id: "spacing-title", label: "Spacing" },
       { id: "motion-title", label: "Motion" },
     ],

@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { BackLink } from "@/components/ui/back-link";
 import { Container } from "@/components/ui/container";
+import { PageGrid } from "@/components/ui/page-grid";
 import type { Block, CaseStudy, Feature, Figure, Section } from "@/lib/case-study";
 import { projectHex, projects, projectTextHex } from "@/lib/projects";
+import { Bars } from "./bars";
 import { Breakdown } from "./breakdown";
 import { GoldenCircle } from "./golden-circle";
 import { Icon } from "./icons";
@@ -13,10 +15,46 @@ import { PersonaCard } from "./persona-card";
 /** Body copy is Large Body (20px) and runs the full width of its container. */
 const TEXT = "type-body-lg text-ink-body";
 
-/** Micro label in the project's text accent; `dot` adds a swatch of the full accent before it. */
-function Eyebrow({ children, color, dot }: { children: string; color?: string; dot?: string }) {
+/**
+ * Editorial case studies (`layout: "editorial"`) hold headings and copy to 8 of the
+ * 12 grid columns from desktop up. Keyed off `data-layout` on <main> (group "case").
+ */
+const MEASURE = "group-data-[layout=editorial]/case:lg:w-2/3";
+
+/** A flat wash of the project accent behind a card's content (the showcase band's tint). */
+function AccentTint({ accent }: { accent: string }) {
+  return <span aria-hidden className="absolute inset-0 -z-10 opacity-20" style={{ backgroundColor: accent }} />;
+}
+
+/** Opens a new chapter of the story: a micro label in the project's text accent, then a hairline. */
+function PartDivider({ label, color }: { label: string; color?: string }) {
   return (
-    <p className="type-micro flex items-center gap-2 text-ink-subtle" style={color ? { color } : undefined}>
+    <div className="mb-12 flex items-center gap-6 md:mb-18">
+      <Eyebrow color={color} className="shrink-0">
+        {label}
+      </Eyebrow>
+      <span aria-hidden className="h-px flex-1 bg-line" />
+    </div>
+  );
+}
+
+/** Micro label in the project's text accent; `dot` adds a swatch of the full accent before it. */
+function Eyebrow({
+  children,
+  color,
+  dot,
+  className = "",
+}: {
+  children: string;
+  color?: string;
+  dot?: string;
+  className?: string;
+}) {
+  return (
+    <p
+      className={`type-micro flex items-center gap-2 text-ink-subtle ${className}`}
+      style={color ? { color } : undefined}
+    >
       {dot && <span aria-hidden className="size-2 rounded-full" style={{ backgroundColor: dot }} />}
       {children}
     </p>
@@ -25,7 +63,7 @@ function Eyebrow({ children, color, dot }: { children: string; color?: string; d
 
 function Paragraphs({ paragraphs }: { paragraphs: string[] }) {
   return (
-    <div className={`space-y-(--space-paragraph) ${TEXT}`}>
+    <div className={`space-y-(--space-paragraph) ${TEXT} ${MEASURE}`}>
       {paragraphs.map((p) => (
         <p key={p}>{p}</p>
       ))}
@@ -36,24 +74,73 @@ function Paragraphs({ paragraphs }: { paragraphs: string[] }) {
 const COLUMNS = {
   1: "",
   2: "md:grid-cols-2",
-  3: "sm:grid-cols-3",
+  3: "md:grid-cols-3",
   4: "grid-cols-2 md:grid-cols-4",
 } as const;
 const SIZES = {
-  1: "(min-width: 1440px) 1192px, 100vw",
+  1: "(min-width: 1440px) 1040px, 100vw",
   2: "(min-width: 768px) 50vw, 100vw",
-  3: "(min-width: 640px) 33vw, 100vw",
+  3: "(min-width: 768px) 33vw, 100vw",
   4: "(min-width: 768px) 25vw, 50vw",
 } as const;
 
 function Figures({ figures, columns = 1, fit = "framed" }: Extract<Block, { type: "figures" }>) {
+  // Photo bento: rows alternate wide + narrow, then narrow + wide. The wide cell sets
+  // the row height (4:3) and the narrow one crops to fill it; phones stack them.
+  if (fit === "bento") {
+    return (
+      <div className="grid gap-3 pt-4 md:grid-cols-3">
+        {figures.map((f, i) => {
+          const wide = i % 4 === 0 || i % 4 === 3;
+          return (
+            <figure
+              key={f.src.src}
+              className={`relative overflow-hidden rounded-card bg-surface ${
+                wide ? "aspect-[4/3] md:col-span-2" : "aspect-[3/4] md:aspect-auto"
+              }`}
+            >
+              <Image
+                src={f.src}
+                alt={f.alt}
+                fill
+                sizes={wide ? "(min-width: 768px) 67vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
+                placeholder="blur"
+                className="object-cover"
+              />
+            </figure>
+          );
+        })}
+      </div>
+    );
+  }
   // Photos and full-bleed art: each fills its own card
   if (fit === "bleed") {
     return (
       <div className={`grid gap-3 pt-4 ${COLUMNS[columns]}`}>
         {figures.map((f) => (
           <figure key={f.src.src} className="overflow-hidden rounded-card bg-surface">
-            <Image src={f.src} alt={f.alt} sizes={SIZES[columns]} placeholder="blur" className="h-auto w-full" />
+            <div className="relative">
+              <Image src={f.src} alt={f.alt} sizes={SIZES[columns]} placeholder="blur" className="h-auto w-full" />
+              {/* Speech bubbles float over the image from tablet up; phones get them listed below */}
+              {f.callouts?.map((c) => (
+                <blockquote
+                  key={c.quote}
+                  className="type-control absolute hidden max-w-80 rounded-control border border-line bg-paper px-4 py-3 text-ink shadow-float md:block"
+                  style={{ left: `${c.x}%`, top: `${c.y}%` }}
+                >
+                  “{c.quote}”
+                </blockquote>
+              ))}
+            </div>
+            {f.callouts && (
+              <ul className="space-y-2 px-4 pt-4 md:hidden">
+                {f.callouts.map((c) => (
+                  <li key={c.quote} className="type-body-md text-ink">
+                    “{c.quote}”
+                  </li>
+                ))}
+              </ul>
+            )}
             {f.caption && <figcaption className="type-body-sm px-4 py-3 text-ink-subtle">{f.caption}</figcaption>}
           </figure>
         ))}
@@ -125,11 +212,12 @@ function Features({ items, accent }: { items: Feature[]; accent: string }) {
   return (
     <dl className="space-y-6 pt-4">
       {items.map((f) => (
-        <div key={f.title} className="grid gap-3 md:grid-cols-[240px_minmax(0,1fr)] md:gap-18">
-          <dt>
+        // Pill in the first 4 grid columns, its copy in the other 8
+        <div key={f.title} className="grid gap-3 md:grid-cols-12">
+          <dt className="md:col-span-4">
             <FeaturePill feature={f} accent={accent} />
           </dt>
-          <dd className={`md:pt-2 ${TEXT}`}>{f.body}</dd>
+          <dd className={`md:col-span-8 md:pt-2 ${TEXT}`}>{f.body}</dd>
         </div>
       ))}
     </dl>
@@ -173,7 +261,12 @@ function Personas({ items }: Extract<Block, { type: "personas" }>) {
 
 function Quotes({ items }: Extract<Block, { type: "quotes" }>) {
   return (
-    <ul className="grid gap-3 pt-4 md:grid-cols-2">
+    // Editorial pages set a row of three quotes three across
+    <ul
+      className={`grid gap-3 pt-4 md:grid-cols-2 ${
+        items.length === 3 ? "group-data-[layout=editorial]/case:lg:grid-cols-3" : ""
+      }`}
+    >
       {items.map((q) => (
         <li key={q.quote} className="flex flex-col rounded-card bg-surface p-6 md:p-8">
           {q.label && <h3 className="type-micro mb-3 text-ink-subtle">{q.label}</h3>}
@@ -185,31 +278,142 @@ function Quotes({ items }: Extract<Block, { type: "quotes" }>) {
   );
 }
 
-function Stats({ items }: Extract<Block, { type: "stats" }>) {
+// Full class names so Tailwind picks them up; fewer than 4 stats stretch to fill the row
+const statColumns = ["md:grid-cols-1", "md:grid-cols-2", "md:grid-cols-3", "md:grid-cols-4"];
+
+function Stats({ items, valueColor }: Extract<Block, { type: "stats" }> & { valueColor?: string }) {
   return (
-    <dl className="grid grid-cols-2 gap-3 pt-4 md:grid-cols-4">
+    <dl className={`grid grid-cols-2 gap-3 pt-4 ${statColumns[Math.min(items.length, 4) - 1]}`}>
       {items.map((s) => (
-        <div key={s.label} className="flex flex-col-reverse rounded-card bg-surface p-6">
+        <div key={s.label} className="flex flex-col-reverse justify-end rounded-card bg-surface p-6">
           <dt className="type-body-md mt-1 text-ink-body">{s.label}</dt>
-          <dd className="type-subtitle">{s.value}</dd>
+          <dd className="type-subtitle" style={valueColor ? { color: valueColor } : undefined}>
+            {s.value}
+          </dd>
         </div>
       ))}
     </dl>
   );
 }
 
-/** Screens on a surface card beside their copy; every other row puts the screens on the right. */
-function Spotlights({ items }: Extract<Block, { type: "spotlights" }>) {
+/** Stacked surface cards, each led by a dot: `negative` in the negative red, `positive` in the project accent. */
+function Findings({
+  tone,
+  items,
+  accent,
+  textAccent,
+}: Extract<Block, { type: "findings" }> & { accent: string; textAccent?: string }) {
+  const dot = tone === "positive" ? accent : "var(--color-negative)";
+  const title = tone === "positive" ? textAccent : "var(--color-negative)";
+  return (
+    <ul className={`space-y-3 pt-4 ${MEASURE}`}>
+      {items.map((item) => (
+        <li key={item.title} className="relative rounded-card bg-surface py-6 pr-6 pl-12 md:py-8 md:pr-8 md:pl-14">
+          <span
+            aria-hidden
+            className="absolute top-8 left-6 size-2 rounded-full md:top-10 md:left-7"
+            style={{ backgroundColor: dot }}
+          />
+          <h3 className="type-subheading" style={title ? { color: title } : undefined}>
+            {item.title}
+          </h3>
+          <p className="type-body-md mt-1 text-ink-body">{item.body}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** One row per test result: the screen tested, then what the tester said and what it told us. */
+function Tests({ items }: Extract<Block, { type: "tests" }>) {
+  return (
+    <ul className="space-y-3 pt-4">
+      {items.map((t) => (
+        <li
+          key={t.quote}
+          className="grid grid-cols-[5.5rem_1fr] items-center gap-5 rounded-card bg-surface p-4 md:grid-cols-[10rem_1fr] md:gap-10 md:p-6"
+        >
+          <Image
+            src={t.figure.src}
+            alt={t.figure.alt}
+            sizes="(min-width: 768px) 160px, 88px"
+            className="h-auto w-full rounded-control"
+          />
+          <div>
+            <blockquote className="type-subheading md:type-heading md:font-medium!">“{t.quote}”</blockquote>
+            <p className="type-body-md mt-3 text-negative">{t.finding}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** The old framing struck through on `bg-surface`, an arrow, then the new one on the accent tint. */
+function Reframe({ from, to, accent }: Extract<Block, { type: "reframe" }> & { accent: string }) {
+  const pill = "type-subheading md:type-heading font-medium! rounded-full px-5 py-2.5 md:px-6 md:py-3";
+  return (
+    <p className="flex flex-wrap items-center gap-4 pt-4">
+      <span className={`${pill} bg-surface text-ink-subtle line-through decoration-2`}>{from}</span>
+      <span aria-hidden className="type-heading text-ink-subtle">
+        →
+      </span>
+      <span className={`${pill} relative isolate overflow-hidden`}>
+        <AccentTint accent={accent} />
+        {to}
+      </span>
+    </p>
+  );
+}
+
+function Testimonial({
+  quote,
+  attribution,
+  accent,
+  textAccent,
+}: Extract<Block, { type: "testimonial" }> & { accent: string; textAccent?: string }) {
+  return (
+    <figure className="relative isolate overflow-hidden rounded-card p-8 md:p-12">
+      <AccentTint accent={accent} />
+      <blockquote className="type-heading font-medium!">“{quote}”</blockquote>
+      <figcaption className="type-body-md mt-6" style={textAccent ? { color: textAccent } : undefined}>
+        {attribution}
+      </figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Screens on a surface card (6 grid columns) beside their copy (5 columns, one
+ * empty column between); every other row puts the screens on the right.
+ */
+function Spotlights({
+  items,
+  onBand,
+  titleColor,
+}: Extract<Block, { type: "spotlights" }> & { onBand?: boolean; titleColor?: string }) {
   return (
     <div className="space-y-12 pt-4 md:space-y-18">
       {items.map((item, i) => (
-        <div key={item.title} className="grid items-center gap-6 md:grid-cols-2 md:gap-18">
+        <div key={item.title} className="grid items-center gap-x-3 gap-y-6 md:grid-cols-12">
+          {item.mockup ? (
+            // A finished mockup (phone frames and shadow baked in) sits straight on the page, uncropped
+            <Image
+              src={item.mockup.src}
+              alt={item.mockup.alt}
+              sizes="(min-width: 1280px) 520px, (min-width: 768px) 50vw, 100vw"
+              placeholder="blur"
+              className={`h-auto w-full md:col-span-6 md:row-start-1 ${i % 2 ? "md:col-start-7" : ""}`}
+            />
+          ) : (
           <div
-            className={`flex h-90 items-start justify-center gap-3 overflow-hidden rounded-card bg-surface px-6 pt-10 sm:h-110 md:px-10 ${
-              i % 2 ? "md:order-last" : ""
+            className={`flex h-90 items-start justify-center gap-3 overflow-hidden rounded-card ${
+              onBand ? "bg-paper" : "bg-surface"
+            } px-6 pt-10 sm:h-110 md:col-span-6 md:row-start-1 md:px-10 ${
+              i % 2 ? "md:col-start-7" : ""
             }`}
           >
-            {item.figures.map((f) => (
+            {item.figures?.map((f) => (
               <Image
                 key={f.src.src}
                 src={f.src}
@@ -219,8 +423,16 @@ function Spotlights({ items }: Extract<Block, { type: "spotlights" }>) {
               />
             ))}
           </div>
-          <div>
-            <h3 className="type-subheading">{item.title}</h3>
+          )}
+          {/* On a showcase band the copy hugs the screens: right-aligned when it sits on the left */}
+          <div
+            className={`md:col-span-5 md:row-start-1 ${i % 2 ? "md:col-start-1" : "md:col-start-8"} ${
+              onBand && i % 2 ? "md:text-right" : ""
+            }`}
+          >
+            <h3 className="type-subheading" style={onBand && titleColor ? { color: titleColor } : undefined}>
+              {item.title}
+            </h3>
             <p className={`mt-2 ${TEXT}`}>{item.body}</p>
           </div>
         </div>
@@ -229,23 +441,35 @@ function Spotlights({ items }: Extract<Block, { type: "spotlights" }>) {
   );
 }
 
-function BlockView({ block, accent, textAccent }: { block: Block; accent: string; textAccent?: string }) {
+function BlockView({
+  block,
+  accent,
+  textAccent,
+  onBand,
+  editorial,
+}: {
+  block: Block;
+  accent: string;
+  textAccent?: string;
+  onBand?: boolean;
+  editorial?: boolean;
+}) {
   switch (block.type) {
     case "text":
       return <Paragraphs paragraphs={block.paragraphs} />;
     case "list":
       return (
-        <ul className={`list-disc space-y-2 pl-6 marker:text-ink-subtle ${TEXT}`}>
+        <ul className={`list-disc space-y-2 pl-6 marker:text-ink-subtle ${TEXT} ${MEASURE}`}>
           {block.items.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
       );
     case "emphasis":
-      return <p className="type-body-lg font-bold! text-ink">{block.text}</p>;
+      return <p className={`type-body-lg font-bold! text-ink ${MEASURE}`}>{block.text}</p>;
     case "subheading":
       return (
-        <div className="pt-6">
+        <div className={`pt-6 ${MEASURE}`}>
           <h3 className="type-subheading">{block.title}</h3>
           {block.paragraphs.length > 0 && (
             <div className="mt-2">
@@ -294,13 +518,23 @@ function BlockView({ block, accent, textAccent }: { block: Block; accent: string
     case "quotes":
       return <Quotes {...block} />;
     case "stats":
-      return <Stats {...block} />;
+      return <Stats {...block} valueColor={editorial ? textAccent : undefined} />;
+    case "findings":
+      return <Findings {...block} accent={accent} textAccent={textAccent} />;
+    case "tests":
+      return <Tests {...block} />;
+    case "reframe":
+      return <Reframe {...block} accent={accent} />;
+    case "testimonial":
+      return <Testimonial {...block} accent={accent} textAccent={textAccent} />;
     case "spotlights":
-      return <Spotlights {...block} />;
+      return <Spotlights {...block} onBand={onBand} titleColor={textAccent} />;
     case "golden-circle":
       return <GoldenCircle {...block} accent={accent} />;
     case "breakdown":
       return <Breakdown {...block} accent={accent} />;
+    case "bars":
+      return <Bars {...block} accent={accent} />;
     case "job-map":
       return <JobMap {...block} accent={accent} textAccent={textAccent} />;
   }
@@ -311,35 +545,112 @@ function SectionView({
   index,
   accent,
   textAccent,
+  editorial,
 }: {
   section: Section;
   index: number;
   accent: string;
   textAccent?: string;
+  editorial?: boolean;
 }) {
   const id = `section-${index}`;
   const statement = section.variant === "statement";
+  const callout = section.variant === "callout";
+  const showcase = section.variant === "showcase";
+  const blocks = section.blocks && (
+    <div className="mt-6 space-y-6">
+      {section.blocks.map((block, i) => (
+        <BlockView
+          key={i}
+          block={block}
+          accent={accent}
+          textAccent={textAccent}
+          onBand={showcase}
+          editorial={editorial}
+        />
+      ))}
+    </div>
+  );
+  // A new chapter gets half a section of extra room above its divider
+  const top = section.part ? "mt-[calc(var(--space-section)*1.5)]" : "mt-(--space-section)";
+  const divider = section.part && <PartDivider label={section.part} color={textAccent} />;
+
+  // Problem statements: the title large on a card tinted with the accent, or muted on `bg-surface`
+  if (callout) {
+    const muted = section.tone === "muted";
+    return (
+      <Container as="section" aria-labelledby={id} className={top}>
+        {divider}
+        <div className={`relative isolate overflow-hidden rounded-card p-8 md:p-14 ${muted ? "bg-surface" : ""}`}>
+          {!muted && <AccentTint accent={accent} />}
+          <Eyebrow color={muted ? undefined : textAccent}>{section.eyebrow}</Eyebrow>
+          <h2 id={id} className={`type-subtitle mt-3 max-w-3xl ${muted ? "text-ink-subtle" : ""}`}>
+            {section.title}
+          </h2>
+          {blocks}
+        </div>
+      </Container>
+    );
+  }
+
+  // Final solution: a full-bleed band in a flat tint of the project accent, header centered
+  // over a hero mockup, then the feature rows (the old Framer layout).
+  if (showcase) {
+    return (
+      <section aria-labelledby={id} className="relative isolate mt-(--space-section) py-18 md:py-24">
+        <div aria-hidden className="absolute inset-0 -z-10 opacity-20" style={{ backgroundColor: accent }} />
+        <Container>
+          <div className="mx-auto max-w-3xl text-center">
+            <Eyebrow color={textAccent} className="justify-center">
+              {section.eyebrow}
+            </Eyebrow>
+            <h2 id={id} className="type-heading mt-1">
+              {section.title}
+            </h2>
+          </div>
+          {section.blocks?.[0]?.type === "text" && (
+            <div className="mx-auto mt-6 max-w-3xl text-center">
+              <Paragraphs paragraphs={section.blocks[0].paragraphs} />
+            </div>
+          )}
+          {section.hero && (
+            <Image
+              src={section.hero.src}
+              alt={section.hero.alt}
+              sizes="(min-width: 768px) 560px, 90vw"
+              className="mx-auto mt-10 h-auto w-full max-w-copy"
+            />
+          )}
+          {section.blocks && (
+            <div className="mt-12 space-y-6 md:mt-18">
+              {section.blocks
+                .filter((block, i) => !(i === 0 && block.type === "text"))
+                .map((block, i) => (
+                  <BlockView key={i} block={block} accent={accent} textAccent={textAccent} onBand />
+                ))}
+            </div>
+          )}
+        </Container>
+      </section>
+    );
+  }
+
   return (
-    <Container as="section" aria-labelledby={id} className="mt-(--space-section)">
+    <Container as="section" aria-labelledby={id} className={top}>
+      {divider}
       <Eyebrow color={textAccent}>{section.eyebrow}</Eyebrow>
       <h2
         id={id}
         className={
           statement
             ? "type-subtitle mt-3 border-l-4 pl-6 md:pl-8"
-            : "type-heading mt-1"
+            : `type-heading mt-1 ${MEASURE}`
         }
         style={statement ? { borderColor: accent } : undefined}
       >
         {section.title}
       </h2>
-      {section.blocks && (
-        <div className="mt-6 space-y-6">
-          {section.blocks.map((block, i) => (
-            <BlockView key={i} block={block} accent={accent} textAccent={textAccent} />
-          ))}
-        </div>
-      )}
+      {blocks}
     </Container>
   );
 }
@@ -373,9 +684,12 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
   const project = projects.find((p) => p.slug === study.slug);
   const accent = project ? projectHex(project) : "currentColor";
   const textAccent = project ? projectTextHex(project) : undefined;
+  const editorial = study.layout === "editorial";
 
   return (
-    <main className="pb-30 xl:[--gutter:200px]">
+    // The narrower case study grid (globals.css, design-system.md §4.1)
+    <main data-grid="case-study" data-layout={study.layout} className="group/case pb-30">
+      <PageGrid grid="case-study" />
       <Container className="pt-6">
         <BackLink href="/#projects" label="Back to projects" className="-ml-3" />
       </Container>
@@ -397,12 +711,13 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         )}
       </Container>
 
-      <Container className="mt-18 grid gap-12 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-18">
-        <div>
+      {/* Context in the first 7 columns, the meta in the last 4 */}
+      <Container grid className="mt-18 gap-y-12">
+        <div className="lg:col-span-7">
           <Eyebrow color={textAccent}>Context</Eyebrow>
           <p className={`mt-3 ${TEXT}`}>{study.context}</p>
         </div>
-        <dl className="grid grid-cols-2 content-start gap-6">
+        <dl className="grid grid-cols-2 content-start gap-6 lg:col-span-4 lg:col-start-9">
           {study.meta.map((row) => (
             <div key={row.label}>
               <dt className="type-micro text-ink-subtle">{row.label}</dt>
@@ -422,7 +737,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         <h2 id="contributions" className="type-heading">
           My contributions
         </h2>
-        <ul className="mt-6 grid gap-3 md:grid-cols-3">
+        <ul className={`mt-6 grid gap-3 ${study.contributions.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3"}`}>
           {study.contributions.map((c) => (
             <li key={c.title} className="rounded-card bg-surface p-6">
               <h3 className="type-subheading">{c.title}</h3>
@@ -433,7 +748,14 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
       </Container>
 
       {study.sections.map((section, i) => (
-        <SectionView key={section.eyebrow} section={section} index={i} accent={accent} textAccent={textAccent} />
+        <SectionView
+          key={section.eyebrow}
+          section={section}
+          index={i}
+          accent={accent}
+          textAccent={textAccent}
+          editorial={editorial}
+        />
       ))}
 
       <Container className="mt-(--space-section)">

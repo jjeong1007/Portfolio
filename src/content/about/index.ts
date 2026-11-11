@@ -25,8 +25,9 @@ import photo12 from "./photo-12.jpg";
 
 /**
  * Content for /about (Figma "Who are you", 103:12209).
- * Photos are cropped to their Figma frame (`size`, width × height), so a row's
- * frames share one height at any width. See "About page" in design-system.md.
+ * Photos are cropped to their Figma frame (`size`, width × height); in the
+ * gallery carousels every photo shares one height, so only the ratio
+ * matters. See "About page" in design-system.md.
  */
 export type Photo = {
   src: StaticImageData;
@@ -38,7 +39,7 @@ export type Photo = {
   focus?: string;
 };
 
-export type Gallery = { title: string; rows: Photo[][] };
+export type Gallery = { title: string; photos: Photo[] };
 
 export const story: string[] = [
   "I’m a product thinker, designer, and builder who loves to tackle complex problems and re-shape how things are done through products that bring wonderful experiences for people.",
@@ -66,45 +67,31 @@ export const collage: {
 export const galleries: Gallery[] = [
   {
     title: "Photography",
-    rows: [
-      [
-        { src: photo01, alt: "Storm clouds breaking over golden hills", size: [228, 334], caption: "Japan Series" },
-        { src: photo02, alt: "A quiet residential street lined with old wooden houses", size: [218, 334], caption: "Japan Series" },
-        { src: photo03, alt: "A tree framed between two buildings in a narrow alley", size: [253, 334], caption: "Japan Series" },
-        { src: photo04, alt: "A lone hiker on a snowy ridge under rolling clouds", size: [251, 334], caption: "Mount Rainier" },
-      ],
-      [
-        { src: photo05, alt: "A snow-covered volcanic peak under a blue sky", size: [486, 324], caption: "Mount Rainier" },
-        { src: photo06, alt: "Evergreen trees in front of a snowy mountain", size: [488, 324], caption: "Mount Rainier" },
-      ],
-      [
-        { src: photo07, alt: "A dark mountain peak wrapped in clouds at dusk", size: [640, 360], caption: "Dolomites, Italy" },
-        { src: photo08, alt: "A person sitting in a green alpine meadow below limestone cliffs", size: [334, 360], caption: "Dolomites, Italy" },
-      ],
-      [{ src: photo09, alt: "A busy shopping street with a gate and hanging banners", size: [986, 355], caption: "Japan Series" }],
-      [
-        { src: photo10, alt: "A coastal headland silhouetted against a hazy sky", size: [313, 418], caption: "Dublin, Ireland" },
-        { src: photo11, alt: "Sea cliffs dropping into turquoise water, from above", size: [335, 418], caption: "Dublin, Ireland" },
-        { src: photo12, alt: "Tall grass on a clifftop with a bird overhead", size: [313, 418], caption: "Cliffs of Moher" },
-      ],
+    photos: [
+      { src: photo01, alt: "Storm clouds breaking over golden hills", size: [228, 334], caption: "Japan Series" },
+      { src: photo02, alt: "A quiet residential street lined with old wooden houses", size: [218, 334], caption: "Japan Series" },
+      { src: photo03, alt: "A tree framed between two buildings in a narrow alley", size: [253, 334], caption: "Japan Series" },
+      { src: photo04, alt: "A lone hiker on a snowy ridge under rolling clouds", size: [251, 334], caption: "Mount Rainier" },
+      { src: photo05, alt: "A snow-covered volcanic peak under a blue sky", size: [486, 324], caption: "Mount Rainier" },
+      { src: photo06, alt: "Evergreen trees in front of a snowy mountain", size: [488, 324], caption: "Mount Rainier" },
+      { src: photo07, alt: "A dark mountain peak wrapped in clouds at dusk", size: [640, 360], caption: "Dolomites, Italy" },
+      { src: photo08, alt: "A person sitting in a green alpine meadow below limestone cliffs", size: [334, 360], caption: "Dolomites, Italy" },
+      { src: photo09, alt: "A busy shopping street with a gate and hanging banners", size: [986, 355], caption: "Japan Series" },
+      { src: photo10, alt: "A coastal headland silhouetted against a hazy sky", size: [313, 418], caption: "Dublin, Ireland" },
+      { src: photo11, alt: "Sea cliffs dropping into turquoise water, from above", size: [335, 418], caption: "Dublin, Ireland" },
+      { src: photo12, alt: "Tall grass on a clifftop with a bird overhead", size: [313, 418], caption: "Cliffs of Moher" },
     ],
   },
   {
     title: "Hiking + Travel",
-    rows: [
-      [
-        { src: hike01, alt: "Jason’s legs stretched out on a cliff above the ocean", size: [309, 412] },
-        { src: hike02, alt: "Jason looking back while leading the way down a grassy trail", size: [309, 412] },
-        { src: hike03, alt: "Jason and a friend taking a selfie in front of rocky mountains", size: [343, 412] },
-      ],
-      [
-        { src: hikeArmsUp, alt: "Jason jumping with his arms up on a mountain overlook", size: [464, 349] },
-        { src: hike05, alt: "Snowy peaks above a half-frozen lake", size: [505, 349] },
-      ],
-      [
-        { src: hike06, alt: "Jason holding a water bottle by a glacier lake", size: [321, 357] },
-        { src: hike07, alt: "Jason with his hands on his head, facing sunlit mountains", size: [648, 357] },
-      ],
+    photos: [
+      { src: hike01, alt: "Jason’s legs stretched out on a cliff above the ocean", size: [309, 412] },
+      { src: hike02, alt: "Jason looking back while leading the way down a grassy trail", size: [309, 412] },
+      { src: hike03, alt: "Jason and a friend taking a selfie in front of rocky mountains", size: [343, 412] },
+      { src: hikeArmsUp, alt: "Jason jumping with his arms up on a mountain overlook", size: [464, 349] },
+      { src: hike05, alt: "Snowy peaks above a half-frozen lake", size: [505, 349] },
+      { src: hike06, alt: "Jason holding a water bottle by a glacier lake", size: [321, 357] },
+      { src: hike07, alt: "Jason with his hands on his head, facing sunlit mountains", size: [648, 357] },
     ],
   },
 ];

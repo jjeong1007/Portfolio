@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { Avatar } from "@/components/home/avatar";
-import { useHeroInView } from "@/components/home/hero-presence";
+import { useHeroOnPage } from "@/components/home/hero-presence";
 import { useTalk } from "@/components/home/use-talk";
 import { PromptChips } from "@/components/ui/prompt-chips";
 import { companionLines } from "@/lib/dialogue";
@@ -11,18 +11,18 @@ const CLOSE_DELAY = 180;
 
 /**
  * Fixed bottom-right character, rendered once in the root layout so it
- * persists across pages. While a page-header character (TalkingAvatar on the
- * landing and About pages) is on screen it tucks away, and it pops back in
- * once that one has scrolled out of view (hero-presence.ts). There's no
+ * persists across pages. Pages with a header character (TalkingAvatar on the
+ * landing, About and studio pages) don't show it at all, even scrolled down
+ * (hero-presence.ts). There's no
  * bubble at rest: hovering the character makes it say a random line from
  * `companionLines` in a bubble that grows as it types (see use-talk.ts);
  * clicking or focusing it opens the site navigation menu above it.
  */
 export function Companion() {
-  const heroInView = useHeroInView();
+  const heroOnPage = useHeroOnPage();
   const [menuOpen, setOpen] = useState(false);
   // Tucking away also closes the menu
-  const open = menuOpen && !heroInView;
+  const open = menuOpen && !heroOnPage;
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const root = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -58,13 +58,13 @@ export function Companion() {
   return (
     <div
       ref={root}
-      // Hidden while the header character is on screen; fades in and out of the corner
-      inert={heroInView}
-      aria-hidden={heroInView}
+      // Hidden on pages with a header character; fades in and out between pages
+      inert={heroOnPage}
+      aria-hidden={heroOnPage}
       // Click-through: its box spans the closed menu too, which would block whatever is
       // underneath (e.g. the project tiles). Only the visible parts take the pointer.
       className={`pointer-events-none fixed right-4 bottom-4 z-20 flex flex-col items-end gap-3 transition-opacity duration-250 ease-out-soft md:right-8 md:bottom-8 ${
-        heroInView ? "opacity-0" : "opacity-100"
+        heroOnPage ? "opacity-0" : "opacity-100"
       }`}
       // Own snapshot so page transitions leave it anchored (see globals.css)
       style={{ viewTransitionName: "companion" }}

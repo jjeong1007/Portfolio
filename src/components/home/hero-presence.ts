@@ -3,41 +3,29 @@
 import { useLayoutEffect, useSyncExternalStore, type RefObject } from "react";
 
 /**
- * Is a page-header character (TalkingAvatar, marked `data-hero-avatar`) on
- * screen? The header avatar reports itself with `useReportHero`; the
- * Companion reads `useHeroInView` and stays out of the way until the header
- * one has scrolled off. Anything tucked under the sticky Navbar counts as off
- * screen.
+ * Does this page have a header character (TalkingAvatar, marked
+ * `data-hero-avatar`)? The header avatar reports itself with `useReportHero`;
+ * the Companion reads `useHeroOnPage` and stays hidden for the whole page, so
+ * there's only ever one Jason. Scrolling doesn't bring the Companion in.
  */
-let inView = false;
+let present = false;
 let watched: Element | null = null;
-let observer: IntersectionObserver | null = null;
 let scanned = false;
 const listeners = new Set<() => void>();
 
 function set(next: boolean) {
-  if (next === inView) return;
-  inView = next;
+  if (next === present) return;
+  present = next;
   listeners.forEach((l) => l());
 }
 
 function watch(el: Element) {
-  if (el === watched) return;
-  observer?.disconnect();
   watched = el;
-  const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) || 0;
-  const box = el.getBoundingClientRect();
-  set(box.bottom > nav && box.top < window.innerHeight);
-  observer = new IntersectionObserver(([entry]) => set(entry.isIntersecting), {
-    rootMargin: `-${nav}px 0px 0px 0px`,
-  });
-  observer.observe(el);
+  set(true);
 }
 
 function unwatch(el: Element) {
   if (el !== watched) return;
-  observer?.disconnect();
-  observer = null;
   watched = null;
   set(false);
 }
@@ -57,11 +45,11 @@ function getSnapshot() {
     const el = document.querySelector("[data-hero-avatar]");
     if (el) watch(el);
   }
-  return inView;
+  return present;
 }
 
 /** Server HTML assumes a header character is showing, so the companion never flashes in on load. */
-export function useHeroInView() {
+export function useHeroOnPage() {
   return useSyncExternalStore(subscribe, getSnapshot, () => true);
 }
 

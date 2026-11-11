@@ -7,7 +7,7 @@ import { durations, easings } from "@/lib/design-tokens";
 export function MotionShowcase() {
   return (
     <>
-      <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3" aria-label="Easing curves">
+      <ul className="grid gap-3 md:grid-cols-2" aria-label="Easing curves">
         {easings.map((e) => (
           <li key={e.token} className="group flex flex-col gap-4 rounded-card bg-surface p-6">
             <div aria-hidden className="relative h-4 rounded-full bg-paper">

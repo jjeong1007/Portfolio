@@ -16,10 +16,13 @@ export function TalkingAvatar({
   className = "",
   style,
   lines = heroLines,
+  avatarClassName,
 }: {
   className?: string;
   style?: CSSProperties;
   lines?: string[];
+  /** Passed to the Avatar, e.g. to resize it. */
+  avatarClassName?: string;
 }) {
   const { open, line, typed, mouth, talk, stop } = useTalk(lines);
   const root = useRef<HTMLDivElement>(null);
@@ -32,7 +35,7 @@ export function TalkingAvatar({
         onPointerLeave={(e) => e.pointerType === "mouse" && stop()}
         onPointerDown={(e) => e.pointerType !== "mouse" && talk({ linger: true })}
       >
-        <Avatar mouth={mouth} />
+        <Avatar mouth={mouth} className={avatarClassName} />
       </div>
 
       <p

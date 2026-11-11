@@ -35,7 +35,7 @@ function ProjectTile({ project, wide }: { project: Project; wide: boolean }) {
   const hasCaseStudy = Boolean(study);
   const siteCover = Boolean(project.siteCover);
   return (
-    <li className={`group relative ${wide ? "aspect-[4/3]" : "aspect-square"} overflow-hidden rounded-card bg-surface has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-nyck`}>
+    <li className={`group relative sm:col-span-2 md:col-span-6 ${wide ? "aspect-[4/3]" : "aspect-square lg:col-span-4"} overflow-hidden rounded-card bg-surface has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-nyck`}>
       {project.url ? (
         <a
           href={project.url}
@@ -98,7 +98,8 @@ export function ProjectGrid({
 }) {
   return (
     <Container as="section" id="projects" aria-label="Projects" className={`scroll-mt-28 ${className}`}>
-      <ul className={`grid gap-3 sm:grid-cols-2 ${wide ? "" : "lg:grid-cols-3"}`}>
+      {/* Half the grid from sm, a third (4 columns) on desktop; wide tiles stay halves */}
+      <ul className="layout-grid gap-y-3">
         {items.map((project) => (
           <ProjectTile key={project.slug} project={project} wide={wide} />
         ))}

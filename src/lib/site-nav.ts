@@ -16,11 +16,22 @@ export const navPrompts: NavPrompt[] = [
   { label: "What are your deep darkest fears in life?", message: "Nice try. That’s classified.", quiet: true },
 ];
 
-/** Top nav bar links (landing page). Same shape as NavPrompt. */
+/**
+ * External profile links. Leave a value empty until it exists: the nav then
+ * shows a toast instead of linking out.
+ */
+export const LINKEDIN_URL = "https://www.linkedin.com/in/jasonjaeyeopjeong/";
+export const MEDIUM_URL = "https://medium.com/@jeongjason5914";
+/** Shown on the CV page and in the footer */
+export const CONTACT_EMAIL = "jeongjason5914@gmail.com";
+/** The resume page (src/app/cv). A PDF in /public or an external link also works. */
+export const CV_URL = "/cv";
+
+/** Top-left nav bar links, after the logo (Figma 240:6001). Same shape as NavPrompt. */
 export const navLinks: NavPrompt[] = [
   { label: "Projects", href: "/#projects" },
   { label: "About me", href: "/about" },
-  { label: "Design system", href: "/design-system" },
+  CV_URL ? { label: "CV", href: CV_URL } : { label: "CV", message: "My CV is on its way. Check back soon!" },
 ];
 
 /**

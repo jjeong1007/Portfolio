@@ -15,7 +15,11 @@
   --color-divider: #d9d9d9;      /* full-bleed hairline under the tab bar */
   --color-line: #e5e5e5;         /* Borders — outlines, table rules */
   --color-surface: #f2f2f2;      /* Secondary BG — cards, active tab */
-  --color-paper: #ffffff;        /* White — page background */
+  --color-page: #fcfcfc;         /* Page background (off-white) */
+  --color-paper: #ffffff;        /* White — chips, pills, popovers and cards that sit on the page */
+
+  /* ---- Status (case study findings; use sparingly) ---------------------- */
+  --color-negative: #b3261e;     /* problems, broken assumptions, "before" states */
 
   /* ---- Project accents (one per project, use sparingly) --------------- */
   --color-desy: #df5732;         /* Desy Burnt Sienna */
@@ -41,7 +45,7 @@
   --tracking-tight: -0.04em;     /* every style except Micro */
   --tracking-wide: 0.04em;       /* Micro / Caption */
   --leading-display: 1.2;        /* Figma "auto" for Bricolage Grotesque */
-  --leading-body: 1.35;          /* Figma "auto" for Satoshi */
+  --leading-body: 1.4;           /* Karla body copy */
 
   /* ---- Radius --------------------------------------------------------- */
   --radius-tab: 4px;
@@ -52,12 +56,14 @@
   /* ---- Elevation (floating UI only; cards stay flat) ------------------ */
   --shadow-float: 0 0 46px rgba(0, 0, 0, 0.12);   /* floating panels */
   --shadow-halo: 0 0 92px rgba(0, 0, 0, 0.12);    /* avatar */
+  /* Liquid glass nav bar once scrolled: a hairline under it, a soft lift, and a bright inner top edge */
+  --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.05);
 
   /* ---- Layout --------------------------------------------------------- */
   --container-page: 1440px;
-  --container-content: 1192px;
+  --container-content: 1192px;   /* page grid */
+  --container-case: 1040px;      /* case study grid */
   --container-copy: 560px;
-  --container-narrow: 1000px;    /* About page: story copy + photo gallery */
 
   /* ---- Motion --------------------------------------------------------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -104,18 +110,45 @@
 
 @theme inline {
   --font-display: var(--font-bricolage), system-ui, sans-serif;
-  --font-body: var(--font-satoshi), system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-karla), system-ui, -apple-system, sans-serif;
   --font-sans: var(--font-body);
 }
 
 /* ---- Semantic spacing (not part of Tailwind's scale) ------------------- */
 :root {
   --gutter: 124px;               /* page side margin at 1440 */
-  --nav-height: 81px;            /* sticky Navbar: 24 + 32 logo + 24 + 1px border */
+  --nav-height: 81px;            /* space the floating Navbar reserves at the top of the page */
+  --nav-offset: var(--nav-height); /* where sticky UI pins: 0 while the Navbar is scrolled away */
   --tabs-height: 37px;           /* sticky Tabs bar: 8 + 20 icon + 8 + 1px border */
   --space-paragraph: 24px;       /* one empty body line between paragraphs */
   --space-intro: 40px;           /* section intro copy → its content block */
   --space-section: 136px;        /* between sub-sections */
+
+  /* Layout grid (design-system.md §4.1). The page grid by default; a page
+     whose <main> has data-grid="case-study" (+ <PageGrid>) uses the case study grid. */
+  --grid-columns: 12;            /* 4 on phones */
+  --grid-gap: 12px;
+  --grid-max: var(--container-content);
+  --grid-name: "Page grid";
+}
+
+/* On the page's <main> for its content; mirrored onto <html> by <PageGrid>
+   for the GridOverlay. Not `:root:has(main…)`: Next keeps the last page's
+   <main> in the DOM (hidden), which would leak its grid into the next one. */
+[data-grid="case-study"] {
+  --grid-max: var(--container-case);
+  --grid-name: "Case study grid";
+}
+/* Case studies keep 200px side margins on desktop; tablet and phone keep the page gutters */
+@media (min-width: 1280px) {
+  [data-grid="case-study"] {
+    --gutter: 200px;
+  }
+}
+
+/* Navbar scrolled away (navbar.tsx): sticky UI moves up into its spot */
+:root[data-nav="hidden"] {
+  --nav-offset: 0px;
 }
 
 /* ---- Type styles: use these, not raw text-* + font-* combos ------------ */
@@ -201,6 +234,22 @@
   letter-spacing: var(--tracking-tight);
 }
 
+/* Columns of the layout grid. Use inside <Container grid>; children span
+   every column unless they say otherwise (col-span-*, col-start-*). */
+@utility layout-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+}
+
+/* "Page grid · 12 columns": names the active grid in the GridOverlay label */
+@utility grid-label {
+  counter-reset: cols var(--grid-columns);
+  &::before {
+    content: var(--grid-name) " · " counter(cols) " columns";
+  }
+}
+
 /* ---- Base -------------------------------------------------------------- */
 @layer base {
   html {
@@ -211,7 +260,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    background: var(--color-paper);
+    background: var(--color-page);
     color: var(--color-ink);
     font-family: var(--font-body);
     font-weight: 500;
@@ -222,6 +271,10 @@
   :focus-visible {
     outline: 2px solid var(--color-nyck);
     outline-offset: 2px;
+  }
+  /* Full width by default; zero specificity so any col-* utility wins */
+  :where(.layout-grid) > * {
+    grid-column: 1 / -1;
   }
 }
 
@@ -241,6 +294,7 @@
 @media (max-width: 767.98px) {
   :root {
     --gutter: 16px;
+    --grid-columns: 4;
     --text-title: 44px;
     --text-subtitle: 32px;
     --text-heading: 26px;

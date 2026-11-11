@@ -11,14 +11,14 @@ import ddayFestival from "./dday-festival.jpg";
 import ddayMerch from "./dday-merch.jpg";
 import ddayStickers from "./dday-stickers.jpg";
 import designSystem from "./design-system.png";
-import finalCommunityCollection from "./final-community-collection.png";
 import finalCommunityPosts from "./final-community-posts.png";
-import finalDiscoverCatalog from "./final-discover-catalog.png";
 import finalDiscoverFeed from "./final-discover-feed.png";
-import finalFestivalsEvents from "./final-festivals-events.png";
 import finalFestivalsMap from "./final-festivals-map.png";
-import finalUploadCreate from "./final-upload-create.png";
-import finalUploadListing from "./final-upload-listing.png";
+import finalMockups from "./final-mockups.png";
+import finalDiscover from "./final-discover.png";
+import finalUpload from "./final-upload.png";
+import finalFestivals from "./final-festivals.png";
+import finalCommunity from "./final-community.png";
 import lofiMarket from "./lofi-market.png";
 import lofiOnboarding from "./lofi-onboarding.png";
 import lofiPlaza from "./lofi-plaza.png";
@@ -30,6 +30,7 @@ import partnershipShopify from "./partnership-shopify.png";
 import pastResearch from "./past-research.png";
 import problemArtisanReels from "./problem-artisan-reels.png";
 import problemViralReels from "./problem-viral-reels.png";
+import testimonial from "./testimonial.png";
 import userFlows from "./user-flows.png";
 
 /**
@@ -409,6 +410,11 @@ export const plaza: CaseStudy = {
     {
       eyebrow: "Final solution",
       title: "Bringing the arts & crafts community closer.",
+      variant: "showcase",
+      hero: {
+        src: finalMockups,
+        alt: "Two phones showing Plaza's For You feed and the Jackalope Festival group page",
+      },
       blocks: [
         {
           type: "text",
@@ -422,34 +428,22 @@ export const plaza: CaseStudy = {
             {
               title: "Discover New Artists & Crafts",
               body: "Through short form video content and a catalog of products, users can browse and discover various artists and products.",
-              figures: [
-                { src: finalDiscoverFeed, alt: "For You feed playing a seller's video" },
-                { src: finalDiscoverCatalog, alt: "Catalog grid of handmade products" },
-              ],
+              mockup: { src: finalDiscover, alt: "For You feed beside the product catalog" },
             },
             {
               title: "Upload & Transfer Products with Ease",
               body: "Manage and upload various products by adding them in manually or through the Shopify transfers feature.",
-              figures: [
-                { src: finalUploadCreate, alt: "Create menu: list a product, upload a video or transfer from Shopify" },
-                { src: finalUploadListing, alt: "List a Product form with photos, name, description and price" },
-              ],
+              mockup: { src: finalUpload, alt: "Create menu with Shopify Transfer beside the List a Product form" },
             },
             {
               title: "Explore Arts & Crafts Festivals",
               body: "Browse and interact with various different Arts & Crafts Festivals that are going on. This is the perfect opportunity to go to these in-person events and engage with the community!",
-              figures: [
-                { src: finalFestivalsEvents, alt: "Events tab listing live and upcoming festivals nearby" },
-                { src: finalFestivalsMap, alt: "Interactive festival map with numbered booths" },
-              ],
+              mockup: { src: finalFestivals, alt: "Events tab listing nearby festivals beside the interactive festival map" },
             },
             {
               title: "Engage in the Community",
               body: "Community groups and posts allow users to interact with one another to develop a close-knit Arts & Crafts Community!",
-              figures: [
-                { src: finalCommunityCollection, alt: "Jewelry Jammers group page showing its product collection" },
-                { src: finalCommunityPosts, alt: "Jackalope Festival group page showing community posts" },
-              ],
+              mockup: { src: finalCommunity, alt: "Jewelry Jammers group collection beside the Jackalope Festival group's posts" },
             },
           ],
         },
@@ -489,16 +483,12 @@ export const plaza: CaseStudy = {
           ],
         },
         {
-          type: "quotes",
-          items: [
+          type: "figures",
+          figures: [
             {
-              quote:
-                "The design system has been actually really helpful. Now I don’t have to slave away at doing front-end anymore!",
-              attribution: "J. P., developer",
-            },
-            {
-              quote: "I always hate doing front end, but [the design system] makes it a lot more manageable and digestible.",
-              attribution: "J. L., developer",
+              src: testimonial,
+              alt: "Developers J. P. and J. L. drawn as cartoons, each in a speech bubble: “The design system has been actually really helpful. Now I don’t have to slave away at doing front-end anymore!” and “I always hate doing front end, but [the design system] makes it a lot more manageable and digestible.”",
+              maxWidth: 720,
             },
           ],
         },

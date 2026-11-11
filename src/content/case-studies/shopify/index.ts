@@ -1,8 +1,14 @@
 // Confidential: keeps this file out of client bundles (see `protected` below)
 import "server-only";
 import type { CaseStudy } from "@/lib/case-study";
+import brainstormPresenting from "./brainstorm-presenting.jpg";
+import brainstormSketches from "./brainstorm-sketches.jpg";
+import brainstormTeam from "./brainstorm-team.jpg";
+import brainstormWhiteboard from "./brainstorm-whiteboard.jpg";
+import competitorsSellingPlatforms from "./competitors-selling-platforms.svg";
+import competitorsWebsiteBuilders from "./competitors-website-builders.svg";
 import currentShopAppHome from "./current-shop-app-home.png";
-import currentShopifySignup from "./current-shopify-signup.png";
+import currentStateTest from "./current-state-test.png";
 import finalAddProduct from "./final-add-product.png";
 import finalBusinessDetails from "./final-business-details.png";
 import finalChoosePath from "./final-choose-path.png";
@@ -10,24 +16,25 @@ import finalSetupChecklist from "./final-setup-checklist.png";
 import finalStoreStyles from "./final-store-styles.png";
 import finalStorefrontEmpty from "./final-storefront-empty.png";
 import finalStorefrontLive from "./final-storefront-live.png";
-import bigcommerceLogo from "./logos/bigcommerce.svg";
-import claudeLogo from "./logos/claude.svg";
-import etsyLogo from "./logos/etsy.svg";
-import instagramLogo from "./logos/instagram.svg";
-import squarespaceLogo from "./logos/squarespace.svg";
-import tiktokLogo from "./logos/tiktok.svg";
-import wixLogo from "./logos/wix.svg";
-import userStoryMap from "./user-story-map.png";
+import ideationV2 from "./ideation-v2.png";
+import prototypesV1 from "./prototypes-v1.png";
+import storyMapToday from "./story-map-today.png";
+import storyMapTomorrow from "./story-map-tomorrow.png";
+import synthesisBoard from "./synthesis-board.png";
+import testAiChatbot from "./test-ai-chatbot.png";
+import testSkip from "./test-skip.png";
+import testTrust from "./test-trust.png";
+import userFlows from "./user-flows.png";
 
 /**
- * Copy from the Figma frame "Shopify Case — Structured" (Low-fi v2). Phone
- * mockups come from the "Mockups" page of the Shopify Design file, cut out of
- * their dark backdrop. Images not exported yet are `placeholder` blocks;
- * `[brackets]` mark copy still to be written.
+ * Copy from the Figma frame "Shopify — Jason Jeong" (177:1180), cut down to read
+ * as an editorial case study. Figures exported from the same frame; phone
+ * mockups come from the "Mockups" page of the Shopify Design file.
  */
 export const shopify: CaseStudy = {
   slug: "shopify",
   protected: true,
+  layout: "editorial",
   name: "Shopify",
   tagline:
     "Lowering the barrier of entry for college students to turn their passion projects into real businesses, starting right from the Shop app.",
@@ -39,47 +46,35 @@ export const shopify: CaseStudy = {
   context:
     "Shopify powers millions of merchants, but college students, the next generation of founders, often stall before they ever launch. We set out to understand what holds them back and how Shopify could meet them where they already are.",
   meta: [
-    { label: "Role", values: ["[Your role]"] },
-    { label: "Timeline", values: ["[Month YYYY] - [Month YYYY]"] },
-    { label: "Team", values: ["[# teammates + roles]"] },
-    { label: "Tools", values: ["Figma", "Shopify Polaris", "[AI prototyping tool]"] },
+    { label: "Role", values: ["Product Designer"] },
+    { label: "Timeline", values: ["April 2026 - June 2026"] },
+    { label: "Team", values: ["3 UX Researchers", "3 Designers"] },
+    { label: "Tools", values: ["Figma", "Claude Code", "Vercel"] },
   ],
   contributions: [
     {
-      title: "Discovery & Validation",
-      body: "Surveyed 35 students (33 without a business), ran [#] interviews, and led current-state and prototype usability tests.",
+      title: "Leadership",
+      body: "Led a team through 12+ user interviews and 20+ user testing sessions, designing a two-sided marketplace that reached an 83% approval rating.",
     },
     {
-      title: "Framing the Opportunity",
-      body: "Built the comps analysis, Golden Circle, ICPs, and JTBD map to define where Shopify could win with students.",
-    },
-    {
-      title: "Prototyping & Iteration",
-      body: "[Describe your role] in AI-assisted prototyping with Shopify's design system, through to the final Shop app concept.",
+      title: "Framing the opportunity",
+      body: "Built the comps analysis, Golden Circle, ICPs and JTBD map to define where Shopify could win with students.",
     },
   ],
   sections: [
     {
       eyebrow: "The problem",
       title: "How might Shopify lower the barrier of entry for students to take their passion project to the next level?",
-      variant: "statement",
+      variant: "callout",
     },
     {
       eyebrow: "Our solution",
-      title: "Introducing [solution name].",
+      title: "Introducing Shop Marketplace.",
       blocks: [
         {
           type: "text",
           paragraphs: [
-            "[One-sentence pitch, e.g. a simple way for students to start selling inside the Shop app before committing to a full Shopify storefront.]",
-          ],
-        },
-        {
-          type: "stats",
-          items: [
-            { value: "83%", label: "approval rating in final validation" },
-            { value: "7", label: "user tests with college students" },
-            { value: "Same day", label: "from idea to first sale" },
+            "A full two-sided marketplace inside the Shop app. Shoppers still buy directly on the platform, and new sellers can open a storefront right in the app, without building a full Shopify site first.",
           ],
         },
         {
@@ -92,40 +87,44 @@ export const shopify: CaseStudy = {
             { src: finalStorefrontLive, alt: "A live storefront inside the Shop app", caption: "4. Start selling" },
           ],
         },
+        {
+          type: "stats",
+          items: [
+            { value: "83%", label: "approval rating in final validation" },
+            { value: "7", label: "user tests with college students" },
+          ],
+        },
       ],
     },
+
+    // ---- Part one · Research -------------------------------------------------
     {
+      part: "Part one · Research",
       eyebrow: "Project context",
-      title: "It has never been easier to start a business. So why aren't more students doing it?",
+      title: "80% of Gen Z knows the Shopify brand, but doesn't use it.",
       blocks: [
         {
           type: "text",
-          paragraphs: [
-            "Shopify powers millions of merchants, but college students, the next generation of founders, often stall before they ever launch. We set out to understand what holds them back and how Shopify could meet them where they already are.",
-          ],
+          paragraphs: ["It has never been easier to start a business. So why aren't more students doing it?"],
         },
       ],
     },
     {
       eyebrow: "Where we started",
       title: "How might we help college students get their businesses started using AI?",
-      variant: "statement",
-      blocks: [{ type: "text", paragraphs: ["Our starting question. Research would push us to rewrite it."] }],
+      variant: "callout",
+      tone: "muted",
     },
     {
       eyebrow: "Macro context",
       title: "Three shifts are making entrepreneurship more accessible than ever.",
       blocks: [
         {
-          type: "text",
-          paragraphs: ["We started by looking at the market students are entering."],
-        },
-        {
           type: "cards",
           items: [
             {
               title: "Social commerce",
-              body: "TikTok and social platforms have accelerated the growth of mobile commerce.",
+              body: "TikTok and other social platforms have accelerated the growth of mobile commerce.",
             },
             {
               title: "COVID-19",
@@ -141,89 +140,132 @@ export const shopify: CaseStudy = {
     },
     {
       eyebrow: "Competitors",
-      title: "Shopify competes with other store builders, and with every place students already build or sell.",
+      title: "Shopify competes with other store builders, and with every place students already sell.",
       blocks: [
-        { type: "subheading", title: "Direct competitors", paragraphs: [] },
         {
-          type: "logos",
-          items: [
-            { name: "BigCommerce", src: bigcommerceLogo },
-            { name: "Wix", src: wixLogo },
-            { name: "Squarespace", src: squarespaceLogo },
-          ],
-        },
-        { type: "subheading", title: "Indirect competitors", paragraphs: [] },
-        {
-          type: "logos",
-          items: [
-            { name: "TikTok Shop", src: tiktokLogo },
-            { name: "Etsy", src: etsyLogo },
-            { name: "Instagram", src: instagramLogo },
-            { name: "Claude Code", src: claudeLogo },
+          type: "figures",
+          columns: 2,
+          figures: [
+            {
+              src: competitorsWebsiteBuilders,
+              alt: "Shopify surrounded by its website-building competitors: BigCommerce, Wix, Squarespace and Claude Code",
+              caption: "Website builders: BigCommerce, Wix, Squarespace and Claude Code",
+              maxWidth: 320,
+            },
+            {
+              src: competitorsSellingPlatforms,
+              alt: "Shopify surrounded by the selling platforms it competes with: TikTok Shop, Etsy and Instagram",
+              caption: "Selling platforms: TikTok Shop, Etsy and Instagram",
+              maxWidth: 320,
+            },
           ],
         },
       ],
     },
     {
-      eyebrow: "Framing the opportunity",
-      title: "Before talking to users, we grounded the work in Shopify's why and who.",
+      eyebrow: "Surveying",
+      title: "Over half of students without a business pointed to a lack of funding.",
+      blocks: [
+        {
+          type: "text",
+          paragraphs: ["We surveyed 35 students, 33 of whom don't currently run a business."],
+        },
+        {
+          type: "bars",
+          title: "Top five hesitations",
+          note: "Students without a business (n=33)",
+          items: [
+            { label: "Lack of funding / resources", value: 52 },
+            { label: "Time constraints", value: 48 },
+            { label: "Skillset concerns", value: 30 },
+            { label: "Difficulty with ideation", value: 15 },
+            { label: "Unaware of how to start", value: 9 },
+          ],
+        },
+      ],
+    },
+    {
+      eyebrow: "Interviews",
+      title: "Students don't have the time, money or skills to get going.",
       blocks: [
         {
           type: "text",
           paragraphs: [
-            "We used the Golden Circle to articulate why this matters for Shopify and defined our ideal customer profiles (ICPs).",
+            "We ran 6 semi-structured interviews to understand the why behind the numbers. Starting a business is a huge time commitment, and most students don't have the capacity for it.",
           ],
         },
         {
-          type: "subheading",
-          title: "Golden Circle",
-          paragraphs: ["Shopify's purpose, how it delivers on it, and what it actually sells."],
-        },
-        {
-          type: "golden-circle",
-          why: [
-            { text: "“Make commerce better for everyone”" },
-            { text: "Accessible entrepreneurship" },
-            { text: "More independence, less dependence" },
-          ],
-          how: [
-            { text: "Being at the forefront of technology", note: "“Wanting to be relevant for the next 100 years”" },
-            { text: "Simple and easy to use systems and designs", note: "“Plug-and-play layout” user experience" },
-            { text: "Merchant success = Shopify success", note: "2.9% service fees" },
-          ],
-          what: [
-            { text: "All in one SaaS platform" },
-            { text: "Payment management" },
-            { text: "Remote + physical storefronts" },
-          ],
-        },
-        {
-          type: "subheading",
-          title: "Ideal customer profiles",
-          paragraphs: ["Shopify's ICPs range from small and medium businesses to enterprises, and 75% are SMBs."],
-        },
-        {
-          type: "breakdown",
-          from: "Smaller businesses",
-          to: "Larger businesses",
+          type: "quotes",
           items: [
-            { label: "Small & medium businesses", value: 75 },
-            { label: "Mid-market & enterprise", value: 25 },
+            { quote: "Trying to get that first sale genuinely takes forever..." },
+            {
+              quote:
+                "I just can't find the right time to start... It takes up too much time and money, both of which I just don't have.",
+            },
+            {
+              quote:
+                "I don't even know where to start. I feel like I don't have the right skills to run a full-fledged business.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      eyebrow: "Current state tests",
+      title: "5 out of 5 users felt overloaded by Shopify's current experience.",
+      blocks: [
+        {
+          type: "text",
+          paragraphs: [
+            "We ran 5 tests on UserTesting.com covering Shopify's onboarding and a walkthrough of the platform. Onboarding was fast but not personalized. Once inside, the full platform felt overwhelming and hard to use.",
+          ],
+        },
+        {
+          type: "figures",
+          fit: "bleed",
+          figures: [
+            {
+              src: currentStateTest,
+              alt: "UserTesting.com session on Shopify's admin home, with the task prompt asking the participant to explore the platform and describe what feels confusing or easy",
+              callouts: [
+                { quote: "Oh gosh, this is a lot.", x: 60, y: 36 },
+                { quote: "Okay, so how exactly am I supposed to start a business with this?", x: 14, y: 58 },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      eyebrow: "User story map",
+      title: "Mapping a student's journey from idea to execution.",
+      blocks: [
+        {
+          type: "text",
+          paragraphs: [
+            "We used what we heard in interviews to map the end-to-end journey of a student launching their first business today.",
+          ],
+        },
+        {
+          type: "figures",
+          fit: "bleed",
+          figures: [
+            {
+              src: storyMapToday,
+              alt: "Story map: Dorianne wants to sell her baked goods, tries to set up a Shopify store, gets lost in long website tutorials and gives up to study for a midterm",
+              caption: "Today: starting a business with Shopify",
+            },
           ],
         },
       ],
     },
     {
       eyebrow: "Jobs to be done",
-      title: "Our hypothesis: students don't lack ideas. They lack a clear path to start.",
+      title: "We mapped the job students hire Shopify to do, and where each step breaks down.",
       blocks: [
         {
-          type: "text",
-          paragraphs: ["We mapped the job students hire a platform like Shopify to do, step by step, and where each step breaks down."],
-        },
-        {
           type: "job-map",
-          job: "Start my first business selling items.",
+          job: "I want to just start selling something and gain money.",
           steps: [
             {
               stage: "Define",
@@ -253,12 +295,15 @@ export const shopify: CaseStudy = {
             { stage: "Monitor", job: "Track first sales" },
           ],
         },
+      ],
+    },
+    {
+      eyebrow: "Initial hypotheses",
+      title: "We believed students needed clear guidance.",
+      blocks: [
         {
-          type: "text",
-          paragraphs: ["The struggles came back to two core assumptions:"],
-        },
-        {
-          type: "cards",
+          type: "findings",
+          tone: "negative",
           items: [
             {
               title: "Students need the fundamentals",
@@ -273,63 +318,17 @@ export const shopify: CaseStudy = {
       ],
     },
     {
-      eyebrow: "Initial hypotheses",
-      title: "Two bets we wanted to test.",
+      eyebrow: "Target persona",
+      title: "Meet Dorianne: an aspiring entrepreneur, but short on resources.",
       blocks: [
-        {
-          type: "cards",
-          items: [
-            {
-              icon: "graduation",
-              title: "Teach as you go",
-              body: "A more educational, informative experience will give students the confidence to start on Shopify.",
-            },
-            {
-              icon: "sparkles",
-              title: "AI-led onboarding",
-              body: "Onboarding led by AI that auto-tailors the platform to each student will cut through the overwhelm.",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      eyebrow: "User story map",
-      title: "Mapping a student's path from idea to first sale.",
-      blocks: [
-        {
-          type: "text",
-          paragraphs: ["We mapped the end-to-end journey of a student launching their first business."],
-        },
-        {
-          type: "figures",
-          columns: 1,
-          figures: [
-            {
-              src: userStoryMap,
-              alt: "User story map for a modified Shopify Academy, with activities, steps and details on sticky notes and the happy path starred",
-              maxWidth: 640,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      eyebrow: "Hypothesis persona",
-      title: "Meet Dorianne: an aspiring founder who's short on time and resources.",
-      blocks: [
-        {
-          type: "text",
-          paragraphs: ["We distilled our assumptions into a hypothesis persona to test against in research."],
-        },
         {
           type: "personas",
           items: [
             {
               name: "Dorianne",
               age: 20,
-              role: "Northwestern sophomore, aspiring baker",
-              body: "Dorianne wants to start a baking business. She has ideas and motivation but struggles to turn them into action due to time and resource constraints. She wants to turn her passion into passive income while having independence and creative control.",
+              role: "NU sophomore, aspiring baker",
+              body: "Dorianne wants to start a baking business. She has ideas and motivation but struggles to turn them into action because of time constraints and a small skillset for running a business. She wants to turn her passion into passive income while keeping independence and creative control.",
               lines: [
                 "I have a whole notebook of recipes. I just need a weekend to start.",
                 "Between midterms and my shifts, when would I even set up a store?",
@@ -340,121 +339,105 @@ export const shopify: CaseStudy = {
             },
           ],
         },
+      ],
+    },
+
+    // ---- Part two · Ideation & testing ----------------------------------------
+    {
+      part: "Part two · Ideation & testing",
+      eyebrow: "Brainstorming",
+      title: "We took to the whiteboard to explore every way Shopify could meet students where they are.",
+      blocks: [
         {
-          type: "cards",
-          items: [
+          type: "figures",
+          fit: "bento",
+          figures: [
             {
-              title: "Needs",
-              body: "A clear starting point with no guesswork, and time-saving tools to balance business and school.",
+              src: brainstormTeam,
+              alt: "Two teammates look up at a wall of whiteboards covered in Shopify ideas, from a student grant program to a Shopify x Instagram store builder",
             },
             {
-              title: "Pain points",
-              body: "A high time commitment alongside school, a lack of funding (“need to sell just to cover tools”), and uncertainty about where to begin.",
+              src: brainstormWhiteboard,
+              alt: "Whiteboard of early Shopify ideas: an idea graveyard, a matchmaker for businesses, a student challenge and a browser extension",
+            },
+            {
+              src: brainstormPresenting,
+              alt: "A teammate walks the group through numbered concepts sketched on the whiteboard",
+            },
+            {
+              src: brainstormSketches,
+              alt: "Whiteboard sketches of concepts including an interactive Sidekick, Sidekick onboarding conversations, an infinite canvas site builder and a Shopify store competition",
             },
           ],
         },
       ],
     },
     {
-      eyebrow: "Surveying",
-      title: "Over half of students without a business pointed to a lack of funding and resources.",
+      eyebrow: "Sketches & flows",
+      title: "A clear user flow before any prototype.",
       blocks: [
         {
           type: "text",
           paragraphs: [
-            "We surveyed 35 students, including 33 who don't currently run a business, to understand what's holding them back. These were their top five hesitations:",
+            "Before building, I mapped the flows and system architecture so that our user testing sessions would hold together.",
           ],
         },
         {
-          type: "stats",
-          items: [
-            { value: "52%", label: "Lack of funding / resources" },
-            { value: "48%", label: "Time constraints" },
-            { value: "30%", label: "Skillset concerns" },
-            { value: "15%", label: "Difficulty with ideation" },
-          ],
-        },
-        { type: "text", paragraphs: ["Another 9% simply didn't know how to start."] },
-      ],
-    },
-    {
-      eyebrow: "Interviews",
-      title: "Students don't have the time, money, or skills, and they live on their phones.",
-      blocks: [
-        {
-          type: "text",
-          paragraphs: ["We followed up with [#] semi-structured interviews to understand the why behind the numbers."],
-        },
-        {
-          type: "cards",
-          items: [
-            { title: "No time, no money", body: "Students don't have the time or money to start." },
-            { title: "Starting is slow", body: "Getting off the ground feels hard because it takes so much time." },
-            { title: "“I don't have the skills”", body: "Many feel they lack the skills needed to run a business." },
-            { title: "Mobile-first", body: "Students tend to do everything, including selling, from their phones." },
-          ],
-        },
-      ],
-    },
-    {
-      eyebrow: "Current state tests",
-      title: "5 out of 5 users felt overloaded by Shopify's current experience.",
-      blocks: [
-        {
-          type: "text",
-          paragraphs: [
-            "We ran usability tests on Shopify's existing onboarding. It was super fast, but not personalized. Once inside, the full platform felt overwhelming and hard to use.",
-          ],
-        },
-        {
-          type: "spotlights",
-          items: [
-            {
-              title: "Signing up today",
-              body: "Shopify's mobile sign-up drops students straight into a free trial for a full storefront, before they know whether they need one.",
-              figures: [{ src: currentShopifySignup, alt: "Shopify's current mobile sign-up screen for a free trial" }],
-            },
-          ],
+          type: "figures",
+          fit: "bleed",
+          figures: [{ src: userFlows, alt: "User flow diagram for AI-personalized, mobile-first onboarding" }],
         },
       ],
     },
     {
       eyebrow: "First round of prototypes",
-      title: "Prototyping AI-personalized, mobile-first onboarding.",
+      title: "AI-personalized, mobile-first onboarding.",
       blocks: [
         {
           type: "text",
-          paragraphs: [
-            "Using AI and connecting it to Shopify's design system, we rapidly built initial prototypes to test our two hypotheses.",
-          ],
+          paragraphs: ["Working from Shopify's design system, I built the initial prototypes for testing."],
         },
         {
-          type: "placeholder",
-          labels: ["Concept 1: Mobile-first AI onboarding", "Concept 2: AI-assisted personalized onboarding"],
-          columns: 2,
-          tall: true,
+          type: "figures",
+          fit: "bleed",
+          figures: [
+            {
+              src: prototypesV1,
+              alt: "First-round prototype screens with AI-guided onboarding questions",
+              caption: "Prototype v1: AI-guided onboarding",
+            },
+          ],
         },
       ],
     },
     {
       eyebrow: "User testing",
-      title: "Gen Z didn't want AI to guide them. They wanted to get through it.",
+      title: "Gen Z didn't want AI to guide them.",
       blocks: [
         {
           type: "text",
           paragraphs: [
-            "Testing with Gen Z users challenged our core hypothesis. Instead of making Shopify feel approachable, AI made users less inclined to use the platform.",
+            "Testing challenged our core hypothesis. Instead of making Shopify feel approachable, AI made users less inclined to use the platform.",
           ],
         },
         {
-          type: "cards",
+          type: "tests",
           items: [
-            { title: "AI lowered intent", body: "Users were actually less inclined to use the platform because of AI." },
             {
-              title: "Low trust in AI",
-              body: "Students had little trust in AI to set up something as personal as their business.",
+              figure: { src: testAiChatbot, alt: "Prototype AI chat onboarding screen" },
+              quote: "Oh great. Another AI chatbot...",
+              finding: "Users were less inclined to use the platform because of AI.",
             },
-            { title: "Speed still wins", body: "Users still wanted to skip through onboarding as fast as possible." },
+            {
+              figure: { src: testTrust, alt: "Prototype screen where AI styles the store" },
+              quote: "I personally wouldn't trust AI to stylize my website or business. I still want to do that myself.",
+              finding: "Students had little trust in AI to set up something as personal as their business.",
+            },
+            {
+              figure: { src: testSkip, alt: "Prototype onboarding questionnaire screen" },
+              quote: "I usually always skip these questions because I just wanna see the platform.",
+              finding: "Users still wanted to get through onboarding as fast as possible.",
+            },
           ],
         },
       ],
@@ -466,7 +449,7 @@ export const shopify: CaseStudy = {
         {
           type: "text",
           paragraphs: [
-            "We went back to students who already run small businesses. They loved the simplicity of selling on mobile through platforms like Depop and Instagram, and saw Shopify as a tool for established businesses rather than for them.",
+            "We went back to students who already run small businesses. They loved how simple it is to sell on mobile through Depop and Instagram, and saw Shopify as a tool for established businesses rather than for them.",
           ],
         },
         {
@@ -474,92 +457,111 @@ export const shopify: CaseStudy = {
           items: [
             {
               quote:
-                "I feel like Shopify is more for, like, seeing the established businesses... with Depop, I feel like that platform... [complete quote]",
+                "I try to avoid [AI], because I want to think for myself when creating content... my business at the end of the day should represent me and feel authentic.",
             },
-            { quote: "...it was very easy to update people on Instagram and keep things live." },
             {
               quote:
-                "I was like thinking the AI thing is kind of annoying. I'm just trying to understand how this works first. [complete quote]",
+                "I feel like Shopify is more for seeing the established businesses... with Depop, it's just for everybody. You don't have to have a business.",
             },
+            { quote: "...it was very easy to update people on Instagram and keep things live." },
           ],
         },
       ],
     },
+
+    // ---- Part three · Reframing ---------------------------------------------
     {
+      part: "Part three · Reframing",
       eyebrow: "Synthesis",
       title: "Start small, then grow into Shopify.",
       blocks: [
         {
           type: "text",
-          paragraphs: ["Synthesizing everything on our [FigJam] boards, three insights reshaped our direction:"],
+          paragraphs: ["We synthesized every survey, interview and test on our FigJam boards."],
         },
-        { type: "placeholder", labels: ["Synthesis / FigJam boards"] },
+        {
+          type: "figures",
+          fit: "bleed",
+          figures: [
+            {
+              src: synthesisBoard,
+              alt: "FigJam affinity board of sticky notes grouped by interviewee and testing round",
+              caption: "Affinity mapping across interviews and both rounds of testing",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      eyebrow: "Design principles",
+      title: "Three principles to drive the product.",
+      blocks: [
         {
           type: "cards",
           items: [
-            { title: "Shopify feels professional, but intimidating", body: "[Supporting detail]" },
-            { title: "Students already sell through mobile-first platforms", body: "[Supporting detail]" },
-            { title: "A simpler mobile selling path feels more accessible", body: "[Supporting detail]" },
+            {
+              title: "A casual marketplace",
+              body: "Counter the feeling that Shopify is overwhelmingly professional with something casual and approachable.",
+            },
+            {
+              title: "Mobile centered",
+              body: "Students already sell on mobile-first platforms like Depop and Vinted. Meet them there.",
+            },
+            {
+              title: "Authenticity",
+              body: "Give sellers control over how their business looks, while keeping the process simple.",
+            },
           ],
         },
-        { type: "subheading", title: "Design principles", paragraphs: [] },
+      ],
+    },
+    {
+      eyebrow: "Core learning",
+      title: "We were framing “business” too broadly.",
+      blocks: [
         {
-          type: "list",
-          items: [
-            "Give users a simple way to start selling before asking them to build a full storefront.",
-            "Start small, then let users grow into the full Shopify experience.",
+          type: "text",
+          paragraphs: [
+            "A business implies full-time commitment and nearly all of your energy, and Shopify gives students the impression they're starting one. Reframing it as a side hustle or passion project lowers the anxiety of getting started.",
           ],
         },
+        { type: "reframe", from: "Business", to: "Passion project / side hustle" },
       ],
     },
     {
       eyebrow: "Reframing the problem",
       title: "How might Shopify lower the barrier of entry for students to take their passion project to the next level?",
-      variant: "statement",
-      blocks: [
-        {
-          type: "text",
-          paragraphs: ["No more “using AI.” The goal is a lower barrier, not a smarter onboarding."],
-        },
-      ],
-    },
-    {
-      eyebrow: "Validated persona",
-      title: "[Headline: who we're really designing for]",
+      variant: "callout",
       blocks: [
         {
           type: "text",
           paragraphs: [
-            "[How the persona changed from Dorianne after research, e.g. already selling on mobile, intimidated by Shopify, wants to start small.]",
+            "We dropped “using AI” to focus on a lower barrier to entry, and swapped “business” for “passion project,” because the word itself intimidates.",
           ],
         },
-        { type: "placeholder", labels: ["Validated persona"] },
       ],
     },
     {
       eyebrow: "Ideation v2",
-      title: "[Headline, e.g. Reimagining where a student's business begins.]",
+      title: "What would a simplified store look like?",
       blocks: [
-        { type: "text", paragraphs: ["[Describe the second round of ideation and the concepts you explored.]"] },
-        { type: "placeholder", labels: ["Ideation v2 sketches / concepts"] },
+        {
+          type: "figures",
+          fit: "bleed",
+          figures: [{ src: ideationV2, alt: "Second-round ideation sketches of a simplified mobile store" }],
+        },
       ],
     },
     {
       eyebrow: "Current state of the Shop app",
-      title: "[Headline: why the Shop app is the right home for new sellers]",
+      title: "The Shop app is one-sided.",
       blocks: [
-        {
-          type: "text",
-          paragraphs: [
-            "[Explain what the Shop app does today and why building here fits students who are mobile-first and want to start small.]",
-          ],
-        },
         {
           type: "spotlights",
           items: [
             {
               title: "Built for shoppers",
-              body: "Today the Shop app is a buyer's feed of brands, deals and products, so the audience a new seller needs is already there.",
+              body: "It's filled with storefronts from established Shopify merchants, who build a professional website first and then add Shop as an extra channel. But that means the audience a new seller needs is already there.",
               figures: [{ src: currentShopAppHome, alt: "The Shop app home feed showing brand cards and deals" }],
             },
           ],
@@ -567,8 +569,34 @@ export const shopify: CaseStudy = {
       ],
     },
     {
-      eyebrow: "Final design",
-      title: "[Solution name]: a simpler way for students to start selling.",
+      eyebrow: "A new flow for selling",
+      title: "What if we reversed the order?",
+      blocks: [
+        {
+          type: "text",
+          paragraphs: [
+            "Instead of starting on a laptop, spending hours designing a store and then setting up payments and taxes, students start right in the Shop app and launch their first storefront without a website.",
+          ],
+        },
+        {
+          type: "figures",
+          fit: "bleed",
+          figures: [
+            {
+              src: storyMapTomorrow,
+              alt: "Story map comparing today's path, where Dorianne gives up, with Shop Marketplace, where she launches a storefront from her phone",
+              caption: "Tomorrow: starting a business with Shop Marketplace",
+            },
+          ],
+        },
+      ],
+    },
+
+    // ---- Final design ---------------------------------------------------------
+    {
+      part: "Final design",
+      eyebrow: "Shop Marketplace",
+      title: "A simpler way for students to start selling.",
       blocks: [
         {
           type: "text",
@@ -597,7 +625,7 @@ export const shopify: CaseStudy = {
             },
             {
               title: "A checklist to the first sale",
-              body: "Quick actions break setup into small tasks (style, shipping, products, payments) so students always know what's next.",
+              body: "Quick actions break setup into small tasks (style, shipping, products, payments), so students always know what's next.",
               figures: [
                 { src: finalSetupChecklist, alt: "Setup progress with quick actions for style, shipping, products and payments" },
                 { src: finalAddProduct, alt: "Add a product form with images, title, price and shipping" },
@@ -612,33 +640,31 @@ export const shopify: CaseStudy = {
         },
       ],
     },
+
+    // ---- Looking back ---------------------------------------------------------
     {
+      part: "Looking back",
       eyebrow: "Final validation",
-      title: "83% of testers approved, and they wanted to start selling right away.",
+      title: "83% of testers approved, and wanted to start selling right away.",
       blocks: [
         {
           type: "stats",
           items: [
-            { value: "7", label: "user tests" },
             { value: "83%", label: "approval rating" },
+            { value: "7", label: "user tests" },
           ],
         },
         {
-          type: "quotes",
-          items: [
-            {
-              label: "Final validation",
-              quote:
-                "I would definitely start using this app right away because it was incredibly easy to get started and sales can start the very same day that the page launches, which I think is wonderful.",
-              attribution: "Test participant",
-            },
-          ],
+          type: "testimonial",
+          quote:
+            "I would definitely start using this app right away because it was incredibly easy to get started and sales can start the very same day that the page launches.",
+          attribution: "Test participant",
         },
       ],
     },
     {
       eyebrow: "Risk roadmap",
-      title: "Every part of this bet carries risk. Here's how we'd de-risk each one.",
+      title: "Every part of this bet carries risk. Here's how we'd de-risk it.",
       blocks: [
         {
           type: "cards",
@@ -648,24 +674,16 @@ export const shopify: CaseStudy = {
               body: "Continuously measure adoption in the Shop app and the number of new storefronts created.",
             },
             {
-              title: "Usability risk",
-              body: "[How you'd keep validating ease of use as the experience scales.]",
-            },
-            {
               title: "Tech risk",
-              body: "Plan for performance capacity on new infrastructure, since much more traffic will now flow into the Shop app.",
+              body: "Plan performance capacity on new infrastructure, since much more traffic will flow into the Shop app.",
             },
             {
               title: "Financial risk",
-              body: "Weigh upkeep costs against new transactions through Shop Pay and the Shop platform to understand transaction fee revenue gained.",
+              body: "Weigh upkeep costs against new transaction fee revenue through Shop Pay and the Shop platform.",
             },
             {
               title: "GTM risk",
-              body: "Creating a new marketplace requires heavy marketing and GTM spend, so we'd look at CAC not just from a user standpoint, but from [finish thought].",
-            },
-            {
-              title: "Legal risk",
-              body: "[e.g. seller verification, payments compliance, or selling restrictions for student sellers.]",
+              body: "A new marketplace needs heavy marketing spend, so we'd track customer acquisition cost closely.",
             },
           ],
         },
@@ -673,14 +691,24 @@ export const shopify: CaseStudy = {
     },
     {
       eyebrow: "Reflection",
-      title: "[What this project taught me]",
+      title: "What I learned.",
       blocks: [
         {
-          type: "cards",
+          type: "findings",
+          tone: "positive",
           items: [
-            { title: "[Takeaway 1]", body: "[e.g. Kill your darlings: AI was our starting point, not the answer.]" },
-            { title: "[Takeaway 2]", body: "[e.g. Meet users where they already are.]" },
-            { title: "[Takeaway 3]", body: "[What you'd do differently next time.]" },
+            {
+              title: "Kill your darlings",
+              body: "AI was our starting point, not the answer. Testing early let us drop it before we over-invested.",
+            },
+            {
+              title: "Meet users where they already are",
+              body: "Students were already selling on their phones. The win was bringing Shopify to that habit, not asking them to adopt a new one.",
+            },
+            {
+              title: "Words shape behavior",
+              body: "Swapping “business” for “passion project” changed how intimidating the whole product felt.",
+            },
           ],
         },
       ],

@@ -22,7 +22,7 @@ The system pairs **minimal structure** with **small moments of play**.
 | Minimal | Playful |
 |---|---|
 | Black and white do most of the work. | Each project has one vibrant accent color, used in small specks: a chip, a tag, a highlight. It never floods a page. |
-| Satoshi carries body copy so content is easy to read. | Bricolage Grotesque carries headlines and gives them character. |
+| Karla carries body copy so content is easy to read. | Bricolage Grotesque carries headlines and gives them character. |
 | Plenty of whitespace, flat surfaces, no shadows. | A hand-drawn vector character of Jason appears across the site. |
 
 **Rules of thumb**
@@ -30,7 +30,7 @@ The system pairs **minimal structure** with **small moments of play**.
 1. When unsure, use black, white or gray. Add accent color on purpose, never as decoration.
 2. A project page uses **only its own** project color. Don't mix accents on one page.
 3. Surfaces are flat: `bg-surface` with `rounded-card`. No gradients. The only shadows are the soft, centered `shadow-float` / `shadow-halo` on UI that floats over the page (menus, the speech bubble, the avatar).
-4. Headlines use the display face (Bricolage). Everything else uses the body face (Satoshi).
+4. Headlines use the display face (Bricolage). Everything else uses the body face (Karla).
 
 ---
 
@@ -47,9 +47,16 @@ The system pairs **minimal structure** with **small moments of play**.
 | Borders | `line` → `border-line` | `#E5E5E5` | Outlines, table and list rules, white swatch border |
 | *(divider)* | `divider` → `border-divider` | `#D9D9D9` | The full-bleed 1px hairline under the tab bar only |
 | Secondary BG | `surface` → `bg-surface` | `#F2F2F2` | Cards, active tab, hover state on tabs |
-| White | `paper` → `bg-paper`, `text-paper` | `#FFFFFF` | Page background, text on dark fills |
+| Page | `page` → `bg-page` | `#FCFCFC` | Page background (`<body>`, sticky bars that cover the page) |
+| White | `paper` → `bg-paper`, `text-paper` | `#FFFFFF` | Chips, pills, popovers and cards that sit on the page; text on dark fills |
 
 Text hierarchy: `ink` for headings and paired answer copy → `ink-body` for paragraphs → `ink-subtle` for labels.
+
+### 2.1a Status
+
+| Token | Hex | Use |
+|---|---|---|
+| `negative` | `#b3261e` | Case study findings only: problems, broken assumptions, what testers pushed back on. Never for decoration. |
 
 ### 2.2 Project accents
 
@@ -83,7 +90,7 @@ Nyck Blue (`#0E6DF9`) is also the **focus ring** color across the site.
 | Role | Family | Weights | Loaded via | CSS var / class |
 |---|---|---|---|---|
 | Display ("playfulness") | **Bricolage Grotesque** | 500, 700 (variable, optical size fixed at `opsz 14`) | `next/font/google` | `--font-display` / `font-display` |
-| Body ("minimalism") | **Satoshi** | 500 (Medium), 700 (Bold) | `next/font/local` from `src/app/fonts/` (Fontshare, ITF Free Font License) | `--font-body` / `font-body` |
+| Body ("minimalism") | **Karla** | 500 (Medium), 700 (Bold) (variable 200–800) | `next/font/google` | `--font-body` / `font-body` |
 
 Bricolage is always set with `font-variation-settings: "opsz" 14`, as in Figma. The `type-*` utilities already do this.
 
@@ -96,20 +103,20 @@ Use the **`type-*` utilities**. They set family, size, weight, line height and t
 | Title | `type-title` | Bricolage | Bold 700 | 72px | 1.2 | −4% (−2.88px) |
 | Sub-title | `type-subtitle` | Bricolage | Bold 700 | 44px | 1.2 | −4% (−1.76px) |
 | Heading | `type-heading` | Bricolage | Bold 700 | 32px | 1.2 | −4% (−1.28px) |
-| Large Body | `type-body-lg` | Satoshi | Medium 500 | 20px | 1.35 | −4% (−0.8px) |
-| Medium Body | `type-body-md` | Satoshi | Medium 500 | 16px | 1.35 | −4% (−0.64px) |
-| Small Body | `type-body-sm` | Satoshi | Medium 500 | 14px | 1.35 | −4% (−0.56px) |
-| Micro / Caption | `type-micro` | Satoshi | Bold 700 | 12px | 14px | **+4%** (0.48px), UPPERCASE |
+| Large Body | `type-body-lg` | Karla | Medium 500 | 20px | 1.4 | −4% (−0.8px) |
+| Medium Body | `type-body-md` | Karla | Medium 500 | 16px | 1.4 | −4% (−0.64px) |
+| Small Body | `type-body-sm` | Karla | Medium 500 | 14px | 1.4 | −4% (−0.56px) |
+| Micro / Caption | `type-micro` | Karla | Bold 700 | 12px | 14px | **+4%** (0.48px), UPPERCASE |
 | Subheading | `type-subheading` | Bricolage | Bold 700 | 20px | 1.2 | −4% |
 | Label | `type-label` | Bricolage | Medium 500 | 20px | 1.2 | −4% |
 | Control | `type-control` | Bricolage | Medium 500 | 16px | 1.2 | −4% |
 
 - **Subheading vs. Label:** both are Bricolage 20px. `type-subheading` (Bold) is for **headings**: any small heading inside a section or card (case study sub-headings such as "Considering brand loyalty when defining user groups", card and contribution titles, persona names, spotlight titles, easing names on the showcase). Render it as an `<h3>`/`<h4>`. `type-label` (Medium) is for **labels that aren't headings**: swatch names, spacing and duration values on the showcase, the large `merge` pill. Never set a heading in `type-label` or in an ad-hoc `font-bold` combo.
 
-The hero's second line ("I do product & strategy") is `type-title` set in Bricolage **Medium** (`font-medium!`). Stacked hero lines use a tight `leading-[1.07]`.
+The hero's second line ("I do design and UX!") is `type-title` set in Bricolage **Medium** (`font-medium!`). Stacked hero lines use a tight `leading-[1.07]`.
 
 - **Tracking:** every style is −4% (`tracking-tight` = `-0.04em`) except Micro, which is +4% (`tracking-wide` = `0.04em`).
-- **Body default:** `<body>` is already Satoshi Medium 16px, −4%, `ink`. Plain text needs no classes.
+- **Body default:** `<body>` is already Karla Medium 16px, −4%, `ink`. Plain text needs no classes.
 - **Paired copy** (label + answer rows, e.g. "How is it designed?") uses 16px with a tighter 20px line height (`leading-5`), from the Figma variable `typography/body-sm/line-height`.
 - **Paragraph spacing:** one empty line between paragraphs = `24px` (`space-y-(--space-paragraph)`).
 
@@ -130,16 +137,27 @@ Display sizes step down at Tailwind's breakpoints. The variables are redefined i
 
 ### 4.1 Grid
 
-- **Design canvas:** 1440px wide.
-- **Content column:** 1192px, centered. Use `<Container>` ([`src/components/ui/container.tsx`](src/components/ui/container.tsx)).
-- **Side gutter** (`--gutter`): 124px at ≥1280 → 64px at ≥1024 → 40px at ≥768 → 16px on mobile.
-- **Two-column splits** (desktop):
-  - Equal halves with a **72px** gap: Overview "Stack / System" blocks.
-  - **660 / 520** with a **12px** gap: brand card + swatch stack.
-  - **576 / 568** with a **48px** gap: neutral swatch columns.
-  - **Label / answer rows:** 148px label column, 72px gap, answer fills the rest.
-- **Prose width:** intro paragraphs in the hero are capped at **560px** (`max-w-copy`). Section intros run the full 1192px column.
-- **Narrow column:** **1000px** (`max-w-narrow`), centered inside the 1192px column. The About page story copy and photo gallery use it.
+There are exactly **two layout grids**. Every page uses one of them, and every layout on a page lines up with its columns. Turn on **Show my system** (top right of the Navbar) to see the active grid drawn over the page (`ui/grid-overlay.tsx`). The live spec is on `/design-system` › Foundations › Grid.
+
+| | Page grid | Case study grid |
+|---|---|---|
+| Used on | Landing (`/`), `/studio`, `/about`, `/design-system` | `/projects/[slug]` (case studies and the password gate) |
+| Columns | 12 (4 on phones, under 768px) | 12 (4 on phones) |
+| Gap | 12px (`--grid-gap`) | 12px |
+| Max width | **1192px** (`--container-content`) | **1040px** (`--container-case`) |
+| Margins | `--gutter`: 124px ≥1280 → 64px ≥1024 → 40px ≥768 → 16px on phones | 200px ≥1280 (wider screens center the 1040px column); the page `--gutter` below that |
+
+- **Why these numbers:** the design canvas is 1440px. The 12px gap is the gap every card grid already uses, so the columns land exactly on them: three project tiles are 4 columns each, and two tiles are 6 each. 12 columns divide into halves, thirds, quarters and sixths. Case studies are mostly reading, so their grid is narrower. Tablets keep all 12 columns so 3-across layouts still fit; phones drop to 4.
+- **Picking a grid:** the page grid is the default. A page switches to the case study grid by putting `data-grid="case-study"` on its `<main>`, which swaps `--grid-max` for everything inside it, and rendering `<PageGrid grid="case-study" />` (`ui/page-grid.tsx`) in it, which mirrors the attribute onto `<html>` while the page is showing so the GridOverlay follows. Don't use `:root:has(main[…])` for this: Next keeps the last page's `<main>` in the DOM (hidden) after you navigate away, so its grid would leak into the next page. The Navbar always stays on the page grid, so it doesn't move between pages.
+- **Using it:** `<Container>` is the grid's frame (max width + margins). `<Container grid>` also lays its children on the columns (the `layout-grid` utility). Children span all the columns unless they set `col-span-*` / `col-start-*`, for example `lg:col-span-10 lg:col-start-2` for the middle 10. On phones `col-span-*` counts out of 4.
+- **Nested grids** (cards, swatches, rows inside a section): use the same 12px gap (`gap-3`) and a column count that divides the area they sit in, and they line up with the page columns by themselves. A full-width area takes 2, 3, 4, 6 or 12 across. On `/design-system` the tab panels are 10 columns wide on desktop (the contents rail takes the first 2), so 2 or 5 across, or 6 + 4.
+- **Splits in use:**
+  - Hero blurb: 10 middle columns on tablet, 8 on desktop (columns 3–10). Avatar and title are centered on all 12.
+  - About page: collage, story and galleries in the middle 10 columns from 1024px (columns 2–11).
+  - Design system overview: copy in 6 columns (7 on tablet), logo mark centered in columns 9–11. "The stack" / "The system" blocks are 5 columns each (columns 1–5 and 7–11). Their question / answer rows split 2 + 3 (3 + 9 on tablet).
+  - Design system tabs: contents rail in columns 1–2, panels in 3–12. Brand board 6 + 4, neutral swatches 5 + 5, project colors 2 columns each.
+  - Case study: context in columns 1–7, project meta in 9–12. Feature rows: pill in 4 columns, copy in 8. Spotlights: screens in 6 columns, copy in 5, with one empty column between.
+- **Off the grid on purpose:** the content *inside* a card (padding, figures on a framed surface, the Golden Circle, the percentage breakdown bars), the Navbar's floating pills, and artwork that bleeds past the margin on phones (the About collage).
 
 ### 4.2 Spacing: the 4-point grid
 
@@ -148,7 +166,7 @@ Display sizes step down at Tailwind's breakpoints. The variables are redefined i
 The same rule applies to fixed component sizes (swatch height 68, logo 272) and to motion distances (the chip lifts 4px, menus rise 8px, `animate-rise` travels 16px, page transitions 24px).
 
 **Off the grid on purpose:**
-- 1px hairlines (`border-line`, `border-divider`) and the 2px focus ring. `--nav-height` is 81px: 80px of content plus its 1px bottom border.
+- 1px hairlines (`border-line`, `border-divider`) and the 2px focus ring. `--nav-height` is the 81px the floating Navbar reserves at the top of the page; `--nav-offset` is where sticky UI pins (0 while the Navbar is scrolled away).
 - Type line heights, which come with each `type-*` style.
 - Artwork drawn in its own units (the character rig, Figma-placed illustrations).
 
@@ -158,13 +176,13 @@ These are the steps the design actually uses (shown live on `/design-system` ›
 |---|---|---|
 | 4 | `gap-1` / `mt-1` | eyebrow → heading; between tabs; Heading → body |
 | 8 | `gap-2` / `py-2` | tab padding (y), icon → label in a tab, Sub-title → body, chip gaps, specimen rows |
-| 12 | `gap-3` / `px-3` | card grid gap, tab padding (x), swatch label inset, table row bottom padding, menu title → chips |
+| 12 | `gap-3` / `px-3` / `--grid-gap` | layout grid gap, card grid gap, tab padding (x), swatch label inset, table row bottom padding, menu title → chips |
 | 16 | `gap-4` / `p-4` | mobile gutter, bubble padding |
 | 20 | `gap-5` | neutral swatch rows |
 | 24 | `gap-6` / `--space-paragraph` | between paragraphs, stacked groups inside a block |
 | 40 | `--space-intro` | section intro copy → its content block |
-| 48 | `gap-12` | neutral swatch columns, large card padding |
-| 72 | `gap-18` / `mt-18` / `pt-18` | column gaps, page top padding, brand board → Mood & Tone |
+| 48 | `gap-12` | large card padding |
+| 72 | `gap-18` / `mt-18` / `pt-18` | page top padding, between blocks, brand board → Mood & Tone |
 | 136 | `--space-section` | between sub-sections (Mood → Color → Typography). 96 on tablet, 72 on mobile |
 
 ### 4.3 Radius, borders, elevation
@@ -189,7 +207,7 @@ These are the steps the design actually uses (shown live on `/design-system` ›
 All live in [`src/components/`](src/components/). `ui/` holds reusable primitives; `design-system/` holds the showcase sections.
 
 ### Container — `ui/container.tsx`
-Centers content at 1192px with the responsive gutter. Polymorphic: `<Container as="header">`.
+The layout grid's frame: `--grid-max` wide (1192px on the page grid, 1040px on the case study grid), centered, with `--gutter` margins. `grid` lays its children on the 12 columns (§4.1). Polymorphic: `<Container as="header" grid>`.
 
 ### SectionIntro — `ui/section-intro.tsx`
 Heading plus `ink-body` paragraphs.
@@ -201,15 +219,15 @@ Heading plus `ink-body` paragraphs.
 `type-micro` eyebrow ("THE STACK") → 4px → `type-heading` with `leading-none`. Max width 356px.
 
 ### Label / answer row (pattern)
-`<dl>` rows: `type-micro text-ink-subtle` label (148px column) + 16px `ink` answer with `leading-5`. Rows stack 24px apart and become a single column on mobile.
+`<dl>` rows: `type-micro text-ink-subtle` label + 16px `ink` answer with `leading-5`, on grid columns (label 2 of a 5-column block on desktop, 3 of 12 on tablet). Rows stack 24px apart and become a single column on mobile.
 
 ### Tabs — `ui/tabs.tsx` (client)
-- A sticky, full-bleed bar on a 1px `divider` bottom border, pinned just below the Navbar (`top-(--nav-height)`).
+- A sticky, full-bleed bar on a 1px `divider` bottom border, pinned just below the Navbar (`top-(--nav-offset)`), sliding up to the top while the Navbar is hidden.
 - Tab: 20px Lucide icon + 8px + `type-body-md` label, `px-3 py-2`, 4px top radius, 4px between tabs.
 - Active and hover: `bg-surface`. Inactive: transparent.
 - State lives in the URL hash (`#foundations`, `#assets`), so tabs can be linked. Left/right arrow keys move between tabs, with full ARIA `tablist`/`tab`/`tabpanel` roles.
-- The bar is `--tabs-height` (37px: 8 + 20px icon + 8, plus its 1px border). Anything sticky below it sits at `top-[calc(var(--nav-height)+var(--tabs-height))]`.
-- Panels render inside one `<Container>`, so panel content should not add its own. Pass `aside` to put a sticky rail beside the panels on desktop (≥1024px): a 192px column, 48px gap, content fills the rest, all inside the 1192px column. Below 1024px the rail is hidden and panels run full width.
+- The bar is `--tabs-height` (37px: 8 + 20px icon + 8, plus its 1px border). Anything sticky below it sits at `top-[calc(var(--nav-offset)+var(--tabs-height))]`.
+- Panels render inside one `<Container>`, so panel content should not add its own. The panels sit on the page grid. Pass `aside` to put a sticky rail beside them on desktop (≥1024px): the rail takes grid columns 1–2 and the panels 3–12. Below 1024px the rail is hidden and panels run full width.
 
 ### ContentsNav — `design-system/contents-nav.tsx` (client)
 The table of contents on `/design-system`, passed to `Tabs` as its `aside`. It sticks under the tab bar and lines up with the panel's first heading (36px down).
@@ -231,18 +249,32 @@ A bordered quick-action pill: `rounded-control border-line bg-paper px-3 py-2`, 
 - Hover: lifts 4px with `ease-spring`, `bg-surface`, border darkens to `ink-faint`. Press: `scale(0.97)`.
 
 ### Navbar — `ui/navbar.tsx` (client)
-The sticky top bar on every page, rendered once in the root layout (Figma `94:8094`). It is `--nav-height` (81px) tall, stays anchored during page transitions, and anything else sticky (e.g. the design system tab bar) sits at `top-(--nav-height)`. It has the 32px logo mark + 24px + links in `type-body-md`, all centered, `py-6`, with a `border-line` bottom edge over a slightly translucent `bg-paper`. Links come from `navLinks` in `lib/site-nav.ts`. "Projects" scrolls smoothly to `#projects`, "About me" goes to `/about`. Hover: text goes to `ink-subtle`; the logo tilts.
+The floating top bar on every page, rendered once in the root layout (Figma `94:8094` + `164:1204`). It reserves `--nav-height` (81px) at the top of the page but has no fill or border of its own, so content scrolls under it. It stays anchored during page transitions.
+- **Main pill (centered):** `rounded-full border-line bg-paper px-8 py-3`, 28px from the top (Figma's 30, on the 4-point grid): the 24px logo mark + 24px + links in `type-body-md` 16px apart. Links come from `navLinks` in `lib/site-nav.ts`. "Projects" scrolls smoothly to `#projects`, "About me" goes to `/about`. Hover: text goes to `ink-subtle`; the logo tilts. On phones it tightens to `px-5`, 16px gaps.
+- **View controls — `ui/view-controls.tsx` (top right):** the same container as the main pill (`rounded-full border-line bg-paper px-8 py-3`, 50px tall), level with it at the right gutter (from `xl`; at `md`–`lg` the pill moves left and the panel sits beside it; hidden on phones). A "Show my system" switch (`role="switch"`, 40 × 24 track, `ink-faint` off / `ink` on, the knob slides with `ease-spring`), a 1px `line` divider, then a light / dark icon button (Lucide sun ↔ moon, spinning between them). The switch sets `<html data-system="on">`, which shows the GridOverlay. The theme button sets `<html data-theme="dark">`; the dark palette is still to come.
+- **Auto-hide:** scrolling down (past an 8px slop) slides it up out of view (300ms `ease-out-soft`). Scrolling up, moving the mouse within 96px of the top edge, or tabbing into it brings it back; it never hides while the mouse is in that zone or at the very top of the page. While hidden, `<html data-nav="hidden">` sets `--nav-offset` to 0, so sticky UI below it (the design system tab bar) pins with `top-(--nav-offset)` and slides up into the gap.
+
+### GridOverlay — `ui/grid-overlay.tsx`
+The layout grid drawn over the whole page while "Show my system" is on, rendered once in the root layout. A fixed, click-through layer (`z-25`: above the page and the companion, under the Navbar) holding a `<Container grid>` of 12 columns (4 on phones), each `bg-nyck/8` with `border-nyck/20` edges, full height. It reads the same grid variables as `Container`, and switches to the case study grid when `<PageGrid>` sets `<html data-grid="case-study">`. A `type-micro` label in `text-nyck` sits bottom-left (16px in, 32px from `md`) and names the grid and its column count ("Case study grid · 12 columns"), from `--grid-name` and `--grid-columns`. It fades in and out over 300ms `ease-out-soft`. No JavaScript: it's shown with `in-data-[system=on]:opacity-100`.
 
 ### Project grid — `home/project-grid.tsx`
-`#projects` on the landing page: a 3-column grid (2 on tablet, 1 on mobile) of square `rounded-card bg-surface` tiles with a 12px gap. Data comes from `lib/projects.ts` (name, discipline, project color). Most tiles are still **placeholders**: no images, and plain gray at rest. **Amazon Music** shows its three cover screens and, on hover, the characters lean in to jam (`JamTile`, §7.4a). **Plaza** shows its vase logo and, on hover, Jason pops out of it (`VaseTile`, §7.4b). Both use `home/use-tile-active.ts`, which listens on the tile: active on hover or keyboard focus, and on touch screens while 60% of the tile is in view. Tiles for projects with a case study link to `/projects/<slug>` (the whole tile is the link, with the focus ring drawn on the tile).
+`#projects` on the landing page: square `rounded-card bg-surface` tiles on the page grid, 4 columns each on desktop (3 across), 6 on tablet (2 across), 2 of the phone grid's 4 from 640px and full width below that. `/studio` (`wide`) keeps 2 across from 640px. Data comes from `lib/projects.ts` (name, discipline, project color). Most tiles are still **placeholders**: no images, and plain gray at rest. **Amazon Music** shows its three cover screens and, on hover, the characters lean in to jam (`JamTile`, §7.4a). **Plaza** shows its vase logo and, on hover, Jason pops out of it (`VaseTile`, §7.4b). Both use `home/use-tile-active.ts`, which listens on the tile: active on hover or keyboard focus, and on touch screens while 60% of the tile is in view. Tiles for projects with a case study link to `/projects/<slug>` (the whole tile is the link, with the focus ring drawn on the tile).
 - **Hover (Figma `94:4008`):** the project color fades up from the bottom (`linear-gradient(0deg, color @ 20% → transparent)`, 500ms). Two pills rise 12px and fade in, the name bottom-left and the discipline bottom-right, 60ms apart, with `ease-spring`. Pills: `type-control` Bold in the project color, `bg-paper/72` + `border-paper` + `backdrop-blur-sm`, `rounded-control px-4 py-2`, 12px from the tile edges.
 
 ### Companion — `ui/companion.tsx` (client)
-A fixed character in the bottom-right corner (32px inset; 16px on mobile), rendered once in the root layout. - **Out of the way of the header character:** on pages with a TalkingAvatar in the header (landing, `/about`), it stays hidden while that avatar is on screen, so there's only ever one Jason in view. Once the header avatar scrolls fully out of view (or under the sticky Navbar), the companion fades in (opacity, 250ms `ease-out-soft`). Scrolling back up fades it out the same way. While hidden it's `inert`, and an open menu closes. The avatar (`data-hero-avatar`) reports itself through `home/hero-presence.ts` (`useReportHero` / `useHeroInView`). The server HTML renders the companion hidden, and the first client read looks for `[data-hero-avatar]` in that HTML, so it never flashes in while the page content is still hydrating. Pages without a header avatar show it straight away.
+A fixed character in the bottom-right corner (32px inset; 16px on mobile), rendered once in the root layout. - **Only one Jason per page:** pages with a TalkingAvatar in the header (landing, `/about`, `/studio`) don't show the companion at all, even once that avatar has scrolled away; there's no scroll-triggered entrance. While hidden it's `inert`. The avatar (`data-hero-avatar`) reports itself through `home/hero-presence.ts` (`useReportHero` / `useHeroOnPage`). The server HTML renders the companion hidden, and the first client read looks for `[data-hero-avatar]` in that HTML, so it never flashes in while the page content is still hydrating. Pages without a header avatar (case studies, `/cv`, `/design-system`) show it straight away.
 - **Speech bubble:** max 284px, `type-control`, right-aligned, `rounded-control border-line shadow-float`, 8px to the left of the avatar. There is no bubble at rest. Hidden on mobile.
 - **Hover = talk:** hovering the character (mouse only) pops the bubble in from the right (`ease-spring`, 250ms) and types a random line from `companionLines` (`lib/dialogue.ts`) while the mouth lip-syncs (`useTalk`). The bubble grows with the typed text. On leave, it fades out.
 - **Click = menu:** the menu opens **only** on click (or keyboard focus), never on hover. It appears above the character with "What do you wanna learn about me?" and the `navPrompts` chips stacked right-aligned. It closes on a second click, Escape, an outside click, or picking a chip. Opening it silences the character, and the bubble fades out while it's open.
 - **Page changes:** it keeps its own view-transition snapshot, so it stays put during route changes and fades in or out when coming from or going to the landing page.
+
+### Footer — `ui/footer.tsx` (client)
+Rendered once in the root layout under every page, on the page grid, below a 1px `border-line` rule. Links come from `lib/site-nav.ts` (`navLinks` through `withHome`, plus Design system; `LINKEDIN_URL`, `MEDIUM_URL`, `CONTACT_EMAIL`).
+- **Call to action** (columns 1–7): `type-micro ink-subtle` "Say hi" → 8px → `type-subtitle` "Let’s build something" over "people smile about." in Bricolage Medium, `leading-[1.07]` → 32px → an inverted Chip "Copy my email" (Lucide copy icon; copies `CONTACT_EMAIL` and toasts "Email copied. Talk soon!", falling back to `mailto:`) and a LinkedIn Chip.
+- **Links** (columns 9–12 on desktop, 2 + 2): "Pages" and "Elsewhere" in `type-micro ink-subtle`, 16px above `type-body-md ink` links 8px apart (hover `ink-subtle`). External links get a `↗` that nudges 4px up and right on hover. Side by side under the call to action on phones.
+- **Wordmark:** "Jason Jeong" in Bricolage Bold, `text-line`, decorative (`aria-hidden`), 64px below. It's sized in container units (`18.5cqw`) so the two words fill the column with a ~0.25em gap at any width. Its box ends on the baseline (`-mb-[0.075em]` at `leading-[0.8]`), so the bottom row's rule sits flush under the letters and the `g` descender hangs over it. Hovering a letter springs it up 0.12em and turns it `ink` (200ms in, 500ms `ease-spring` back).
+- **Bottom row:** a `border-line` rule, then `type-body-sm ink-subtle` "© 2026 Jason Jeong" · "Designed in Figma, built with Next.js" · "Back to top ↑" (`ink`, the arrow lifts 4px on hover). It stays left-aligned, and on phones it wraps 112px short of the right edge, so the Companion never covers it.
+- The case study templates keep their own "Thanks for reading" ending with a "Back to projects" link; the footer carries the email and copyright.
 
 ### Site navigation data — `lib/site-nav.ts`
 `navPrompts` (the companion chips) and `navLinks` (the nav bar) are the single source for where things link. An entry with `href` navigates; one with `message` shows a toast. `transitionFor(href)` picks `nav-back` for links into `/` and `nav-forward` otherwise.
@@ -254,7 +286,7 @@ Wrap each page's content in `<PageTransition>` inside `page.tsx`. Links pass `tr
 A 128px circle (`rounded-full border-2 border-line shadow-halo`) that crops the character to the head, using Figma offsets stored as percentages. The character is an inline SVG rig: the head bobs, the eyes blink at random and follow the cursor, and a `mouth` prop picks the lip-sync shape. See §7.4.
 
 ### TalkingAvatar — `home/talking-avatar.tsx` (client)
-The page-header avatar (landing page and `/about`). Pass `lines` to change what it says (default `heroLines`; `/about` uses `aboutLines`). It reports whether it's on screen so the Companion can stay hidden meanwhile (see Companion). **Top room:** the bubble opens upward, so a header avatar needs at least ~80px between the Navbar and the avatar for a two-line bubble to clear the nav: the landing hero uses `pt-20` (`md:pt-23`), `/about` uses `pt-24`. Hovering the character (or tapping it on touch) says a random line from `heroLines` in [`lib/dialogue.ts`](src/lib/dialogue.ts), never the same one twice in a row. The text types into a speech bubble while the mouth lip-syncs. Bubble: `type-control`, `rounded-control border-line bg-paper shadow-float`, `px-4 py-3`, centered text, **8px above** the avatar and centered on it, max 320px wide. It pops up from the bottom with `ease-spring` (250ms) and fades out 150ms after the pointer leaves (on touch, 2.5s after the line finishes). Only the typed part of the line is laid out, so the bubble starts small and grows as the text types. Screen readers get the whole line through a polite live region. The typing and lip-sync logic lives in `home/use-talk.ts` (`useTalk(lines)`), shared with the Companion. To add dialogue, add strings to `heroLines` / `companionLines`.
+The page-header avatar (landing page and `/about`). Pass `lines` to change what it says (default `heroLines`; `/about` uses `aboutLines`). It reports itself so the Companion stays hidden on that page (see Companion). **Top room:** the bubble opens upward, so a header avatar needs at least ~80px between the Navbar and the avatar for a two-line bubble to clear the nav: the landing hero uses `pt-20` (`md:pt-23`), `/about` uses `pt-24`. Hovering the character (or tapping it on touch) says a random line from `heroLines` in [`lib/dialogue.ts`](src/lib/dialogue.ts), never the same one twice in a row. The text types into a speech bubble while the mouth lip-syncs. Bubble: `type-control`, `rounded-control border-line bg-paper shadow-float`, `px-4 py-3`, centered text, **8px above** the avatar and centered on it, max 320px wide. It pops up from the bottom with `ease-spring` (250ms) and fades out 150ms after the pointer leaves (on touch, 2.5s after the line finishes). Only the typed part of the line is laid out, so the bubble starts small and grows as the text types. Screen readers get the whole line through a polite live region. The typing and lip-sync logic lives in `home/use-talk.ts` (`useTalk(lines)`), shared with the Companion. To add dialogue, add strings to `heroLines` / `companionLines`.
 
 ### Case study page — `case-study/case-study-page.tsx`
 Every project case study at `/projects/[slug]` uses this one template. Content is data, so a new case study needs no new components:
@@ -263,20 +295,30 @@ Every project case study at `/projects/[slug]` uses this one template. Content i
 
 Layout, top to bottom:
 - **Header:** BackLink ("Back to projects" → `/#projects`) → eyebrow (`type-micro`, project category, a small dot in the project color) → `type-title` name → `type-body-lg` tagline (full width) → cover: three product screens on a fixed-height `bg-surface rounded-card`, the middle one raised, all running off the bottom edge. Never use an exported "cover slide" with its own title, fonts or dark backdrop. **Amazon Music** swaps in `case-study/jam-cover.tsx` (see §7.4): on hover (tap on touch) the outer screens slide out of frame and the personas and Jason peek in from the sides to jam along.
-- **Overview:** Context paragraph (`type-body-lg ink-body`) beside a 2-column label / answer `<dl>` (Role, Timeline, Team, Tools), 400px wide on desktop.
+- **Grid:** the case study grid (`<main data-grid="case-study">`, 1040px, §4.1).
+- **Overview:** Context paragraph (`type-body-lg ink-body`, columns 1–7) beside a 2-column label / answer `<dl>` (Role, Timeline, Team, Tools) in columns 9–12 on desktop.
 - **My contributions:** `type-heading` + three `bg-surface rounded-card p-6` cards, titles in `type-subheading`, body `type-body-md`.
 - **Sections:** eyebrow (`type-micro ink-subtle`) → 4px → `type-heading` (full width) → blocks 24px apart, `--space-section` between sections. Running copy in sections (paragraphs, lists, `emphasis` lines and feature text) is **Large Body** (`type-body-lg`, 20px) in `ink-body`, running the full width of the column. Text inside cards (`cards`, personas, contributions) stays **Medium Body** (`type-body-md`, 16px).
-- **Blocks:** `text`, `list`, `emphasis` (one bold `ink` line), `subheading` (`type-subheading`), `cards` (titles in `type-subheading`), `features`, `merge`, `personas`, `quotes`, `stats`, `spotlights` and `figures`.
+- **Blocks:** `text`, `list`, `emphasis` (one bold `ink` line), `subheading` (`type-subheading`), `cards` (titles in `type-subheading`), `features`, `merge`, `personas`, `quotes`, `stats`, `bars`, `spotlights` and `figures`.
+  - **Editorial layout** (`layout: "editorial"` on the `CaseStudy`, used by Shopify): section headings and running copy are held to 8 of 12 columns from desktop up (`MEASURE`, keyed off `data-layout` on `<main>`), figures keep the full width, a row of three `quotes` sits three across, and `stats` values are set in the project's text accent.
+  - Section `part`: starts a chapter ("Part one · Research") with a `type-micro` label in the text accent and an `bg-line` hairline, 1.5× `--space-section` above it.
+  - Section `variant: "callout"`: the title in `type-subtitle` on a `rounded-card` tinted with the project accent at 20% (like the showcase band); `tone: "muted"` uses `bg-surface` and `ink-subtle` instead, for a framing that later gets replaced.
+  - `findings`: stacked `bg-surface` cards, each led by an 8px dot. `tone: "negative"` (problems, broken assumptions) sets the dot and title in `negative`; `tone: "positive"` (wins, takeaways) uses the project accent and its text shade.
+  - `tests`: one `bg-surface` row per usability test: the screen tested (160px), the tester's words in `type-heading` Medium, and the finding in `negative`.
+  - `reframe`: the old word struck through on a `bg-surface` pill → the new one on an accent-tinted pill.
+  - `testimonial`: one large quote (`type-heading` Medium) on an accent-tinted card, attribution in the text accent.
   - `features`: label / answer rows. The label is a feature pill (Chip styling at rest: `rounded-control border-line bg-paper`, `type-control`, 20px Lucide icon in the project color), 240px column, 72px gap.
   - `merge`: pills joined by `+` and `=` (`type-heading ink-subtle`) on a `bg-surface` card; the result pill is larger (`type-label`).
   - `personas`: `bg-surface rounded-card p-6` cards, 3 across: 96px circular portrait (`border-2 border-line bg-paper`), name in `type-subheading`, age and favorite artist in `type-body-sm ink-subtle`, bio in `type-body-md`. The portrait idles with `animate-bob` (pivot at the neck, `50% 67%`), each card's loop offset by 1.1s. Hovering it (or tapping on touch) types one of the persona's `lines` into a bubble 12px to the portrait's right (`useTalk`, max 224px, grows as it types).
   - `cards`: 2 across, or 3 across (≥1024px) when there are exactly three.
   - `quotes`: `bg-surface rounded-card` cards, 2 across: optional `type-micro ink-subtle` label, the quote in `type-body-lg ink` with curly quotes, attribution in `type-body-sm ink-subtle` pinned to the bottom. Use for interview quotes and testimonials instead of screenshots of speech bubbles.
   - `stats`: big numbers on `bg-surface rounded-card p-6` tiles, 4 across (2 on mobile): value in `type-subtitle`, label in `type-body-md ink-body`.
+  - A section with `variant: "showcase"` (the final solution) sits on a full-bleed band filled with the project accent at 20%. Its eyebrow, title and intro copy are centered, an optional `hero` mockup (max 560px) sits under them, and its spotlight cards turn `bg-paper`, with titles in the project's text shade and the copy right-aligned when it sits on the left.
   - `spotlights`: feature rows, two columns with a 72px gap. Bare product screens sit side by side on a fixed-height `bg-surface` card and run off its bottom edge, like the cover, beside a `type-subheading` title and Large Body copy. Every other row puts the screens on the right.
   - `golden-circle`: Simon Sinek's Why / How / What on a `bg-surface rounded-card` card. Three `bg-paper` point cards (titles in `type-subheading`, points in `type-body-md`) sit beside concentric rings that are flat fills of the project accent (20%, 30%, then a solid core; they compound toward the center), labeled in `type-subheading ink`. No dark backdrop or gradients.
+  - `bars`: ranked percentages (survey answers) on a `bg-surface rounded-card p-6 md:p-8` card: `type-subheading` title over an optional `type-body-sm ink-subtle` note (sample size), then one row per answer: label in `type-body-md ink-body`, a 12px `bg-paper` rounded track filled in the project accent (scaled to the largest value), value in `type-label ink`. On mobile the bar drops under its label.
   - `job-map`: a Jobs To Be Done map on a `bg-surface rounded-card` card. "Main job" (`type-micro ink-subtle`) over the job statement in `type-subheading`, then the steps as `bg-paper rounded-card p-4` cards, 6 across on desktop (3 on tablet, stacked on mobile). Each step: a numbered stage name (`type-micro` in the project's text shade), the job in `type-body-md ink`, then an optional struggle under a `border-line` hairline (`type-body-sm ink-body`) with the assumption it backs beside a dot in the project accent. The cards use a subgrid, so struggles line up across columns.
-  - `figures` are either `framed` (default: transparent graphics on a padded `bg-surface` card, never scaled past their pixel size; with several figures each gets its own `type-body-sm` caption) or `bleed` (photos that fill their own card, with a blur placeholder), in 1, 2, 3 or 4 columns.
+  - `figures` are either `framed` (default: transparent graphics on a padded `bg-surface` card, never scaled past their pixel size; with several figures each gets its own `type-body-sm` caption) or `bleed` (photos that fill their own card, with a blur placeholder), in 1, 2, 3 or 4 columns. `bento` puts photos on a 3-column grid, rows alternating a wide (2-column, 4:3) and a narrow cell that crops (`object-cover`) to the row's height; list them landscape, portrait, portrait, landscape. Phones stack them at 4:3 and 3:4.
   - **Rebuild, don't screenshot:** anything that is mostly text (feature lists, personas, diagrams of labels) is a block, not an image, so it uses the site's type and colors. Keep images for real screens, sketches, photos and illustrations, cropped free of baked-in captions.
 - **Icons:** Lucide geometry inlined in `case-study/icons.tsx` (they take `currentColor`). Add new ones there and to `IconName` in `lib/case-study.ts`.
 - **Statement:** a section with `variant: "statement"` (the core problem / HMW) sets its title in `type-subtitle` with a 4px left rule in the project color. It's the only place the accent appears at large size.
@@ -287,11 +329,18 @@ The slug is URL data, so the page reads it behind `<Suspense>`, and grid tiles `
 ### About page — `app/about/page.tsx`
 Figma `103:12209`. Copy and photos are data in [`src/content/about/index.ts`](src/content/about/index.ts) (`story`, `collage`, `galleries`).
 - **Header:** `pt-24` (room for the speech bubble under the Navbar), TalkingAvatar (`aboutLines`) → 12px → `type-title` "So, who is Jason Jeong?" over "I’m a creative builder." in Bricolage Medium, `leading-[1.07]` like the landing hero. Blocks `animate-rise`, 80ms apart.
-- **Collage — `about/photo-collage.tsx` (client):** a selfie (492 × 304) with four photos (296 × 216, ±15°) behind it, all `rounded-photo shadow-halo`, laid out in a 952 × 556 Figma frame. Positions are multiples of `--u` (`100cqw / 952`), so it scales as one piece. On small screens the frame is 96px wider than the column and the outer photos run off the edges (the page clips them). At rest the four photos peek out from behind the selfie. Hovering or keyboard-focusing the collage (tapping on touch) fans them out to their Figma spots: 700ms `ease-spring`, 60ms apart. The `type-subheading ink-body` "hover over me!" sits 8px above the selfie and fades away once they're out; touch screens read "tap me!".
-- **Story:** `type-body-lg ink-body` paragraphs in the 1000px `max-w-narrow` column, 64px below the collage.
-- **Outside of design:** `--space-section` down, a centered `type-subtitle` `<h2>`, 64px, then one gallery per hobby (`about/photo-gallery.tsx`), `--space-section` apart. Each gallery has a centered `type-subtitle` title in Bricolage Medium, 16px above its photos.
-- **Gallery rows:** each photo keeps its Figma frame (`size`) and grows by its aspect ratio, so every row is justified to one height at any width, with 12px gaps. Below 640px the rows become a 2-column masonry and panoramas (wider than 2:1) span both columns. Photos are `rounded-photo` on `bg-surface` with a blur placeholder. An optional `caption` sits 12px in from the bottom left, in `type-body-md paper`, and only shows on hover, like the project tiles: an `ink` gradient (60% at the bottom, clear by halfway up) fades in over 500ms `ease-out-soft`, then the caption rises 12px and fades in (300ms `ease-spring`, 60ms later). Photos without a caption get no hover. Touch screens can't hover, so they show both at rest.
-- To add a photo, drop it in `src/content/about/`, import it, and add it to a row with its frame size.
+- **Collage — `about/photo-collage.tsx` (client):** a selfie (492 × 304) with four photos (296 × 216, ±15°) behind it, all `rounded-photo shadow-halo`, laid out in a 952 × 556 Figma frame. Positions are multiples of `--u` (`100cqw / 952`), so it scales as one piece. From 1024px it fills the middle 10 grid columns. Below that the frame is 96px wider than the column and the outer photos run off the edges (the page clips them). At rest the four photos peek out from behind the selfie. Hovering or keyboard-focusing the collage (tapping on touch) fans them out to their Figma spots: 700ms `ease-spring`, 60ms apart. The `type-subheading ink-body` "hover over me!" sits 8px above the selfie and fades away once they're out; touch screens read "tap me!".
+- **Story:** `type-body-lg ink-body` paragraphs in the middle 10 grid columns (from 1024px), 64px below the collage. The collage and galleries use the same 10 columns.
+- **Outside of design:** `--space-section` down, a centered `type-subtitle` `<h2>`, 64px, then one carousel per hobby (`about/photo-carousel.tsx`, client), `--space-section` apart. Each has a centered `type-subtitle` title in Bricolage Medium, 16px above its photos.
+- **Gallery carousels:** every photo is 320px tall (420px from `md`), its width set by its Figma frame (`size`) and capped at the 10-column width, `rounded-photo` on `bg-surface` with a blur placeholder, 12px apart. The active photo sits centered; the rest peek out past the column (the page clips them), scaled down 12% and tilted 3° per step away, at 70% opacity. The track moves on a JS spring (stiffness 180, damping 17), so each settle overshoots a little and bounces back; moving fast skews the photos up to 5° into the motion. Drag or flick it (a 48px drag always moves one photo; past either end it rubber-bands at 30%), swipe a trackpad (one swipe = one photo), use ←/→/Home/End, tap a side photo, or use the controls 24px below: two 48px round arrow buttons (`border-line bg-paper`, lift 4px on hover like Chip) around dots (8px `ink-faint`; the active one stretches to 24px `ink` with `ease-spring`). Pushing past the first or last photo bumps the track and springs back. An optional `caption` shows on the active photo only: the `ink` gradient fades in (500ms `ease-out-soft`), then the caption rises 12px (300ms `ease-spring`, 200ms later). Reduced motion: no tilt, scale or skew, and it jumps instead of springing.
+- To add a photo, drop it in `src/content/about/`, import it, and add it to a gallery's `photos` with its frame size.
+
+### CV page — `app/cv/page.tsx`
+The resume as a page, linked from the Navbar's "CV" (`CV_URL` in `lib/site-nav.ts`). Content is data in [`src/content/cv/index.ts`](src/content/cv/index.ts), from `assets/Base-Resume.pdf`; the "Download PDF" chip serves the copy at `public/jason-jeong-cv.pdf`, so update both together. Page grid.
+- **Header:** left-aligned in the same 10 columns as the sections: `type-title` "My experience" (`leading-[1.07]`), then contact Chips 32px below (email, LinkedIn, Medium), ending with an inverted Chip (`bg-ink text-paper`, Lucide download icon) for the PDF. Blocks `animate-rise`, 80ms apart.
+- **Sections** (Education, Experience, Projects, Leadership, Skills): the middle 10 grid columns from 1024px, 72px below the header and `--space-section` apart. A `type-heading` over a 1px `ink` rule, then entries on `border-line` rules, 32px padding, split 3 + 7 columns from `md` (stacked on phones).
+- **Entry:** left, the dates in `type-body-sm ink` over the place in `ink-subtle`. Right, a `type-subheading` name led by an 8px dot in the company's project accent (`ink-faint` when it has none), the role in `type-body-md ink-body`, 16px, then bullets (`type-body-md ink-body`, 8px apart, 4px `ink-faint` dots). Entries with a case study end with an underlined "Read the case study →" link whose arrow nudges 4px on hover.
+- **Skills:** `type-micro ink-subtle` labels (3 columns) beside static pills (`type-body-sm`, `rounded-control border-line bg-paper px-3 py-1`, 8px apart). They don't lift on hover, because they aren't links.
 
 ### BackLink — `ui/back-link.tsx`
 "‹ Back to main page" at the top left of secondary pages (Figma `94:8004`). It is a Lucide `chevron-left` (20×24, `#525252`) + 8px + `type-body-md` in `ink-body`, `px-3 py-2`, sitting at the left edge of the content column. Hover: `bg-surface`, text goes to `ink`, chevron nudges 4px left. It links to `/` by default; pass `href`/`label` to reuse it on other pages.
@@ -303,7 +352,7 @@ Figma `103:12209`. Copy and photos are data in [`src/content/about/index.ts`](sr
 `rounded-card bg-surface`, no border or shadow. The brand card centers the 94px logo mark, then 8px, then "Jason Jeong" in `type-subtitle`.
 
 ### Type specimen row (pattern)
-The sample on the left in its own style, the spec on the right in Satoshi Bold 16. `border-b border-line pb-3`, rows 8px apart.
+The sample on the left in its own style, the spec on the right in Karla Bold 16. `border-b border-line pb-3`, rows 8px apart.
 
 ### Character strip — `design-system/character-strip.tsx`
 Five character illustrations placed on a 1192 × 235 `bg-surface` card at Figma coordinates, converted to percentages so the strip scales. On mobile it keeps a 640px minimum and scrolls sideways.
@@ -434,10 +483,11 @@ All transitions turn off under `prefers-reduced-motion`. Looping animations must
 
 **New section on a page**
 ```tsx
-<Container className="pt-9 pb-30">
+<Container grid className="pt-9 pb-30">
   <SectionIntro title="Case studies" level="section">
     <p>Short muted intro paragraph.</p>
   </SectionIntro>
+  {/* 2 across = 6 grid columns each; gap-3 is the grid gap, so the cards line up */}
   <div className="mt-(--space-intro) grid gap-3 md:grid-cols-2">
     {/* cards: rounded-card bg-surface */}
   </div>
@@ -471,13 +521,13 @@ const accent = projectColors.nyck;
 
 ## 9. Notes and decisions while translating Figma
 
-- Figma line heights are "auto". They are written down as 1.2 for Bricolage and 1.35 for Satoshi, which matches the rendered box heights in Figma (for example 44px → 53px).
+- Figma line heights are "auto". They are written down as 1.2 for Bricolage and 1.4 for Karla, which matches the rendered box heights in Figma (for example 44px → 53px).
 - The Figma variable `typography/micro-s/letter-spacing` is 0.44px, but the type-scale spec says "4% LSP" (0.48px). The system uses **4%**.
 - In Figma, the type-scale list sits at x=130 instead of the 124px column edge. The build aligns it to the column.
 - Gaps between sub-sections vary in Figma (72, 137 and 141px). The system sets them to **72px** after the brand board and **136px** between the rest.
 - Project chips in the Figma palette row cut off their labels, so the label is hidden by default and shows on hover.
 - Landing page: the avatar border in Figma is `#EDEDED` at 1.78px. It's built with `border-2 border-line` (#E5E5E5), which looks the same, so the system doesn't gain a near-duplicate gray.
 - **4-point grid migration:** the Figma file had off-grid spacing (5, 7, 10, 22, 35, 37, 42, 50, 54, 93px, a 67px swatch, a 147px label column). Each was rounded to the nearest multiple of 4 (§4.2), so the build is a few pixels off Figma in those places on purpose.
-- About page (`103:12209`): the photo radius in Figma mixes 12, 8 and ~6px. It's built with one `rounded-photo` (8px). The gallery is 986px wide in Figma and the copy 1000px. Both use the 1000px `max-w-narrow`. The 200px gap above "Outside of design" is `--space-section` (136px). The title's second line uses the hero's tight `leading-[1.07]` rather than Figma's auto line height.
+- About page (`103:12209`): the photo radius in Figma mixes 12, 8 and ~6px. It's built with one `rounded-photo` (8px). The gallery is 986px wide in Figma and the copy 1000px. Both use the middle 10 grid columns (992px at 1440). The 200px gap above "Outside of design" is `--space-section` (136px). The title's second line uses the hero's tight `leading-[1.07]` rather than Figma's auto line height.
 - About page collage: Figma shows only the fanned-out layout, with a "hover over me!" label. The build reads that as the hover state and tucks the photos behind the selfie at rest.
 - The **Assets** tab has no Figma design yet. Its page reuses the Foundations patterns to show logo marks, characters and icons.

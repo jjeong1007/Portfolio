@@ -55,7 +55,7 @@ export function Assets() {
 
       <section aria-labelledby="char-title" className="mt-(--space-section)">
         <h3 id="char-title" className="type-heading">Characters</h3>
-        <div className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-3 md:grid-cols-3 lg:grid-cols-2">
           {characters.map((a) => <AssetCard key={a.name} asset={a} />)}
         </div>
       </section>
@@ -69,7 +69,7 @@ export function Assets() {
           </a>{" "}
           at 20px with a black stroke.
         </p>
-        <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
           {icons.map((a) => <AssetCard key={a.name} asset={a} size="sm" />)}
         </div>
       </section>

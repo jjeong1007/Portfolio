@@ -35,7 +35,7 @@ const blocks = [
 
 export function Overview() {
   return (
-    <Container as="header" className="pt-6 md:pt-14">
+    <Container as="header" grid className="pt-6 md:pt-14">
       <BackLink />
       <h1 className="type-title mt-8 md:mt-10">
         Thinking in systems.
@@ -43,8 +43,9 @@ export function Overview() {
         Not by each frame.
       </h1>
 
-      <div className="mt-10 flex flex-col-reverse items-start justify-between gap-6 md:mt-14 md:flex-row md:gap-18">
-        <div className="max-w-copy md:pt-2">
+      {/* Copy on the first half, the mark centered in columns 9–11 */}
+      <div className="mt-10 flex flex-col-reverse items-start gap-6 md:mt-14 md:grid md:grid-cols-subgrid md:gap-y-0">
+        <div className="md:col-span-7 md:pt-2 lg:col-span-6">
           <h2 className="type-subtitle">Overview</h2>
           <div className="space-y-(--space-paragraph) text-ink-body">
             <p>
@@ -65,22 +66,27 @@ export function Overview() {
           width={270}
           height={270}
           preload
-          className="size-30 shrink-0 md:size-50 xl:mr-22 xl:size-68"
+          className="size-30 shrink-0 md:col-span-4 md:col-start-9 md:size-50 md:justify-self-end lg:col-span-3 lg:justify-self-center xl:size-68"
         />
       </div>
 
-      <div className="mt-24 grid gap-14 lg:mt-41 lg:grid-cols-2 lg:gap-18">
-        {blocks.map((block) => (
-          <section key={block.eyebrow} className="flex flex-col gap-6">
+      {/* Two blocks of 5 columns, one empty column between them */}
+      <div className="mt-24 grid grid-cols-subgrid gap-y-14 lg:mt-41">
+        {blocks.map((block, i) => (
+          <section
+            key={block.eyebrow}
+            className={`col-span-full flex flex-col gap-6 lg:col-span-5 ${i ? "lg:col-start-7" : "lg:col-start-1"}`}
+          >
             <div className="flex max-w-[356px] flex-col gap-1">
               <p className="type-micro">{block.eyebrow}</p>
               <h3 className="type-heading leading-none!">{block.title}</h3>
             </div>
+            {/* Question in the first 3 columns (2 of the block's 5 on desktop), answer in the rest */}
             <dl className="flex flex-col gap-6">
               {block.rows.map((row) => (
-                <div key={row.q} className="grid gap-2 md:grid-cols-[148px_1fr] md:gap-18">
-                  <dt className="type-micro text-ink-subtle md:whitespace-nowrap">{row.q}</dt>
-                  <dd className="leading-5">{row.a}</dd>
+                <div key={row.q} className="grid gap-x-(--grid-gap) gap-y-2 md:grid-cols-12 lg:grid-cols-5">
+                  <dt className="type-micro text-ink-subtle md:col-span-3 md:whitespace-nowrap lg:col-span-2">{row.q}</dt>
+                  <dd className="leading-5 md:col-span-9 lg:col-span-3">{row.a}</dd>
                 </div>
               ))}
             </dl>

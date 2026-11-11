@@ -7,7 +7,7 @@ export default function Home() {
     <PageTransition>
       <main className="pb-30">
         <Hero />
-        <ProjectGrid className="mt-20 md:mt-28" />
+        <ProjectGrid className="mt-20 md:mt-36" />
       </main>
     </PageTransition>
   );

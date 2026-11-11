@@ -52,7 +52,7 @@ export function Tabs({ items, label, aside }: TabsProps) {
 
   return (
     <>
-      <nav className="sticky top-(--nav-height) z-10 border-b border-divider bg-paper">
+      <nav className="sticky top-(--nav-offset) z-10 border-b border-divider bg-page transition-[top] duration-300 ease-out-soft">
         <Container>
           <div role="tablist" aria-label={label} className="flex gap-1">
             {items.map((item, i) => {
@@ -83,13 +83,14 @@ export function Tabs({ items, label, aside }: TabsProps) {
           </div>
         </Container>
       </nav>
-      <Container className={aside ? "lg:grid lg:grid-cols-[192px_minmax(0,1fr)] lg:gap-12" : ""}>
+      {/* With an aside: it takes the first 2 grid columns on desktop, the panels the other 10 */}
+      <Container grid>
         {aside && (
-          <div className="sticky top-[calc(var(--nav-height)+var(--tabs-height))] hidden self-start pt-9 lg:block">
+          <div className="sticky top-[calc(var(--nav-offset)+var(--tabs-height))] hidden self-start pt-9 transition-[top] duration-300 ease-out-soft lg:col-span-2 lg:block">
             {aside}
           </div>
         )}
-        <div className="min-w-0">
+        <div className={aside ? "lg:col-span-10 lg:col-start-3" : ""}>
           {items.map((item) => (
             <div
               key={item.id}

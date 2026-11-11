@@ -2,6 +2,7 @@ import Image from "next/image";
 import { SectionIntro } from "@/components/ui/section-intro";
 import { Swatch } from "@/components/ui/swatch";
 import { CharacterStrip } from "@/components/design-system/character-strip";
+import { GridSpecs } from "@/components/design-system/grid-specs";
 import { MotionShowcase } from "@/components/design-system/motion-showcase";
 import { SpacingScale } from "@/components/design-system/spacing-scale";
 import { neutrals, projectColors, typeScale } from "@/lib/design-tokens";
@@ -20,13 +21,13 @@ export function Foundations() {
         </p>
       </SectionIntro>
 
-      {/* Brand board */}
-      <div className="mt-(--space-intro) grid gap-3 lg:grid-cols-[660fr_520fr]">
-        <div className="flex min-h-[420px] flex-col items-center justify-center gap-2 rounded-card bg-surface lg:min-h-[620px]">
+      {/* Brand board: 6 + 4 of the panel's 10 columns */}
+      <div className="mt-(--space-intro) grid gap-3 lg:grid-cols-10">
+        <div className="flex min-h-[420px] flex-col items-center justify-center gap-2 rounded-card bg-surface lg:col-span-6 lg:min-h-[620px]">
           <Image src="/brand/logo-mark-small.svg" alt="" width={94} height={94} />
           <p className="type-subtitle">Jason Jeong</p>
         </div>
-        <ul className="flex flex-col gap-3" aria-label="Brand colors">
+        <ul className="flex flex-col gap-3 lg:col-span-4" aria-label="Brand colors">
           {brandColors.map((color) => (
             <li key={color.name}>
               <Swatch color={color} />
@@ -45,7 +46,7 @@ export function Foundations() {
           </p>
           <p>
             Elements of minimalism come into play through the usage of black and white as primary
-            colors throughout the website and the font “Satoshi” for body texts where information
+            colors throughout the website and the font “Karla” for body texts where information
             needs to be easily consumed by users.
           </p>
           <p>
@@ -75,7 +76,7 @@ export function Foundations() {
           </p>
         </SectionIntro>
 
-        <div className="mt-(--space-intro) grid gap-5 md:grid-cols-[576fr_568fr] md:gap-12">
+        <div className="mt-(--space-intro) grid gap-x-3 gap-y-5 md:grid-cols-2">
           {[lightNeutrals, darkNeutrals].map((column, i) => (
             <ul key={i} className="flex flex-col gap-5" aria-label={i ? "Dark neutrals" : "Light neutrals"}>
               {column.map((color) => (
@@ -87,7 +88,8 @@ export function Foundations() {
           ))}
         </div>
 
-        <ul className="mt-9 grid grid-cols-3 gap-3 lg:grid-cols-6" aria-label="Project colors">
+        {/* 2 columns each: 6 across on tablet, 5 across the 10-column panel on desktop */}
+        <ul className="mt-9 grid grid-cols-2 gap-3 md:grid-cols-6 lg:grid-cols-5" aria-label="Project colors">
           {Object.values(projectColors).map((color) => (
             <li key={color.name}>
               <Swatch color={color} variant="chip" />
@@ -99,14 +101,14 @@ export function Foundations() {
       {/* Typography */}
       <section aria-labelledby="type-title" className="mt-(--space-section)">
         <SectionIntro title="Typography" id="type-title">
-          <p>This design system composes of two primary typefaces: Bricolage Grotesque and Satoshi.</p>
+          <p>This design system composes of two primary typefaces: Bricolage Grotesque and Karla.</p>
           <p>
             Bricolage Grotesque creates a more playful and fun feel towards the website really
             allowing me to showcase my playfulness when I design. It also just compliments to
             character designs.
           </p>
           <p>
-            Satoshi provides a more minimal and simple experience to the user as they are reading
+            Karla provides a more minimal and simple experience to the user as they are reading
             the contents of my website. It’s slick and clean look makes text easier to read and
             digest because of its sans-serif nature.
           </p>
@@ -119,7 +121,7 @@ export function Foundations() {
           </div>
           <Image src="/brand/icon-times.svg" alt="combined with" width={28} height={28} />
           <div className="font-body font-bold">
-            <p className="text-body-lg leading-display tracking-tight">Satoshi</p>
+            <p className="text-body-lg leading-display tracking-tight">Karla</p>
             <p className="text-subtitle leading-display tracking-tight">Minimalism</p>
           </div>
         </div>
@@ -134,6 +136,24 @@ export function Foundations() {
               <span className="type-body-sm font-bold whitespace-nowrap md:text-body-md">{style.spec}</span>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Grid */}
+      <section aria-labelledby="grid-title" className="mt-(--space-section)">
+        <SectionIntro title="Grid" id="grid-title">
+          <p>
+            Every page sits on one of two layout grids. Both have 12 columns with a 12px gap, the
+            same gap as every card grid, so three project tiles are exactly 4 columns each. Phones
+            drop to 4 columns.
+          </p>
+          <p>
+            The page grid runs 1192px wide. Case studies are mostly reading, so they use a narrower
+            1040px grid. Flip “Show my system” in the top right to see the grid over any page.
+          </p>
+        </SectionIntro>
+        <div className="mt-(--space-intro)">
+          <GridSpecs />
         </div>
       </section>
 

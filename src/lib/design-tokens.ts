@@ -78,17 +78,44 @@ export type SpaceStep = {
 export const spacingScale: SpaceStep[] = [
   { px: 4, token: "1", use: "Eyebrow → heading, between tabs" },
   { px: 8, token: "2", use: "Icon → label, Sub-title → body, chip gaps" },
-  { px: 12, token: "3", use: "Card grid gap, control padding (x)" },
+  { px: 12, token: "3 · --grid-gap", use: "Layout grid gap, card grid gap, control padding (x)" },
   { px: 16, token: "4", use: "Gutter on mobile, bubble padding" },
   { px: 20, token: "5", use: "Neutral swatch rows" },
   { px: 24, token: "6 · --space-paragraph", use: "Between paragraphs, stacked groups" },
   { px: 40, token: "10 · --space-intro", use: "Section intro → its content" },
-  { px: 48, token: "12", use: "Swatch columns, card padding (lg)" },
-  { px: 72, token: "18", use: "Column gaps, page top padding" },
+  { px: 48, token: "12", use: "Card padding (lg)" },
+  { px: 72, token: "18", use: "Page top padding, between blocks" },
   { px: 136, token: "34 · --space-section", use: "Between sections (96 tablet, 72 mobile)" },
 ];
 
 /* ---- Motion ------------------------------------------------------------- */
+
+export type LayoutGrid = {
+  name: string;
+  /** Content width (px) at the 1440 canvas */
+  width: number;
+  margins: string;
+  usedOn: string;
+};
+
+/**
+ * The two layout grids (globals.css `--grid-*`, design-system.md §4.1). Both
+ * are 12 columns with a 12px gap (4 columns on phones); only the width differs.
+ */
+export const layoutGrids: LayoutGrid[] = [
+  {
+    name: "Page grid",
+    width: 1192,
+    margins: "124px · 64px under 1280 · 40px under 1024 · 16px on phones",
+    usedOn: "Landing, Studio, About me, Design system",
+  },
+  {
+    name: "Case study grid",
+    width: 1040,
+    margins: "200px at 1440, never less than the page margins",
+    usedOn: "Case studies and their password gate",
+  },
+];
 
 export type Easing = { token: string; curve: string; use: string };
 

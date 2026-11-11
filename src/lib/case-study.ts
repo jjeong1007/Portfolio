@@ -5,7 +5,8 @@ import type { PersonaKey } from "@/components/case-study/persona-art";
  * Shape of a case study page (`/projects/[slug]`). Each case study lives in
  * `src/content/case-studies/<slug>/` as an `index.ts` plus its images, and is
  * registered in `src/content/case-studies/index.ts`. Rendered by
- * `components/case-study/case-study-page.tsx`.
+ * `components/case-study/editorial-case-study.tsx` (Shopify has its own
+ * hand-built page, shopify-editorial.tsx, in the same layout).
  */
 
 export type Figure = {
@@ -14,6 +15,11 @@ export type Figure = {
   caption?: string;
   /** Caps the displayed width in px (framed figures only), for art that reads too large at full width. */
   maxWidth?: number;
+  /**
+   * Speech bubbles over the image (bleed figures only), e.g. what testers said on that screen.
+   * `x` / `y` place each bubble's top-left corner as a percentage of the image.
+   */
+  callouts?: { quote: string; x: number; y: number }[];
 };
 
 /** Lucide icons available to `features`, `merge` and `cards` blocks (drawn in `case-study/icons.tsx`). */
@@ -66,7 +72,11 @@ export type Block =
    * Images. `framed` (default) sits them on a `bg-surface` card with padding,
    * for transparent graphics; `bleed` lets photos and full-bleed art fill the card.
    */
-  | { type: "figures"; figures: Figure[]; columns?: 1 | 2 | 3 | 4; fit?: "framed" | "bleed" }
+  /**
+   * `bento` lays photos out 3 across, alternating a wide (2-column) and a narrow
+   * cell per row: list them landscape, portrait, portrait, landscape, … (cropped to fit).
+   */
+  | { type: "figures"; figures: Figure[]; columns?: 1 | 2 | 3 | 4; fit?: "framed" | "bleed" | "bento" }
   /** Stand-ins for images not exported yet: dashed `bg-surface` cards, each labeled with what goes there. */
   | { type: "placeholder"; labels: string[]; columns?: 1 | 2 | 3 | 4; tall?: boolean }
   /** Titled cards in a grid, e.g. takeaways; `icon` sits above the title in the project color. */
@@ -91,6 +101,8 @@ export type Block =
    * `from` / `to` label the ends of the range.
    */
   | { type: "breakdown"; from: string; to: string; items: { label: string; value: number; note?: string }[] }
+  /** Ranked horizontal bars of percentages, e.g. survey answers; `note` sits under the title (sample size). */
+  | { type: "bars"; title: string; note?: string; items: { label: string; value: number }[] }
   /**
    * A Jobs To Be Done map: the main job, then its steps in order (Define, Locate…).
    * A step can name the struggle it surfaced and, in `supports`, the assumption it backs.
@@ -100,14 +112,42 @@ export type Block =
       job: string;
       steps: { stage: string; job: string; struggle?: string; supports?: string }[];
     }
+  /**
+   * Findings as stacked cards, each with a dot, a title and a line of detail. `negative`
+   * marks problems and assumptions (in `negative`); `positive` marks wins and takeaways
+   * (in the project accent).
+   */
+  | { type: "findings"; tone: "negative" | "positive"; items: { title: string; body: string }[] }
+  /** Usability test results: the screen tested, what the tester said, and what it told us. */
+  | { type: "tests"; items: { figure: Figure; quote: string; finding: string }[] }
+  /** One word or framing swapped for another: the old one struck through, the new one in the accent tint. */
+  | { type: "reframe"; from: string; to: string }
+  /** One large quote on a band tinted with the project accent, e.g. the final validation verdict. */
+  | { type: "testimonial"; quote: string; attribution: string }
   /** Feature rows: screens on a `bg-surface` card beside a title and description, alternating sides. */
-  | { type: "spotlights"; items: { title: string; body: string; figures: Figure[] }[] };
+  /** `mockup` replaces the card with one finished mockup image (device frames baked in), shown uncropped. */
+  | { type: "spotlights"; items: { title: string; body: string; figures?: Figure[]; mockup?: Figure }[] };
 
 export type Section = {
+  /**
+   * Starts a new chapter of the story ("Part one · Research"): a labeled hairline
+   * divider above this section, with extra space before it.
+   */
+  part?: string;
   eyebrow: string;
   title: string;
-  /** `statement` sets the title large with an accent rule: use it for the core problem / HMW. */
-  variant?: "statement";
+  /**
+   * `statement` sets the title large with an accent rule: use it for the core problem / HMW.
+   * `callout` sets the title large on a card tinted with the project accent (or `bg-surface`
+   * with `tone: "muted"`, e.g. a first framing that later gets replaced).
+   * `showcase` sets the section on a full-bleed band tinted with the project accent, with a
+   * centered header and an optional `hero` image under it: use it for the final solution.
+   */
+  variant?: "statement" | "callout" | "showcase";
+  /** `callout` only: `muted` uses `bg-surface` and subtle text instead of the accent tint. */
+  tone?: "muted";
+  /** `showcase` only: a transparent mockup shown centered under the header. */
+  hero?: Figure;
   blocks?: Block[];
 };
 
@@ -119,6 +159,12 @@ export type CaseStudy = {
    */
   protected?: boolean;
   name: string;
+  /**
+   * `editorial` reads like a long-form article: section headings and body copy are held to
+   * a narrower measure (8 of 12 columns) while figures keep the full width, quotes sit three
+   * across, and stats are set in the project accent.
+   */
+  layout?: "editorial";
   /** One line under the title. */
   tagline: string;
   /** Product screens shown side by side on a `bg-surface` card (no baked-in titles or backdrops). Empty shows a placeholder. */
