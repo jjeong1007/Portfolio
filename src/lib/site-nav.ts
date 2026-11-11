@@ -1,20 +1,11 @@
 /**
- * The "What do you wanna learn about me?" options. Shared by the landing
- * prompt card and the companion menu so they never drift apart.
- * An entry with `href` navigates; one with `message` shows a toast until its
- * page exists.
+ * A site link. An entry with `href` navigates; one with `message` shows a
+ * toast until its page exists.
  */
 export type NavPrompt = {
   label: string;
   quiet?: boolean;
 } & ({ href: string } | { message: string });
-
-export const navPrompts: NavPrompt[] = [
-  { label: "My projects!!", href: "/#projects" },
-  { label: "Who are you?!", href: "/about" },
-  { label: "How’d you make this website??", href: "/design-system" },
-  { label: "What are your deep darkest fears in life?", message: "Nice try. That’s classified.", quiet: true },
-];
 
 /**
  * External profile links. Leave a value empty until it exists: the nav then
@@ -27,7 +18,7 @@ export const CONTACT_EMAIL = "jeongjason5914@gmail.com";
 /** The resume page (src/app/cv). A PDF in /public or an external link also works. */
 export const CV_URL = "/cv";
 
-/** Top-left nav bar links, after the logo (Figma 240:6001). Same shape as NavPrompt. */
+/** Top-left nav bar links, after the logo (Figma 240:6001). */
 export const navLinks: NavPrompt[] = [
   { label: "Projects", href: "/#projects" },
   { label: "About me", href: "/about" },

@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { Avatar } from "@/components/home/avatar";
-import { useReportHero } from "@/components/home/hero-presence";
 import { useTalk } from "@/components/home/use-talk";
 import { heroLines } from "@/lib/dialogue";
 
@@ -10,7 +9,6 @@ import { heroLines } from "@/lib/dialogue";
  * The page-header avatar with a speech bubble above it. Hovering the
  * character (or tapping it on touch) says a random line from `lines`
  * (`heroLines` on the landing page) while the mouth lip-syncs to each letter.
- * While it's on screen the corner Companion stays hidden (hero-presence.ts).
  */
 export function TalkingAvatar({
   className = "",
@@ -25,11 +23,9 @@ export function TalkingAvatar({
   avatarClassName?: string;
 }) {
   const { open, line, typed, mouth, talk, stop } = useTalk(lines);
-  const root = useRef<HTMLDivElement>(null);
-  useReportHero(root);
 
   return (
-    <div ref={root} data-hero-avatar className={`relative ${className}`} style={style}>
+    <div className={`relative ${className}`} style={style}>
       <div
         onPointerEnter={(e) => e.pointerType === "mouse" && talk()}
         onPointerLeave={(e) => e.pointerType === "mouse" && stop()}

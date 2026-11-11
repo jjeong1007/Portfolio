@@ -78,6 +78,7 @@ export const amazonMusic: CaseStudy = {
           figures: [
             {
               src: sharingHabits,
+              scale: 1.5,
               alt: "Examples of how Gen Z shares music: Spotify Wrapped, a Spotify Jam queue, a receipt-style top tracks list and a song shared to an Instagram story",
             },
           ],
@@ -102,16 +103,12 @@ export const amazonMusic: CaseStudy = {
           ],
         },
         { type: "emphasis", text: "So how can we create something that is “uniquely Amazon?”" },
-        {
-          type: "figures",
-          figures: [
-            {
-              src: streamingPlatforms,
-              alt: "Logos of the streaming platforms compared: YouTube Music, Spotify, Amazon Music, Apple Music, SoundCloud and Pandora",
-            },
-          ],
-        },
       ],
+      aside: {
+        src: streamingPlatforms,
+        scale: 1.5,
+        alt: "Logos of the streaming platforms compared: YouTube Music, Spotify, Amazon Music, Apple Music, SoundCloud and Pandora",
+      },
     },
     {
       eyebrow: "Competitive differentiation",

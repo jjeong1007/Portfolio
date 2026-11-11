@@ -30,6 +30,9 @@ const SIZES = {
 } as const;
 const HALF = SIZES[2];
 
+/** A framed figure's fixed width in px, from `maxWidth` or `scale`; undefined keeps its natural size. */
+const displayWidth = (f: Figure) => f.maxWidth ?? (f.scale ? Math.round(f.src.width * f.scale) : undefined);
+
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /** Three product screens on a grey card, the middle one raised, running off the bottom edge. */
@@ -117,8 +120,8 @@ function Figures({ figures, columns = 1, fit = "framed" }: Extract<Block, { type
             <Image
               src={f.src}
               alt={f.alt}
-              sizes={f.maxWidth ? `${f.maxWidth}px` : SIZES[columns]}
-              style={f.maxWidth ? { width: f.maxWidth } : undefined}
+              sizes={displayWidth(f) ? `${displayWidth(f)}px` : SIZES[columns]}
+              style={displayWidth(f) ? { width: displayWidth(f) } : undefined}
             />
             {!single && f.caption && <figcaption>{f.caption}</figcaption>}
           </div>
@@ -442,14 +445,34 @@ function SectionView({ section, index }: { section: Section; index: number }) {
     );
   }
 
+  const header = (
+    <div className="narrow">
+      <p className="eyebrow">{section.eyebrow}</p>
+      <h2 id={id}>{section.title}</h2>
+    </div>
+  );
+
+  // Copy on the left, a framed graphic on the right
+  if (section.aside) {
+    return (
+      <>
+        {divider}
+        <section aria-labelledby={id} className="split">
+          <div>
+            {header}
+            <Blocks blocks={blocks} />
+          </div>
+          <Figures type="figures" figures={[section.aside]} />
+        </section>
+      </>
+    );
+  }
+
   return (
     <>
       {divider}
       <section aria-labelledby={id}>
-        <div className="narrow">
-          <p className="eyebrow">{section.eyebrow}</p>
-          <h2 id={id}>{section.title}</h2>
-        </div>
+        {header}
         <Blocks blocks={blocks} />
       </section>
     </>

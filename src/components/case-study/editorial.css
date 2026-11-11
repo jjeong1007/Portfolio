@@ -352,6 +352,12 @@
 .editorial-cs .frame img { width: auto; max-width: 100%; border-radius: 0; margin: 0 auto; }
 .editorial-cs .frame .figs figcaption { text-align: center; }
 @media (max-width: 809.98px) { .editorial-cs .frame { padding: 16px; } }
+/* Section with an aside: copy beside a framed graphic, half and half; stacks below 1200px */
+.editorial-cs .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.editorial-cs .split .narrow { width: 100%; }
+.editorial-cs .split .frame { margin: 0; padding: 24px; }
+@media (max-width: 1199.98px) { .editorial-cs .split { grid-template-columns: 1fr; gap: 36px; } }
+@media (max-width: 809.98px) { .editorial-cs .split .frame { padding: 16px; } }
 /* Photo bento: rows alternate wide + narrow */
 .editorial-cs .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 36px; }
 .editorial-cs .bento figure { position: relative; margin: 0; overflow: hidden; border-radius: 20px; background: var(--cs-tint-grey); }

@@ -84,7 +84,7 @@ function ProjectTile({ project, wide }: { project: Project; wide: boolean }) {
 }
 
 /**
- * Projects section on the landing page. `#projects` is the nav / companion anchor.
+ * Projects section on the landing page. `#projects` is the nav anchor.
  * `wide` lays the tiles out two across in 4:3 cards that fill the row (/studio).
  */
 export function ProjectGrid({

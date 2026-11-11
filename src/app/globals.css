@@ -305,7 +305,7 @@
 /* ---- View transitions (route changes) ----------------------------------
    Types come from <Link transitionTypes> (src/lib/site-nav.ts) and are
    mapped to classes by <PageTransition>. Old page leaves fast, new page
-   arrives gently after it. The companion stays anchored throughout. */
+   arrives gently after it. The nav bar stays anchored throughout. */
 :root {
   --vt-exit: 220ms;
   --vt-enter: 520ms;
@@ -381,30 +381,16 @@
   }
 }
 
-/* Layout-level chrome (nav bar, companion) never moves or fades during
-   route changes */
-::view-transition-group(site-nav),
-::view-transition-group(companion) {
+/* Layout-level chrome (the nav bar) never moves or fades during route changes */
+::view-transition-group(site-nav) {
   animation: none;
   z-index: 100;
 }
-::view-transition-old(site-nav),
-::view-transition-old(companion) {
+::view-transition-old(site-nav) {
   display: none;
 }
-::view-transition-new(site-nav),
-::view-transition-new(companion) {
+::view-transition-new(site-nav) {
   animation: none;
-}
-/* Arriving from / leaving to a page without it */
-::view-transition-new(companion):only-child {
-  animation: var(--vt-enter) var(--ease-out-soft) 120ms both vt-arrive;
-  --vt-dir: 1;
-}
-::view-transition-old(companion):only-child {
-  display: block;
-  animation: var(--vt-exit) ease-in both vt-leave;
-  --vt-dir: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {

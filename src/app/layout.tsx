@@ -1,7 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Karla } from "next/font/google";
-import { Companion } from "@/components/ui/companion";
 import { Footer } from "@/components/ui/footer";
 import { GridOverlay } from "@/components/ui/grid-overlay";
 import { Navbar } from "@/components/ui/navbar";
@@ -36,7 +35,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           <Footer />
           <GridOverlay />
-          <Companion />
         </ToastProvider>
         <Analytics />
       </body>

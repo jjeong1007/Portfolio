@@ -15,9 +15,3 @@ export const aboutLines: string[] = [
   "That’s me! Well, a drawing of me.",
   "Scroll down, I took all of these photos myself!",
 ];
-
-/** The little character in the bottom-right corner of every other page. */
-export const companionLines: string[] = [
-  "Hiya! Still here if you need me.",
-  "Click me if you wanna go somewhere else!",
-];

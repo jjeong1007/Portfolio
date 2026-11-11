@@ -16,6 +16,11 @@ export type Figure = {
   /** Caps the displayed width in px (framed figures only), for art that reads too large at full width. */
   maxWidth?: number;
   /**
+   * Grows (or shrinks) a framed figure from its natural size, e.g. 1.5 = 50% larger. It still
+   * never runs wider than the frame. Ignored when `maxWidth` is set.
+   */
+  scale?: number;
+  /**
    * Speech bubbles over the image (bleed figures only), e.g. what testers said on that screen.
    * `x` / `y` place each bubble's top-left corner as a percentage of the image.
    */
@@ -148,6 +153,12 @@ export type Section = {
   tone?: "muted";
   /** `showcase` only: a transparent mockup shown centered under the header. */
   hero?: Figure;
+  /**
+   * Default sections only: a graphic on a grey frame to the right of the header and blocks
+   * (half and half from 1200px; below that it stacks under them). Honors the figure's `scale` /
+   * `maxWidth`, but never runs wider than its column.
+   */
+  aside?: Figure;
   blocks?: Block[];
 };
 

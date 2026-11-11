@@ -23,8 +23,7 @@ const linkClass = "type-body-md text-ink transition-colors duration-150 hover:te
 /**
  * The site footer, rendered once in the root layout under every page: a
  * call to action with a copy-email chip, page and profile links, a giant
- * wordmark whose letters spring up on hover, and the copyright row. The
- * bottom row stays left so the fixed Companion never covers it.
+ * wordmark whose letters spring up on hover, and the copyright row.
  * See "Footer" in design-system.md.
  */
 export function Footer() {
@@ -116,8 +115,7 @@ export function Footer() {
         </p>
       </Container>
 
-      <Container // The Companion sits over the bottom-right corner on phones, so the row wraps before reaching it
-        className="type-body-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line py-6 text-ink-subtle max-md:pr-28">
+      <Container className="type-body-sm flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line py-6 text-ink-subtle">
         <p>© 2026 Jason Jeong</p>
         <p>Designed in Figma, built with Next.js</p>
         <button
